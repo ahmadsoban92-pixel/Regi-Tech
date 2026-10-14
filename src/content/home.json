@@ -1,0 +1,49 @@
+{
+  "eyebrow": "Motorcycle Number Plate Specialists",
+  "titleLine1": "Your ride.",
+  "titleLine2": "Your signature.",
+  "heroBody": "Choose your plate finish, personalise the details and preview your design before you order.",
+  "heroPrimary": "Design Your Plate",
+  "heroSecondary": "Explore Our Plates",
+  "proofPoints": ["Live preview", "Free UK delivery", "24-month product warranty"],
+  "productsEyebrow": "01 / Choose Your Finish",
+  "productsTitle": "Find your signature plate.",
+  "productsBody": "Explore five plate styles and choose your starting point.",
+  "craftEyebrow": "The craft behind your plate",
+  "craftTitle": "Handcrafted. Every Detail Matters.",
+  "craftBody": "Our hand-crafted motorcycle plates bring together care, skill, and close attention to detail. From the lettering to the finishing touches, each detail contributes to a distinctive plate that complements your ride.",
+  "craftFeatures": [
+    { "title": "Care", "body": "Thoughtful attention throughout the making process.", "icon": "/assets/regitech/icon-care.svg" },
+    { "title": "Skill", "body": "Craftsmanship that brings the details together.", "icon": "/assets/regitech/icon-skill.svg" },
+    { "title": "Attention to Detail", "body": "A closer look at the lettering, edges, and finish.", "icon": "/assets/regitech/icon-detail.svg" }
+  ],
+  "craftCta": "Explore Hand-Crafted Plates",
+  "storyEyebrow": "02 / Personal To Your Ride",
+  "storyTitle": "Every ride has its own story.",
+  "storyBody": "Choose the details that make your plate personal—from your preferred finish to the options available for your style.",
+  "storyCta": "Make It Yours",
+  "stepsEyebrow": "03 / Make It Yours",
+  "stepsTitle": "Three steps. Your plate.",
+  "steps": [
+    { "number": "01", "title": "Choose your style", "body": "Compare finishes and select your preferred plate." },
+    { "number": "02", "title": "Personalise the details", "body": "Enter your registration and choose the available options." },
+    { "number": "03", "title": "Review and order", "body": "Check your design, add delivery details and complete your order." }
+  ],
+  "detailsTitle": "The finishing touch is in the details.",
+  "detailsBody": "See your selected options together before you order.",
+  "detailsPoints": ["Choose your size", "Select your border", "Add your personal touch"],
+  "detailsCta": "Start Customising",
+  "faqTitle": "Good to know before you order.",
+  "faqBody": "Find quick answers about personalisation, delivery and your plate options.",
+  "faqQuestions": [
+    "What is the difference between show and road-legal plates?",
+    "Can I preview my plate before ordering?",
+    "Can I upload my own logo?",
+    "How much is delivery?"
+  ],
+  "faqCta": "View All FAQs",
+  "closingTitle": "Make the next detail yours.",
+  "closingBody": "Choose your plate style and bring your design together.",
+  "closingPrimary": "Design Your Plate",
+  "closingSecondary": "Explore Our Plates"
+}

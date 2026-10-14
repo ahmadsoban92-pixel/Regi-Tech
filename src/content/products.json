@@ -1,0 +1,42 @@
+[
+  {
+    "id": "hand-crafted-show-plate",
+    "name": "Hand Crafted SHOW PLATE",
+    "badge": "Show plate",
+    "description": "Personalise your show plate with black or mirror-silver borders, a logo and a custom slogan.",
+    "price": "£17.99",
+    "image": "/assets/regitech/plate-handcrafted.png"
+  },
+  {
+    "id": "2d-road-legal",
+    "name": "2D Printed Road-Legal Number Plate",
+    "badge": "Road-legal",
+    "description": "A printed motorcycle plate with a fixed 7×9-inch format and optional country flag.",
+    "price": "£13.99",
+    "image": "/assets/regitech/plate-road-legal.png"
+  },
+  {
+    "id": "2d-show-plate",
+    "name": "2D Printed Show Plate",
+    "badge": "Show plate",
+    "description": "A printed show plate with optional black inner border, logo and slogan.",
+    "price": "£14.99",
+    "image": "/assets/regitech/plate-2d-show.png"
+  },
+  {
+    "id": "crystal-3d",
+    "name": "Regi-Tech Crystal 3D™",
+    "badge": "Show / road-legal options",
+    "description": "A distinctive 3D appearance on a smooth, flat surface made with premium 4mm high-clarity PMMA.",
+    "price": "£21.99",
+    "image": "/assets/regitech/plate-crystal.png"
+  },
+  {
+    "id": "black-4d",
+    "name": "Black 4D Motorbike Plate",
+    "badge": "Show configuration",
+    "description": "A bold 4D-style appearance with a flat finish and personalised details.",
+    "price": "£18.99",
+    "image": "/assets/regitech/plate-black-4d.png"
+  }
+]

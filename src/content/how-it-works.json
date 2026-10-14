@@ -1,0 +1,40 @@
+{
+  "breadcrumb": "How It Works",
+  "eyebrow": "The journey",
+  "title": "From finish to fit, in four steps",
+  "body": "A simple, transparent path from choosing your plate to it landing on your bike.",
+  "start": "Start",
+  "ready": "Ready to ride",
+  "steps": [
+    {
+      "number": "01",
+      "title": "Choose your style",
+      "description": "Compare finishes across our five plate styles — hand crafted, 2D printed, Crystal 3D™ and Black 4D — and pick the one that suits your bike.",
+      "points": ["Road-legal and show-plate options", "Five finishes to compare"],
+      "icon": "/assets/regitech/icon-choose.svg"
+    },
+    {
+      "number": "02",
+      "title": "Personalise the details",
+      "description": "Enter your registration and choose the options available for your chosen product, with a live front and rear preview updating as you go.",
+      "points": ["Live dual-view preview", "Borders, flag, logo, slogan and fixings"],
+      "icon": "/assets/regitech/icon-personalise.svg"
+    },
+    {
+      "number": "03",
+      "title": "Review and order",
+      "description": "Check your design, add your delivery details and complete your order. Road-legal plates include document verification where required.",
+      "points": ["Clear price breakdown", "Free Royal Mail Tracked 48 delivery"],
+      "icon": "/assets/regitech/icon-review.svg"
+    },
+    {
+      "number": "04",
+      "title": "Made and dispatched",
+      "description": "Your plate is produced to your saved specification and dispatched. Track it to your door — ready to fit and ride.",
+      "points": ["Built to your saved spec", "Tracked delivery to your door"],
+      "icon": "/assets/regitech/icon-dispatch.svg"
+    }
+  ],
+  "cta": "Start designing your plate",
+  "ctaNote": "Takes less than two minutes."
+}

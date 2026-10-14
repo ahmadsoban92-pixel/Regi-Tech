@@ -1,0 +1,76 @@
+{
+  "breadcrumb": ["Home", "Our Plates", "Hand Crafted SHOW PLATE"],
+  "title": "Hand Crafted SHOW PLATE",
+  "badge": "Show plate",
+  "changeStyle": "Change Plate Style",
+  "previewNote": "Front plates are white, rear plates are yellow. Both update live with your design.",
+  "steps": ["Registration", "Size", "Borders", "Logo", "Slogan", "Fixings"],
+  "registration": {
+    "title": "Registration",
+    "label": "Enter your registration",
+    "placeholder": "e.g. AB76 BCD",
+    "hint": "Check your registration carefully before ordering."
+  },
+  "size": {
+    "title": "Size",
+    "options": [
+      { "value": "3×7″", "description": "Compact tail-tidy size.", "price": 0 },
+      { "value": "4×6″", "description": "Compact and popular for track and show bikes.", "price": 0 },
+      { "value": "5×7″", "description": "A balanced size for sportbikes and supermotos.", "price": 0, "badge": "POPULAR" },
+      { "value": "6×8″", "description": "Traditional UK motorcycle plate proportions.", "price": 0 },
+      { "value": "Custom", "description": "Choose your own width and height in inches.", "price": 3 }
+    ]
+  },
+  "borders": {
+    "title": "Borders",
+    "innerLabel": "Inner border",
+    "outerLabel": "Outer border",
+    "options": [
+      { "value": "None", "price": 0 },
+      { "value": "Black", "price": 2 },
+      { "value": "Mirror Silver", "price": 5 }
+    ]
+  },
+  "logo": {
+    "title": "Logo",
+    "options": [
+      { "value": "No Logo", "price": 0 },
+      { "value": "BMW", "price": 2, "icon": "/assets/regitech/brand-bmw.svg" },
+      { "value": "Ducati", "price": 2, "icon": "/assets/regitech/brand-ducati.svg" },
+      { "value": "Harley-Davidson", "price": 2, "icon": "/assets/regitech/brand-harley.svg" },
+      { "value": "Honda", "price": 2, "icon": "/assets/regitech/brand-honda.svg" },
+      { "value": "KTM", "price": 2, "icon": "/assets/regitech/brand-ktm.svg" },
+      { "value": "Other Logo", "price": 2, "description": "Upload your own artwork" }
+    ],
+    "uploadLabel": "Upload logo artwork",
+    "uploadHint": "PNG, JPG, SVG or PDF."
+  },
+  "slogan": {
+    "title": "Slogan",
+    "toggle": "Add a slogan",
+    "description": "Positioned near the bottom of your plate.",
+    "textLabel": "Slogan text",
+    "placeholder": "Ride with passion",
+    "fontLabel": "Font",
+    "fonts": ["The Boss", "The Scribbler", "Rebel"],
+    "price": 2
+  },
+  "fixings": {
+    "title": "Fixings",
+    "options": [
+      { "value": "No Fixing", "description": "Use your existing motorcycle bracket or hardware.", "price": 0 },
+      { "value": "Nylon Screws + Nylon Nuts", "description": "2 × anti-vibration nuts with 2 × black nylon screws.", "price": 1 },
+      { "value": "3M VHB Adhesive Tape", "description": "4 × 3M VHB adhesive tape strips.", "price": 1 },
+      { "value": "Complete Fixing Kit", "description": "Adhesive tape, nylon screws and nylon nuts.", "price": 2 }
+    ],
+    "specialLabel": "Special Requirements (optional)",
+    "specialPlaceholder": "Add a note for our team"
+  },
+  "priceSummary": "Price summary",
+  "delivery": "UK Royal Mail Tracked 48",
+  "free": "FREE",
+  "total": "Total",
+  "back": "Back",
+  "continue": "Continue",
+  "addToCart": "Add to Cart"
+}

@@ -1,0 +1,30 @@
+{
+  "breadcrumb": ["Home", "Checkout"],
+  "title": "Checkout",
+  "contactTitle": "Contact details",
+  "deliveryTitle": "Delivery address",
+  "fields": {
+    "firstName": "First name",
+    "lastName": "Last name",
+    "email": "Email",
+    "telephone": "Telephone",
+    "addressLine1": "Address line 1",
+    "addressLine2": "Address line 2 (optional)",
+    "town": "Town / City",
+    "postcode": "Postcode",
+    "country": "Country",
+    "billingSame": "Billing address is the same as delivery address",
+    "notes": "Additional Notes (optional)"
+  },
+  "delivery": {
+    "title": "Delivery",
+    "method": "Royal Mail Tracked 48 — FREE",
+    "estimate": "Estimated delivery: 2–3 working days after dispatch."
+  },
+  "summary": "Order summary",
+  "subtotal": "Subtotal",
+  "deliveryLabel": "Delivery",
+  "free": "FREE",
+  "total": "Total",
+  "submit": "View order confirmation layout"
+}

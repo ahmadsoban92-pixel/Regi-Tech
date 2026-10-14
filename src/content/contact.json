@@ -1,0 +1,21 @@
+{
+  "breadcrumb": "Contact",
+  "title": "Let’s talk about your plate",
+  "body": "Need help choosing a finish, checking an option or discussing your order? Contact our team.",
+  "details": [
+    { "label": "WhatsApp", "value": "+44 7438 773936", "icon": "/assets/regitech/icon-contact-whatsapp.svg", "href": "https://wa.me/447438773936" },
+    { "label": "Email", "value": "info@lpworkshop.co.uk", "icon": "/assets/regitech/icon-contact-email.svg", "href": "mailto:info@lpworkshop.co.uk" },
+    { "label": "Telephone", "value": "+44 7438 773936", "icon": "/assets/regitech/icon-contact-phone.svg", "href": "tel:+447438773936" },
+    { "label": "Address", "value": "38 Portway Close, Reading, RG1 6LB, United Kingdom", "icon": "/assets/regitech/icon-contact-location.svg", "href": "https://maps.google.com/?q=38+Portway+Close+Reading+RG1+6LB" }
+  ],
+  "formTitle": "Send a message",
+  "fields": {
+    "name": "Name",
+    "email": "Email",
+    "reference": "Order reference",
+    "optional": "optional",
+    "message": "Message"
+  },
+  "submit": "Please contact us by email or WhatsApp.",
+  "note": "This form is not connected yet. Reach us directly using the details on the left."
+}

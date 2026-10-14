@@ -1,0 +1,51 @@
+{
+  "breadcrumb": "FAQs",
+  "title": "Questions about your plate?",
+  "body": "Find the details you need before ordering.",
+  "items": [
+    {
+      "question": "What’s the Difference Between Our Hand-Crafted and 2D Printed Plates?",
+      "answer": "Hand-crafted plates offer premium personalised border, logo and slogan options. Our 2D printed plates use a printed finish and are available in separate show-plate and road-legal configurations."
+    },
+    {
+      "question": "What Is the Mirror Silver Effect on the Border?",
+      "answer": "Mirror Silver is a premium reflective-looking border finish available on supported show-style products. It is not available on the 2D road-legal plate."
+    },
+    {
+      "question": "What is the difference between a show plate and a road-legal plate?",
+      "answer": "Show plates are intended for display, events, private land or other permitted non-road use. Road-legal plates follow a stricter specification, include required markings and require V5C verification."
+    },
+    {
+      "question": "Can I preview my plate before ordering?",
+      "answer": "Yes. The configurator provides a live proportional preview so you can review your registration and selected options before ordering."
+    },
+    {
+      "question": "Can I upload my own logo?",
+      "answer": "Supported show-style products accept your own PNG, JPG, SVG or PDF artwork. You are responsible for permission to use supplied logos and images."
+    },
+    {
+      "question": "How much is delivery?",
+      "answer": "UK delivery with Royal Mail Tracked 48 is free."
+    },
+    {
+      "question": "How long does delivery take?",
+      "answer": "Royal Mail Tracked 48 is estimated at 2–3 working days after dispatch. Orders placed by 12:00 are targeted for same-day dispatch, subject to payment, verification and production requirements."
+    },
+    {
+      "question": "Can I change my order?",
+      "answer": "Contact us as soon as possible. Personalised or made-to-order changes may not be possible after production has started."
+    },
+    {
+      "question": "How long can my slogan be?",
+      "answer": "A slogan can contain up to 28 characters on supported plate styles."
+    },
+    {
+      "question": "What does the warranty cover?",
+      "answer": "The 24-month warranty covers manufacturing and material defects under normal use. It does not normally cover accidental damage, incorrect fitting, alteration, misuse or normal wear."
+    }
+  ],
+  "supportTitle": "Still have a question?",
+  "supportBody": "Contact our team and we will help you.",
+  "whatsapp": "WhatsApp",
+  "email": "Email"
+}

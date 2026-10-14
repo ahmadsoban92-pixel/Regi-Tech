@@ -1,0 +1,15 @@
+export const CONTACT_NAME_MAX = 80;
+export const CONTACT_EMAIL_MAX = 254;
+export const CONTACT_REFERENCE_MAX = 40;
+export const CONTACT_MESSAGE_MAX = 1000;
+export const REGISTRATION_MAX = 12;
+export const CUSTOM_DIMENSION_MAX = 5;
+export const SLOGAN_MAX = 28;
+export const SPECIAL_REQUIREMENTS_MAX = 500;
+export const ORDER_NOTES_MAX = 1000;
+export const CHECKOUT_NAME_MAX = 80;
+export const CHECKOUT_EMAIL_MAX = 254;
+export const CHECKOUT_TELEPHONE_MAX = 30;
+export const CHECKOUT_ADDRESS_MAX = 120;
+export const CHECKOUT_TOWN_MAX = 80;
+export const CHECKOUT_POSTCODE_MAX = 16;

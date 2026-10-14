@@ -1,0 +1,15 @@
+{
+  "breadcrumb": ["Home", "Review"],
+  "title": "Check your plate details",
+  "edit": "Edit",
+  "priceBreakdown": "Price breakdown",
+  "itemTotal": "Item total",
+  "subtotal": "Subtotal",
+  "delivery": "UK Royal Mail Tracked 48",
+  "free": "FREE",
+  "total": "Total",
+  "notesLabel": "Order Notes / Special Instructions (optional)",
+  "notesPlaceholder": "Add a message or instruction for our team",
+  "confirmation": "I have checked my registration, personalisation and order details.",
+  "continue": "Continue to Checkout"
+}
