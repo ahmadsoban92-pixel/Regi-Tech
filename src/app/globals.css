@@ -24,7 +24,20 @@
   --success: #36c98f;
   --shadow: rgba(0, 0, 0, 0.28);
   --overlay: rgba(0, 0, 0, 0.78);
+  --plate-front: #ffffff;
+  --plate-rear: #ffd600;
+  --plate-ink: #111111;
+  --plate-edge: #2b2d31;
+  --mirror-silver: linear-gradient(120deg, #6f7378 0%, #eef1f4 22%, #8e9399 42%, #ffffff 58%, #747980 78%, #d8dce0 100%);
   --max-width: 1800px;
+}
+
+@font-face {
+  font-family: "New Rocker";
+  src: url("/assets/regitech/NewRocker-Regular.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
 }
 
 * {
@@ -97,6 +110,46 @@ a {
   white-space: nowrap;
 }
 
+.plate-registration-has-logo:not(.plate-registration-has-slogan) {
+  font-size: 23.5cqw;
+}
+
+.plate-registration-has-logo:not(.plate-registration-has-slogan) .plate-registration-line-first {
+  top: 19%;
+}
+
+.plate-registration-has-logo:not(.plate-registration-has-slogan) .plate-registration-line-second {
+  top: 53%;
+}
+
+.plate-registration-has-slogan:not(.plate-registration-has-logo) {
+  font-size: 23cqw;
+}
+
+.plate-registration-has-slogan:not(.plate-registration-has-logo) .plate-registration-line-first {
+  top: 8%;
+}
+
+.plate-registration-has-slogan:not(.plate-registration-has-logo) .plate-registration-line-second {
+  top: 43%;
+}
+
+.plate-registration-has-logo.plate-registration-has-slogan {
+  font-size: 20.5cqw;
+}
+
+.plate-registration-has-logo.plate-registration-has-slogan .plate-registration-line-first {
+  top: 19%;
+}
+
+.plate-registration-has-logo.plate-registration-has-slogan .plate-registration-line-second {
+  top: 47%;
+}
+
+.plate-registration-has-flag .plate-registration-line {
+  left: 20%;
+}
+
 .plate-registration-line {
   position: absolute;
   right: 13.3%;
@@ -113,7 +166,39 @@ a {
 }
 
 .plate-slogan {
-  font-family: Georgia, serif;
+  font-family: "New Rocker", serif;
+  overflow-wrap: anywhere;
+}
+
+.plate-border {
+  position: absolute;
+  z-index: 5;
+  border-style: solid;
+  pointer-events: none;
+}
+
+.plate-border-outer {
+  inset: 1.8%;
+  border-width: 2.1cqw;
+  border-radius: 2.6cqw;
+}
+
+.plate-border-inner {
+  inset: 5.2%;
+  border-width: 1.1cqw;
+  border-radius: 1.8cqw;
+}
+
+.plate-border-black {
+  border-color: var(--plate-ink);
+}
+
+.plate-border-mirror {
+  border-color: transparent;
+  background: var(--mirror-silver) border-box;
+  -webkit-mask: linear-gradient(#000 0 0) padding-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
 }
 
 .section-heading {

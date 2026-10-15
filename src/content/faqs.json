@@ -5,44 +5,46 @@
   "items": [
     {
       "question": "What’s the Difference Between Our Hand-Crafted and 2D Printed Plates?",
-      "answer": "Hand-crafted plates offer premium personalised border, logo and slogan options. Our 2D printed plates use a printed finish and are available in separate show-plate and road-legal configurations."
+      "answer": [
+        { "type": "paragraph", "text": "Both our Hand-Crafted and 2D Printed plates are made using quality materials and production processes. The main differences lie in their production methods and the appearance of the finished plates." },
+        { "type": "heading", "text": "Hand-Crafted Plates" },
+        { "type": "paragraph", "text": "Both types of plates are designed using Adobe Illustrator, giving us greater creative freedom and flexibility to customise designs according to our customers’ requirements. Rather than relying solely on automated number plate design programmes with predefined layouts and limited customisation options, we have greater control over the design process, allowing us to create more distinctive and personalised designs." },
+        { "type": "paragraph", "text": "For our Hand-Crafted plates, the production process involves several stages. We first prepare the design file and use a laser-cutting machine to engrave the required details and die-cut the masking paper. The masking is then carefully removed before glossy black ink is applied by spraying. The plate is subsequently placed in a low-temperature oven to allow the ink to dry." },
+        { "type": "paragraph", "text": "Finally, a reflective sheet is laminated onto the PMMA plate to complete the production process." },
+        { "type": "paragraph", "text": "This multi-stage process creates a distinctive finish that is generally brighter, glossier and more reflective. It also offers enhanced resistance to sunlight, helping to maintain the plate’s colour and appearance over time." },
+        { "type": "heading", "text": "2D Printed Plates" },
+        { "type": "paragraph", "text": "Our 2D Printed plates are produced using a high-resolution 1200 × 1200 dpi printer, delivering sharp details and a consistent printed finish." },
+        { "type": "paragraph", "text": "This production method offers a clean, uniform appearance and is suitable for customers who prefer a more standardised finish. Like our Hand-Crafted plates, 2D Printed plates are designed with care and produced to meet our quality standards." },
+        { "type": "heading", "text": "Which Option Is Right for You?" },
+        { "type": "paragraph", "text": "The best choice depends on your preferred appearance and design requirements." },
+        {
+          "type": "list",
+          "items": [
+            { "parts": [{ "text": "Hand-Crafted: ", "strong": true }, { "text": "Offers a brighter, glossier and more reflective finish, with a production process that allows greater flexibility in customising the design." }] },
+            { "parts": [{ "text": "2D Printed: ", "strong": true }, { "text": "Offers a clean, sharp and consistent printed finish, ideal for customers who prefer a more uniform appearance." }] }
+          ]
+        },
+        { "type": "paragraph", "text": "Both options have their own characteristics, allowing you to choose the style that best suits your preferences." },
+        { "type": "paragraph", "parts": [{ "text": "Both our Hand-Crafted and 2D Printed plates are backed by a " }, { "text": "three-year warranty against colour fading and yellowing caused by sunlight", "strong": true }, { "text": ", subject to our warranty terms." }] }
+      ]
     },
     {
       "question": "What Is the Mirror Silver Effect on the Border?",
-      "answer": "Mirror Silver is a premium reflective-looking border finish available on supported show-style products. It is not available on the 2D road-legal plate."
+      "answer": [
+        { "type": "paragraph", "parts": [{ "text": "The Mirror Silver Effect is a special finish applied to the border of our Show Plates to create a " }, { "text": "reflective, mirror-like appearance", "strong": true }, { "text": ", rather than simply a flat silver colour." }] },
+        { "type": "paragraph", "text": "Unlike silver-coloured foil that is laminated onto the plate, our Mirror Silver Effect is created by spraying a specialist liquid mirror-silver material directly onto the surface. The plate is then placed in a low-temperature oven to allow the material to dry and develop its reflective finish." },
+        { "type": "paragraph", "text": "Once dry, the finish produces a mirror-like effect that reflects light and changes in appearance depending on the lighting conditions and viewing angle." },
+        { "type": "paragraph", "text": "This option is available for customers who want a distinctive mirror-silver finish for their Show Plates, whether for motorcycle displays, shows or decorative purposes." }
+      ]
     },
-    {
-      "question": "What is the difference between a show plate and a road-legal plate?",
-      "answer": "Show plates are intended for display, events, private land or other permitted non-road use. Road-legal plates follow a stricter specification, include required markings and require V5C verification."
-    },
-    {
-      "question": "Can I preview my plate before ordering?",
-      "answer": "Yes. The configurator provides a live proportional preview so you can review your registration and selected options before ordering."
-    },
-    {
-      "question": "Can I upload my own logo?",
-      "answer": "Supported show-style products accept your own PNG, JPG, SVG or PDF artwork. You are responsible for permission to use supplied logos and images."
-    },
-    {
-      "question": "How much is delivery?",
-      "answer": "UK delivery with Royal Mail Tracked 48 is free."
-    },
-    {
-      "question": "How long does delivery take?",
-      "answer": "Royal Mail Tracked 48 is estimated at 2–3 working days after dispatch. Orders placed by 12:00 are targeted for same-day dispatch, subject to payment, verification and production requirements."
-    },
-    {
-      "question": "Can I change my order?",
-      "answer": "Contact us as soon as possible. Personalised or made-to-order changes may not be possible after production has started."
-    },
-    {
-      "question": "How long can my slogan be?",
-      "answer": "A slogan can contain up to 28 characters on supported plate styles."
-    },
-    {
-      "question": "What does the warranty cover?",
-      "answer": "The 24-month warranty covers manufacturing and material defects under normal use. It does not normally cover accidental damage, incorrect fitting, alteration, misuse or normal wear."
-    }
+    { "question": "What is the difference between a show plate and a road-legal plate?", "answer": "Show plates are intended for display, events, private land or other permitted non-road use. Road-legal plates follow a stricter specification, include required markings and require V5C verification." },
+    { "question": "Can I preview my plate before ordering?", "answer": "Yes. The configurator provides a live proportional preview so you can review your registration and selected options before ordering." },
+    { "question": "Can I upload my own logo?", "answer": "Supported show-style products accept your own PNG, JPG, SVG or PDF artwork. You are responsible for permission to use supplied logos and images." },
+    { "question": "How much is delivery?", "answer": "UK delivery with Royal Mail Tracked 48 is free." },
+    { "question": "How long does delivery take?", "answer": "Royal Mail Tracked 48 is estimated at 2–3 working days after dispatch. Orders placed by 12:00 are targeted for same-day dispatch, subject to payment, verification and production requirements." },
+    { "question": "Can I change my order?", "answer": "Contact us as soon as possible. Personalised or made-to-order changes may not be possible after production has started." },
+    { "question": "How long can my slogan be?", "answer": "A slogan can contain up to 28 characters on supported plate styles." },
+    { "question": "What does the warranty cover?", "answer": "The 24-month warranty covers manufacturing and material defects under normal use. Separately, Hand-Crafted and 2D Printed plates have a three-year warranty against colour fading and yellowing caused by sunlight, subject to the warranty terms. Accidental damage, incorrect fitting, alteration, misuse and normal wear are not normally covered." }
   ],
   "supportTitle": "Still have a question?",
   "supportBody": "Contact our team and we will help you.",

@@ -3,6 +3,20 @@
   "title": "Checkout",
   "contactTitle": "Contact details",
   "deliveryTitle": "Delivery address",
+  "billingTitle": "Billing address",
+  "lookup": {
+    "label": "Find your UK address",
+    "button": "Find address",
+    "loading": "Finding addresses…",
+    "select": "Select your address",
+    "selectPlaceholder": "Choose an address",
+    "manual": "Or enter the address manually below.",
+    "notFound": "No addresses were found for that postcode. Check it or enter the address manually.",
+    "unavailable": "Address lookup is temporarily unavailable. Please enter the address manually.",
+    "rateLimited": "Too many address searches. Please wait a moment or enter the address manually.",
+    "suggestions": "Did you mean:",
+    "loadMore": "Load more addresses"
+  },
   "fields": {
     "firstName": "First name",
     "lastName": "Last name",
@@ -11,6 +25,7 @@
     "addressLine1": "Address line 1",
     "addressLine2": "Address line 2 (optional)",
     "town": "Town / City",
+    "county": "County (optional)",
     "postcode": "Postcode",
     "country": "Country",
     "billingSame": "Billing address is the same as delivery address",

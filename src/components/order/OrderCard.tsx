@@ -3,16 +3,19 @@ import { Pencil } from "lucide-react";
 import { PlatePreview } from "@/components/order/PlatePreview";
 import { formatPrice, getOrderTotal, getPriceBreakdown } from "@/lib/orderPricing";
 import type { PlateConfiguration } from "@/types/order";
+import { getProductRule } from "@/lib/productCatalog";
 
 export function OrderCard({ config, editable = false, quantity = 1 }: { config: PlateConfiguration; editable?: boolean; quantity?: number }) {
+  const rule = getProductRule(config.productId);
   const details = [
     config.size === "Custom" ? `Custom: ${config.customWidth}×${config.customHeight}″` : config.size,
-    `${config.innerBorder} inner border`,
-    `${config.outerBorder} outer border`,
-    config.logo === "Other Logo" ? config.uploadedLogoName || config.logo : config.logo,
-    config.sloganEnabled ? `Slogan “${config.sloganText}” (${config.sloganFont})` : "No slogan",
+    rule.innerBorders.length > 1 ? `${config.innerBorder} inner border` : "",
+    rule.outerBorders.length > 1 ? `${config.outerBorder} outer border` : "",
+    rule.logos.length > 1 ? (config.logo === "Other Logo" ? config.uploadedLogoName || config.logo : config.logo) : "",
+    config.countryFlag !== "None" ? `${config.countryFlag} country flag` : "",
+    rule.slogan ? (config.sloganMode === "custom" ? `Slogan “${config.sloganText}” (${config.sloganFont})` : "No slogan") : "",
     config.fixing,
-  ];
+  ].filter(Boolean);
   const lines = getPriceBreakdown(config);
 
   return (

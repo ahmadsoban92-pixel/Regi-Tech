@@ -17,6 +17,9 @@ importers:
       '@hookform/resolvers':
         specifier: latest
         version: 5.9.1(react-hook-form@7.90.0(@types/react@19.3.0)(react@19.3.0))(zod@4.6.7)
+      '@ideal-postcodes/sdk':
+        specifier: 0.5.0
+        version: 0.5.0
       lucide-react:
         specifier: latest
         version: 1.55.0(@types/react@19.3.0)(react@19.3.0)
@@ -149,6 +152,18 @@ packages:
       yup:
         optional: true
       zod:
+        optional: true
+
+  '@ideal-postcodes/sdk@0.5.0':
+    resolution: {integrity: sha512-w1pBvUP/RCGVbnEvMyXk7b+71DdJgC7IJDyG0pe73DTqI25J5iLUONZe6OW9ImEfjC+itoEzagdWP0ZaRjq32w==}
+    engines: {node: '>=22'}
+    peerDependencies:
+      '@tanstack/preact-query': ^5.100.11
+      '@tanstack/react-query': ^5.100.11
+    peerDependenciesMeta:
+      '@tanstack/preact-query':
+        optional: true
+      '@tanstack/react-query':
         optional: true
 
   '@img/colour@1.1.0':
@@ -886,6 +901,8 @@ snapshots:
       react-hook-form: 7.90.0(@types/react@19.3.0)(react@19.3.0)
     optionalDependencies:
       zod: 4.6.7
+
+  '@ideal-postcodes/sdk@0.5.0': {}
 
   '@img/colour@1.1.0':
     optional: true

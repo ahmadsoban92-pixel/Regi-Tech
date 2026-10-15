@@ -7,13 +7,15 @@ import content from "@/content/cart.json";
 import { formatPrice, getOrderTotal } from "@/lib/orderPricing";
 import { PlatePreview } from "@/components/order/PlatePreview";
 import { useOrderFlow } from "@/components/order/OrderFlowProvider";
+import { getProductRule } from "@/lib/productCatalog";
 
 export function CartDrawer() {
   const { cartOpen, config, hasCartItem, quantity, setCartOpen, setHasCartItem, setQuantity } = useOrderFlow();
   const reduceMotion = useReducedMotion();
 
   const total = getOrderTotal(config) * quantity;
-  const details = [config.size, `${config.innerBorder.toLowerCase()} inner border`, `${config.outerBorder.toLowerCase()} outer border`, config.logo, config.sloganEnabled ? `Slogan “${config.sloganText}”` : "No slogan"];
+  const rule = getProductRule(config.productId);
+  const details = [config.size, rule.innerBorders.length > 1 ? `${config.innerBorder.toLowerCase()} inner border` : "", rule.outerBorders.length > 1 ? `${config.outerBorder.toLowerCase()} outer border` : "", rule.logos.length > 1 ? config.logo : "", config.countryFlag !== "None" ? config.countryFlag : "", rule.slogan ? (config.sloganMode === "custom" ? `Slogan “${config.sloganText}”` : "No slogan") : ""].filter(Boolean);
 
   return (
     <AnimatePresence initial={false}>

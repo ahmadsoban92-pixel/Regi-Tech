@@ -4,20 +4,33 @@
   "badge": "Show plate",
   "changeStyle": "Change Plate Style",
   "previewNote": "Front plates are white, rear plates are yellow. Both update live with your design.",
-  "steps": ["Registration", "Size", "Borders", "Logo", "Slogan", "Fixings"],
+  "roadLegalPreviewNote": "Road-legal motorcycle plates use the fixed 7×9-inch rear format and include the required manufacturer markings.",
+  "stepLabels": {
+    "registration": "Registration",
+    "size": "Size",
+    "borders": "Borders",
+    "logo": "Logo",
+    "slogan": "Slogan",
+    "countryFlag": "Country Flag",
+    "fixings": "Fixings"
+  },
   "registration": {
     "title": "Registration",
     "label": "Enter your registration",
     "placeholder": "e.g. AB76 BCD",
-    "hint": "Check your registration carefully before ordering."
+    "hint": "Check your registration carefully before ordering.",
+    "roadLegalHint": "Enter up to seven letters and numbers. The legal display space is added automatically."
   },
   "size": {
     "title": "Size",
+    "widthLabel": "Width in inches",
+    "heightLabel": "Height in inches",
     "options": [
       { "value": "3×7″", "description": "Compact tail-tidy size.", "price": 0 },
       { "value": "4×6″", "description": "Compact and popular for track and show bikes.", "price": 0 },
       { "value": "5×7″", "description": "A balanced size for sportbikes and supermotos.", "price": 0, "badge": "POPULAR" },
       { "value": "6×8″", "description": "Traditional UK motorcycle plate proportions.", "price": 0 },
+      { "value": "7×9″", "description": "Fixed road-legal motorcycle plate size.", "price": 0 },
       { "value": "Custom", "description": "Choose your own width and height in inches.", "price": 3 }
     ]
   },
@@ -35,33 +48,48 @@
     "title": "Logo",
     "options": [
       { "value": "No Logo", "price": 0 },
-      { "value": "BMW", "price": 2, "icon": "/assets/regitech/brand-bmw.svg" },
-      { "value": "Ducati", "price": 2, "icon": "/assets/regitech/brand-ducati.svg" },
-      { "value": "Harley-Davidson", "price": 2, "icon": "/assets/regitech/brand-harley.svg" },
-      { "value": "Honda", "price": 2, "icon": "/assets/regitech/brand-honda.svg" },
-      { "value": "KTM", "price": 2, "icon": "/assets/regitech/brand-ktm.svg" },
+      { "value": "BMW", "price": 2, "icon": "/assets/regitech/logo-brand-bmw.png" },
+      { "value": "Ducati", "price": 2, "icon": "/assets/regitech/logo-brand-ducati.png" },
+      { "value": "Harley-Davidson", "price": 2, "icon": "/assets/regitech/logo-brand-harley-davidson.png" },
+      { "value": "Honda", "price": 2, "icon": "/assets/regitech/logo-brand-honda.png" },
+      { "value": "Kawasaki", "price": 2, "icon": "/assets/regitech/logo-brand-kawasaki.png" },
+      { "value": "Triumph", "price": 2, "icon": "/assets/regitech/logo-brand-triumph.png" },
+      { "value": "KTM", "price": 2, "icon": "/assets/regitech/logo-brand-ktm.png" },
       { "value": "Other Logo", "price": 2, "description": "Upload your own artwork" }
     ],
     "uploadLabel": "Upload logo artwork",
-    "uploadHint": "PNG, JPG, SVG or PDF."
+    "uploadHint": "PNG, JPG, SVG or PDF.",
+    "dragHint": "Drag the logo on the preview, or focus it and use the arrow keys.",
+    "resetPosition": "Reset logo position"
   },
   "slogan": {
     "title": "Slogan",
-    "toggle": "Add a slogan",
+    "none": "No Slogan",
+    "add": "Add a Slogan",
     "description": "Positioned near the bottom of your plate.",
     "textLabel": "Slogan text",
     "placeholder": "Ride with passion",
     "fontLabel": "Font",
-    "fonts": ["The Boss", "The Scribbler", "Rebel"],
+    "fonts": ["Rebel"],
     "price": 2
+  },
+  "countryFlag": {
+    "title": "Country Flag",
+    "description": "Optional identifier displayed on the left of a supported road-legal plate.",
+    "options": [
+      { "value": "None", "price": 0 },
+      { "value": "Union Jack", "price": 2, "icon": "/assets/regitech/flag-union-jack.png" },
+      { "value": "England", "price": 2, "icon": "/assets/regitech/flag-england.png" },
+      { "value": "Scotland", "price": 2, "icon": "/assets/regitech/flag-scotland.png" },
+      { "value": "Wales", "price": 2, "icon": "/assets/regitech/flag-wales.png" }
+    ]
   },
   "fixings": {
     "title": "Fixings",
     "options": [
       { "value": "No Fixing", "description": "Use your existing motorcycle bracket or hardware.", "price": 0 },
-      { "value": "Nylon Screws + Nylon Nuts", "description": "2 × anti-vibration nuts with 2 × black nylon screws.", "price": 1 },
-      { "value": "3M VHB Adhesive Tape", "description": "4 × 3M VHB adhesive tape strips.", "price": 1 },
-      { "value": "Complete Fixing Kit", "description": "Adhesive tape, nylon screws and nylon nuts.", "price": 2 }
+      { "value": "Nylon Fixing Set", "description": "2 nuts, 2 black nylon screws and 2 yellow nylon screws.", "price": 1 },
+      { "value": "3M Adhesive Tape", "description": "4 × 3M adhesive tape strips.", "price": 1 }
     ],
     "specialLabel": "Special Requirements (optional)",
     "specialPlaceholder": "Add a note for our team"

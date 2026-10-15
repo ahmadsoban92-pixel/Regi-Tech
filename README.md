@@ -13,6 +13,14 @@ corepack pnpm dev
 
 Open `http://localhost:3000`.
 
+Copy `.env.example` to `.env.local` when local server settings are needed. The optional Ideal Postcodes integration uses a server-only key:
+
+```bash
+IDEAL_POSTCODES_API_KEY=ak_your_key_here
+```
+
+Without that key, checkout continues to support validated manual delivery and billing addresses.
+
 If the project is moved or copied to another directory, do not copy `node_modules` or `.next`. Delete those generated directories in the destination and run the install command again so pnpm can create links for the new absolute path.
 
 ## Available routes
@@ -22,7 +30,7 @@ If the project is moved or copied to another directory, do not copy `node_module
 - `/how-it-works` — ordering guide
 - `/faqs` — frequently asked questions
 - `/contact` — contact details and validated form
-- `/design` — six-step live plate configurator
+- `/design` — product-specific live plate configurator
 - `/review` — order review and customer confirmation
 - `/checkout` — validated customer and delivery form
 - `/order-confirmation` — confirmation layout

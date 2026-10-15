@@ -1,30 +1,18 @@
 "use client";
 
 import { createContext, useCallback, useContext, useMemo, useState } from "react";
-import products from "@/content/products.json";
+import { createDefaultConfiguration } from "@/lib/productCatalog";
 import type { CustomerDetails, PlateConfiguration } from "@/types/order";
 
-const firstProduct = products[0];
+const defaultConfiguration = createDefaultConfiguration("hand-crafted-show-plate");
 
-const defaultConfiguration: PlateConfiguration = {
-  productId: firstProduct.id,
-  productName: firstProduct.name,
-  badge: firstProduct.badge,
-  registration: "",
-  size: "6×8″",
-  customWidth: "",
-  customHeight: "",
-  innerBorder: "None",
-  outerBorder: "None",
-  logo: "No Logo",
-  uploadedLogoName: "",
-  sloganEnabled: false,
-  sloganText: "Ride with passion",
-  sloganFont: "The Boss",
-  fixing: "No Fixing",
-  specialRequirements: "",
-  orderNotes: "",
-  basePrice: Number(firstProduct.price.replace(/[^0-9.]/g, "")),
+const emptyAddress = {
+  addressLine1: "",
+  addressLine2: "",
+  town: "",
+  county: "",
+  postcode: "",
+  country: "United Kingdom",
 };
 
 const defaultCustomer: CustomerDetails = {
@@ -32,12 +20,9 @@ const defaultCustomer: CustomerDetails = {
   lastName: "",
   email: "",
   telephone: "",
-  addressLine1: "",
-  addressLine2: "",
-  town: "",
-  postcode: "",
-  country: "United Kingdom",
+  deliveryAddress: emptyAddress,
   billingSameAsDelivery: true,
+  billingAddress: emptyAddress,
   additionalNotes: "",
 };
 
@@ -66,19 +51,11 @@ export function OrderFlowProvider({ children }: { children: React.ReactNode }) {
   const [quantity, setQuantity] = useState(1);
 
   const selectProduct = useCallback((productId: string) => {
-    const product = products.find((item) => item.id === productId) ?? firstProduct;
-    setConfig((current) => ({
-      ...defaultConfiguration,
-      productId: product.id,
-      productName: product.name,
-      badge: product.badge,
-      registration: current.registration,
-      basePrice: Number(product.price.replace(/[^0-9.]/g, "")),
-    }));
+    setConfig((current) => current.productId === productId ? current : createDefaultConfiguration(productId, current.registration));
   }, []);
 
   const resetOrder = useCallback(() => {
-    setConfig(defaultConfiguration);
+    setConfig(createDefaultConfiguration("hand-crafted-show-plate"));
     setCustomer(defaultCustomer);
     setHasCartItem(false);
     setQuantity(1);
