@@ -135,7 +135,7 @@ export function getProductRule(productId: string): ProductRule {
 
 export function createDefaultConfiguration(productId: string, registration = ""): PlateConfiguration {
   const rule = getProductRule(productId);
-  const safeRegistration = rule.useType === "road-legal" ? registration.replace(/[^A-Za-z0-9]/g, "").toUpperCase().slice(0, 7) : registration.slice(0, 12);
+  const safeRegistration = rule.useType === "road-legal" ? registration.replace(/[^A-Za-z0-9]/g, "").toUpperCase().slice(0, 7) : registration.toUpperCase().slice(0, 12);
   return {
     productId: rule.id,
     productName: rule.name,
@@ -148,7 +148,7 @@ export function createDefaultConfiguration(productId: string, registration = "")
     innerBorder: "None",
     outerBorder: "None",
     logo: "No Logo",
-    logoPosition: { x: 50, y: 10 },
+    logoPosition: { x: 50, y: 12 },
     uploadedLogoName: "",
     uploadedLogoPreviewUrl: "",
     uploadedLogoMimeType: "",

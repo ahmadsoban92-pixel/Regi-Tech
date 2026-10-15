@@ -17,7 +17,7 @@ import {
 } from "@/lib/formLimits";
 import type { PlateUseType } from "@/types/order";
 
-const showRegistrationSchema = z.string().max(REGISTRATION_MAX, `Registration must be ${REGISTRATION_MAX} characters or fewer.`).refine((value) => value.trim().length > 0, "Enter your registration.");
+const showRegistrationSchema = z.string().max(REGISTRATION_MAX, `Registration must be ${REGISTRATION_MAX} characters or fewer.`).refine((value) => value.trim().length > 0, "Enter your registration.").transform((value) => value.toUpperCase());
 const roadLegalRegistrationSchema = z.string().trim().min(1, "Enter your registration.").transform((value) => value.replace(/\s+/g, "").toUpperCase()).refine((value) => /^[A-Z0-9]+$/.test(value), "Use letters and numbers only.").refine((value) => value.length <= ROAD_LEGAL_REGISTRATION_MAX, `Road-legal registration must be ${ROAD_LEGAL_REGISTRATION_MAX} characters or fewer.`);
 
 export function createConfiguratorSchema(useType: PlateUseType) {

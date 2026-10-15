@@ -3,7 +3,7 @@
   "title": "Hand Crafted SHOW PLATE",
   "badge": "Show plate",
   "changeStyle": "Change Plate Style",
-  "previewNote": "Front plates are white, rear plates are yellow. Both update live with your design.",
+  "previewNote": "Front and rear previews are yellow and update live with your design.",
   "roadLegalPreviewNote": "Road-legal motorcycle plates use the fixed 7×9-inch rear format and include the required manufacturer markings.",
   "stepLabels": {
     "registration": "Registration",
@@ -70,7 +70,8 @@
     "textLabel": "Slogan text",
     "placeholder": "Ride with passion",
     "fontLabel": "Font",
-    "fonts": ["Rebel"],
+    "fonts": ["The Boss", "The Scribbler", "Rebel"],
+    "fontPending": "Font file required",
     "price": 2
   },
   "countryFlag": {
