@@ -138,31 +138,35 @@ a {
 }
 
 .plate-registration-has-slogan:not(.plate-registration-has-logo) .plate-registration-line-first {
-  top: 8%;
+  top: 10.13%;
 }
 
 .plate-registration-has-slogan:not(.plate-registration-has-logo) .plate-registration-line-second {
-  top: 43%;
+  top: 53.27%;
 }
 
 .plate-registration-has-logo.plate-registration-has-slogan .plate-registration-line-first {
-  top: 24%;
+  top: 23%;
 }
 
 .plate-registration-has-logo.plate-registration-has-slogan .plate-registration-line-second {
-  top: 49%;
+  top: 54%;
 }
 
 .plate-registration-line {
   position: absolute;
-  right: 13.3%;
-  left: 13.3%;
+  right: 5.5%;
+  left: 5.5%;
   display: block;
   transform: translateY(-10%);
 }
 
 .plate-registration-text {
   display: inline-block;
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, -10%) scaleX(var(--plate-registration-scale));
+  transform-origin: center;
 }
 
 .plate-registration-measure {
@@ -184,20 +188,29 @@ a {
 
 .plate-registration-single .plate-registration-line {
   top: 47%;
-  right: 8%;
-  left: 8%;
+  right: 3.5%;
+  left: 3.5%;
   line-height: 0.92;
   transform: translateY(-50%);
 }
 
+.plate-registration-single .plate-registration-text {
+  transform: translate(-50%, -50%) scaleX(var(--plate-registration-scale));
+}
+
 .plate-registration-single.plate-registration-border-1 .plate-registration-line {
-  right: 7.5%;
-  left: 7.5%;
+  right: 4.5%;
+  left: 4.5%;
 }
 
 .plate-registration-single.plate-registration-border-2 .plate-registration-line {
-  right: 8.5%;
-  left: 8.5%;
+  right: 5.5%;
+  left: 5.5%;
+}
+
+.plate-registration-has-flag .plate-registration-line-second {
+  right: 4.5%;
+  left: 19%;
 }
 
 .plate-registration-single.plate-registration-has-logo .plate-registration-line {
@@ -205,11 +218,11 @@ a {
 }
 
 .plate-registration-single.plate-registration-has-slogan .plate-registration-line {
-  top: 40%;
+  top: 47%;
 }
 
 .plate-registration-single.plate-registration-has-logo.plate-registration-has-slogan .plate-registration-line {
-  top: 45%;
+  top: 51%;
 }
 
 .plate-slogan {
@@ -340,9 +353,17 @@ a {
 }
 
 .plate-canvas-landscape .plate-slogan {
-  bottom: 8%;
+  bottom: 8.5%;
   font-size: var(--plate-slogan-size);
   max-height: 16%;
+}
+
+.plate-canvas-landscape .plate-slogan-border-1 {
+  bottom: 10.5%;
+}
+
+.plate-canvas-landscape .plate-slogan-border-2 {
+  bottom: 11.5%;
 }
 
 .section-heading {
@@ -467,6 +488,48 @@ summary:focus-visible {
   color: var(--destructive);
   font-size: 0.75rem;
   line-height: 1.4;
+}
+
+.admin-dark-field,
+.admin-light-field {
+  width: 100%;
+  min-height: 42px;
+  border-radius: 6px;
+  padding: 0.625rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  transition: border-color 160ms ease, box-shadow 160ms ease;
+}
+
+.admin-dark-field {
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: transparent;
+  color: white;
+}
+
+.admin-dark-field::placeholder {
+  color: rgba(255, 255, 255, 0.2);
+}
+
+.admin-light-field {
+  border: 1px solid #e5e7eb;
+  background: white;
+  color: #111111;
+}
+
+.admin-light-field::placeholder {
+  color: rgba(43, 45, 49, 0.55);
+}
+
+.admin-search-field {
+  padding-left: 2.5rem;
+}
+
+.admin-dark-field:focus,
+.admin-light-field:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgba(255, 214, 0, 0.16);
+  outline: none;
 }
 
 @media (min-width: 768px) {

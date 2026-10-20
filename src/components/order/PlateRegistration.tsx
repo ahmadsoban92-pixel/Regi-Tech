@@ -9,11 +9,12 @@ type PlateRegistrationProps = {
   hasFlag?: boolean;
   hasLogo?: boolean;
   hasSlogan?: boolean;
+  horizontalScale?: number;
   maxFontSizeCqw?: number;
   singleLine?: boolean;
 };
 
-export function PlateRegistration({ borderCount = 0, lineOne, lineTwo, hasFlag = false, hasLogo = false, hasSlogan = false, maxFontSizeCqw = 27.58, singleLine = false }: PlateRegistrationProps) {
+export function PlateRegistration({ borderCount = 0, lineOne, lineTwo, hasFlag = false, hasLogo = false, hasSlogan = false, horizontalScale = 1, maxFontSizeCqw = 27.58, singleLine = false }: PlateRegistrationProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const lineRefs = useRef<Array<HTMLSpanElement | null>>([]);
   const measureRefs = useRef<Array<HTMLSpanElement | null>>([]);
@@ -41,7 +42,7 @@ export function PlateRegistration({ borderCount = 0, lineOne, lineTwo, hasFlag =
         lineRefs.current.forEach((line, index) => {
           const measuredText = measureRefs.current[index];
           if (!line || !measuredText || !measuredText.textContent) return;
-          const measuredTextWidth = measuredText.getBoundingClientRect().width;
+          const measuredTextWidth = measuredText.getBoundingClientRect().width * horizontalScale;
           const availableWidth = Math.max(0, line.clientWidth - Math.max(4, line.clientWidth * 0.04));
           if (!measuredTextWidth || !availableWidth) return;
           nextSize = Math.min(nextSize, maxFontSizeCqw * (availableWidth / measuredTextWidth));
@@ -63,10 +64,10 @@ export function PlateRegistration({ borderCount = 0, lineOne, lineTwo, hasFlag =
       cancelAnimationFrame(frame);
       resizeObserver.disconnect();
     };
-  }, [borderCount, hasFlag, hasLogo, hasSlogan, lineOne, lineTwo, maxFontSizeCqw, singleLine]);
+  }, [borderCount, hasFlag, hasLogo, hasSlogan, horizontalScale, lineOne, lineTwo, maxFontSizeCqw, singleLine]);
 
   return (
-    <div aria-hidden="true" className={`plate-registration ${stateClasses}`} ref={containerRef} style={{ "--plate-registration-size": `${fontSizeCqw}cqw` } as CSSProperties}>
+    <div aria-hidden="true" className={`plate-registration ${stateClasses}`} ref={containerRef} style={{ "--plate-registration-scale": horizontalScale, "--plate-registration-size": `${fontSizeCqw}cqw` } as CSSProperties}>
       <span className="plate-registration-line plate-registration-line-first" ref={(element) => { lineRefs.current[0] = element; }}><span className="plate-registration-text">{lineOne}</span></span>
       {singleLine ? null : <span className="plate-registration-line plate-registration-line-second" ref={(element) => { lineRefs.current[1] = element; }}><span className="plate-registration-text">{lineTwo}</span></span>}
       <span className="plate-registration-measure" style={{ "--plate-registration-measure-size": `${maxFontSizeCqw}cqw` } as CSSProperties}>

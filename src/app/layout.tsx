@@ -5,6 +5,8 @@ import "@fontsource/montserrat/500.css";
 import "@fontsource/montserrat/600.css";
 import "@fontsource/montserrat/700.css";
 import "@fontsource/montserrat/800.css";
+import "@fontsource/source-code-pro/400.css";
+import "@fontsource/source-code-pro/600.css";
 import "./globals.css";
 import { OrderFlowProvider } from "@/components/order/OrderFlowProvider";
 import { MotionProvider } from "@/components/ui/MotionProvider";

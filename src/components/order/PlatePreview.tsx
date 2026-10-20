@@ -31,11 +31,24 @@ function clampLogoPosition(position: LogoPosition): LogoPosition {
   return { x: clamp(position.x, 11, 89), y: clamp(position.y, 9, 91) };
 }
 
-function getRegistrationMaxFontSize(config: PlateConfiguration, singleLine: boolean) {
-  const aspectRatio = getPlateAspectRatio(config);
-  const ratioScale = Math.min(1, (8 / 6) / aspectRatio);
-  const baseSize = singleLine ? 22 : 27.58 * ratioScale;
-  return Number(baseSize.toFixed(2));
+function getRegistrationMaxFontSize(singleLine: boolean, hasLogo: boolean, hasSlogan: boolean) {
+  // Use the supplied reference geometry as the upper bound, then let the
+  // measured fitter reduce long lines to the printable width. Accessory-heavy
+  // show plates use a modestly lower cap so their dedicated safe areas remain
+  // separate without moving the registration block sharply upward.
+  if (singleLine) return hasLogo ? 26 : 30;
+  if (hasLogo && hasSlogan) return 27.5;
+  if (hasLogo) return 30;
+  if (hasSlogan) return 28;
+  return 36;
+}
+
+function getRegistrationHorizontalScale(singleLine: boolean, hasLogo: boolean, hasSlogan: boolean) {
+  if (singleLine) return hasLogo ? 0.87 : 0.78;
+  if (hasLogo && hasSlogan) return 1.28;
+  if (hasSlogan) return 1.38;
+  if (hasLogo) return 1.24;
+  return 1.18;
 }
 
 function getSloganFontClass(font: PlateConfiguration["sloganFont"]) {
@@ -62,7 +75,8 @@ export function PlatePreview({ compact = false, config, onLogoPositionChange }: 
   const hasFlag = Boolean(flagAsset);
   const interactiveLogo = hasLogo && Boolean(onLogoPositionChange) && !compact;
   const logoPosition = clampLogoPosition(config.logoPosition);
-  const registrationMaxFontSize = getRegistrationMaxFontSize(config, singleLine);
+  const registrationMaxFontSize = getRegistrationMaxFontSize(singleLine, hasLogo, hasSlogan);
+  const registrationHorizontalScale = getRegistrationHorizontalScale(singleLine, hasLogo, hasSlogan);
   const borderCount = Number(config.innerBorder !== "None") + Number(config.outerBorder !== "None");
   const sloganFontSize = getSloganFontSize(config.sloganText, singleLine);
 
@@ -126,9 +140,9 @@ export function PlatePreview({ compact = false, config, onLogoPositionChange }: 
         </div>
       ) : null}
 
-      <PlateRegistration borderCount={borderCount} hasFlag={hasFlag} hasLogo={hasLogo} hasSlogan={hasSlogan} lineOne={lineOne} lineTwo={lineTwo} maxFontSizeCqw={registrationMaxFontSize} singleLine={singleLine} />
+      <PlateRegistration borderCount={borderCount} hasFlag={hasFlag} hasLogo={hasLogo} hasSlogan={hasSlogan} horizontalScale={registrationHorizontalScale} lineOne={lineOne} lineTwo={lineTwo} maxFontSizeCqw={registrationMaxFontSize} singleLine={singleLine} />
 
-      {hasSlogan ? <div className={`plate-slogan ${getSloganFontClass(config.sloganFont)} absolute z-10 text-center text-[var(--plate-ink)]`} style={{ "--plate-slogan-size": `${sloganFontSize}cqw` } as CSSProperties}>{config.sloganText}</div> : null}
+      {hasSlogan ? <div className={`plate-slogan plate-slogan-border-${Math.min(borderCount, 2)} ${getSloganFontClass(config.sloganFont)} absolute z-10 text-center text-[var(--plate-ink)]`} style={{ "--plate-slogan-size": `${sloganFontSize}cqw` } as CSSProperties}>{config.sloganText}</div> : null}
 
       {config.useType === "road-legal" ? <RoadLegalMarkings hasInnerBorder={config.innerBorder !== "None"} /> : null}
     </div>
