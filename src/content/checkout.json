@@ -5,7 +5,7 @@
   "deliveryTitle": "Delivery address",
   "billingTitle": "Billing address",
   "lookup": {
-    "label": "Find your UK address",
+    "label": "Enter your postcode, then press ‘Find address’",
     "button": "Find address",
     "loading": "Finding addresses…",
     "select": "Select your address",
@@ -36,10 +36,42 @@
     "method": "Royal Mail Tracked 48 — FREE",
     "estimate": "Estimated delivery: 2–3 working days after dispatch."
   },
+  "v5c": {
+    "title": "Road-legal verification",
+    "body": "Upload a clear, readable copy of the vehicle V5C that matches the registration being ordered.",
+    "label": "V5C document",
+    "selected": "Selected file",
+    "typeError": "Upload a PDF, JPG or PNG V5C document.",
+    "sizeError": "The V5C document must be 10 MB or smaller.",
+    "privacy": "Your V5C is stored privately with this order and is not used for unrelated marketing.",
+    "dispatch": "Road-legal dispatch may be delayed until registration verification is complete.",
+    "required": "Upload a clear PDF, JPG or PNG copy of the V5C document for this plate."
+  },
+  "artwork": {
+    "title": "Other Logo artwork",
+    "body": "Select the artwork used for this plate again. For privacy and security, uploaded files are not stored in your browser.",
+    "label": "Logo artwork",
+    "selected": "Selected file",
+    "typeError": "Upload PNG, JPG, SVG or PDF artwork.",
+    "sizeError": "The artwork file must be 10 MB or smaller."
+  },
+  "cancelled": {
+    "title": "Payment was not completed",
+    "body": "Your order is still available and has not been marked as paid.",
+    "retry": "Retry secure payment",
+    "retrying": "Opening secure payment…"
+  },
+  "errors": {
+    "artworkRequired": "Select the Other Logo artwork again before checkout.",
+    "emptyCart": "Your cart is empty. Add at least one plate before checkout.",
+    "unavailable": "Secure checkout is temporarily unavailable. Your card has not been charged."
+  },
   "summary": "Order summary",
+  "paymentExplainer": "After you submit your contact and address details, you’ll enter card or payment details securely on Stripe.",
   "subtotal": "Subtotal",
   "deliveryLabel": "Delivery",
   "free": "FREE",
   "total": "Total",
-  "submit": "View order confirmation layout"
+  "submit": "Proceed to secure payment",
+  "submitting": "Preparing secure payment…"
 }

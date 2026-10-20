@@ -39,6 +39,22 @@
   font-display: swap;
 }
 
+@font-face {
+  font-family: "UKNumberPlate";
+  src: url("/assets/regitech/UKNumberPlate.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Anita Semi-square";
+  src: url("/assets/regitech/AnitaSemiSquare.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -103,13 +119,14 @@ a {
   position: absolute;
   inset: 0;
   color: var(--foreground-on-light);
-  font-family: "Inter", Arial, sans-serif;
+  font-family: "UKNumberPlate", "Inter", Arial, sans-serif;
   font-size: var(--plate-registration-size);
-  font-weight: 700;
+  font-weight: 400;
   letter-spacing: normal;
   line-height: normal;
   text-align: center;
   white-space: nowrap;
+  z-index: 10;
 }
 
 .plate-registration-has-logo:not(.plate-registration-has-slogan) .plate-registration-line-first {
@@ -136,16 +153,12 @@ a {
   top: 49%;
 }
 
-.plate-registration-has-flag .plate-registration-line {
-  right: 8%;
-  left: 20%;
-}
-
 .plate-registration-line {
   position: absolute;
   right: 13.3%;
   left: 13.3%;
   display: block;
+  transform: translateY(-10%);
 }
 
 .plate-registration-text {
@@ -203,7 +216,6 @@ a {
   right: 12%;
   bottom: 7%;
   left: 12%;
-  font-family: "New Rocker", serif;
   font-size: var(--plate-slogan-size);
   line-height: 1;
   max-height: 13%;
@@ -212,61 +224,119 @@ a {
   text-wrap: balance;
 }
 
+.plate-slogan-font-boss {
+  font-family: "Anita Semi-square", sans-serif;
+}
+
+.plate-slogan-font-scribbler {
+  font-family: "Chalkboard SE";
+}
+
+.plate-slogan-font-rebel {
+  font-family: "New Rocker", serif;
+}
+
 .plate-border-frame {
   position: absolute;
-  inset: 2.35%;
   z-index: 5;
-  box-sizing: border-box;
   border-radius: 1.25cqw;
+  overflow: hidden;
   pointer-events: none;
 }
 
 .plate-border-frame-single {
-  border-width: 1.85cqw;
-  border-style: solid;
+  background: var(--plate-border-material);
+  --plate-border-width: 2.35cqw;
 }
 
-.plate-border-band {
-  position: absolute;
-  box-sizing: border-box;
-  border-style: solid;
+.plate-border-frame-inner {
+  inset: 2.35cqw;
+  --plate-border-width: 1.85cqw;
 }
 
-.plate-border-band-outer {
+.plate-border-frame-outer {
   inset: 0;
-  border-width: 0.55cqw;
-  border-radius: 1.25cqw;
+  border-radius: inherit;
+}
+
+.plate-border-frame-road-legal.plate-border-frame-inner {
+  inset: 1.35cqw;
+  --plate-border-width: 1.35cqw;
+}
+
+.plate-border-frame-double {
+  inset: 0;
+  border-radius: inherit;
+  background: var(--plate-border-material);
+}
+
+.plate-border-frame-double-same {
+  --plate-border-width: 2.35cqw;
+}
+
+.plate-border-frame-double-mixed {
+  --plate-border-width: 1.48cqw;
+}
+
+.plate-border-band,
+.plate-border-cutout {
+  position: absolute;
 }
 
 .plate-border-band-inner {
-  inset: 0.55cqw;
-  border-width: 1.75cqw;
-  border-radius: 0.7cqw;
+  inset: var(--plate-border-width);
+  border-radius: 0.75cqw;
+  background: var(--plate-border-material);
+  --plate-border-width: 1.48cqw;
+}
+
+.plate-border-cutout {
+  inset: var(--plate-border-width);
+  border-radius: 0.55cqw;
+  background: var(--plate-surface);
 }
 
 .plate-border-material-black {
-  border-color: var(--plate-ink);
+  --plate-border-material: var(--plate-ink);
 }
 
 .plate-border-material-silver {
-  border-color: var(--mirror-silver);
+  --plate-border-material: var(--mirror-silver);
 }
 
 .plate-flag {
-  top: 49%;
-  left: 8%;
-  width: 9.5%;
-  transform: translateY(-8%);
+  pointer-events: none;
 }
 
-.plate-flag-art {
-  aspect-ratio: 4 / 3;
-  max-height: 13cqw;
+.road-legal-markings {
+  position: absolute;
+  inset: 0;
+  z-index: 15;
+  pointer-events: none;
+  color: var(--plate-ink);
+  font-size: 1.55cqw;
+  font-weight: 600;
+  line-height: 1;
+  white-space: nowrap;
+  --road-legal-marking-bottom: 2.2%;
 }
 
-.plate-flag-identifier {
-  margin-top: 0.6cqw;
-  font-size: 2.8cqw;
+.road-legal-markings-with-border {
+  --road-legal-marking-bottom: 6.4%;
+}
+
+.road-legal-marking {
+  position: absolute;
+  bottom: var(--road-legal-marking-bottom);
+}
+
+.road-legal-marking-manufacturer {
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.road-legal-marking-standard {
+  right: 7%;
 }
 
 .plate-canvas-landscape .plate-slogan {

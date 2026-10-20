@@ -1,12 +1,21 @@
 {
   "title": "Thank you for your order",
-  "body": "Your order details are shown below. Contact our team if you need help with your order.",
+  "paidBody": "Payment is confirmed. Your order details are shown below.",
+  "pendingTitle": "We’re confirming your payment",
+  "pendingBody": "Stripe has returned you to Regi-Tech, but the verified payment update has not arrived yet. Your order has not been marked as paid until that secure update is received.",
+  "failedTitle": "Payment was not completed",
+  "failedBody": "Your order is saved, but it has not been marked as paid. Return to checkout to try payment again.",
+  "unavailableTitle": "Order confirmation unavailable",
+  "unavailableBody": "This confirmation link is invalid or no longer available. Contact our team if you need help locating your order.",
+  "verificationPending": "Your road-legal documents are awaiting verification before dispatch.",
   "referenceLabel": "Order reference",
-  "reference": "RT-260041",
   "priceBreakdown": "Price breakdown",
+  "orderNotes": "Order notes",
+  "subtotal": "Subtotal",
   "delivery": "UK Royal Mail Tracked 48",
   "free": "FREE",
   "total": "Total",
   "designAnother": "Design another plate",
+  "returnToCheckout": "Return to checkout",
   "contact": "Contact our team"
 }

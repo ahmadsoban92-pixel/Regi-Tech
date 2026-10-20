@@ -4,7 +4,8 @@ import Image from "next/image";
 import { useRef, type CSSProperties } from "react";
 import { PlateBorderFrame } from "@/components/order/PlateBorderFrame";
 import { PlateRegistration } from "@/components/order/PlateRegistration";
-import { FLAG_ASSETS, getPlateAspectRatio, LOGO_ASSETS } from "@/lib/productCatalog";
+import { RoadLegalMarkings } from "@/components/order/RoadLegalMarkings";
+import { getCountryFlagDefinition, getPlateAspectRatio, LOGO_ASSETS } from "@/lib/productCatalog";
 import type { LogoPosition, PlateConfiguration } from "@/types/order";
 
 function splitRegistration(config: PlateConfiguration, singleLine: boolean): [string, string] {
@@ -22,25 +23,25 @@ function splitRegistration(config: PlateConfiguration, singleLine: boolean): [st
   return [value.slice(0, midpoint), value.slice(midpoint)];
 }
 
-function flagIdentifier(flag: PlateConfiguration["countryFlag"]) {
-  return { "Union Jack": "UK", England: "ENG", Scotland: "SCO", Wales: "CYMRU", None: "" }[flag];
-}
-
 function clamp(value: number, minimum: number, maximum: number) {
   return Math.min(maximum, Math.max(minimum, value));
 }
 
-function clampLogoPosition(position: LogoPosition, hasSlogan: boolean): LogoPosition {
-  return { x: clamp(position.x, 15, 85), y: clamp(position.y, 12, hasSlogan ? 74 : 85) };
+function clampLogoPosition(position: LogoPosition): LogoPosition {
+  return { x: clamp(position.x, 11, 89), y: clamp(position.y, 9, 91) };
 }
 
-function getRegistrationMaxFontSize(config: PlateConfiguration, singleLine: boolean, hasLogo: boolean, hasSlogan: boolean, hasFlag: boolean) {
+function getRegistrationMaxFontSize(config: PlateConfiguration, singleLine: boolean) {
   const aspectRatio = getPlateAspectRatio(config);
   const ratioScale = Math.min(1, (8 / 6) / aspectRatio);
   const baseSize = singleLine ? 22 : 27.58 * ratioScale;
-  const contentScale = hasLogo && hasSlogan ? 0.72 : hasLogo ? 0.84 : hasSlogan ? 0.83 : 1;
-  const flagScale = hasFlag ? 0.82 : 1;
-  return Number((baseSize * contentScale * flagScale).toFixed(2));
+  return Number(baseSize.toFixed(2));
+}
+
+function getSloganFontClass(font: PlateConfiguration["sloganFont"]) {
+  if (font === "The Boss") return "plate-slogan-font-boss";
+  if (font === "The Scribbler") return "plate-slogan-font-scribbler";
+  return "plate-slogan-font-rebel";
 }
 
 function getSloganFontSize(text: string, singleLine: boolean) {
@@ -54,13 +55,14 @@ export function PlatePreview({ compact = false, config, onLogoPositionChange }: 
   const singleLine = config.useType === "show" && aspectRatio >= 1.75;
   const [lineOne, lineTwo] = splitRegistration(config, singleLine);
   const logoAsset = config.logo === "Other Logo" ? config.uploadedLogoPreviewUrl : LOGO_ASSETS[config.logo];
-  const flagAsset = FLAG_ASSETS[config.countryFlag];
+  const flagDefinition = getCountryFlagDefinition(config.countryFlag);
+  const flagAsset = flagDefinition.assetPath;
   const hasLogo = config.logo !== "No Logo";
   const hasSlogan = config.sloganMode === "custom" && Boolean(config.sloganText);
   const hasFlag = Boolean(flagAsset);
   const interactiveLogo = hasLogo && Boolean(onLogoPositionChange) && !compact;
-  const logoPosition = clampLogoPosition(config.logoPosition, hasSlogan);
-  const registrationMaxFontSize = getRegistrationMaxFontSize(config, singleLine, hasLogo, hasSlogan, hasFlag);
+  const logoPosition = clampLogoPosition(config.logoPosition);
+  const registrationMaxFontSize = getRegistrationMaxFontSize(config, singleLine);
   const borderCount = Number(config.innerBorder !== "None") + Number(config.outerBorder !== "None");
   const sloganFontSize = getSloganFontSize(config.sloganText, singleLine);
 
@@ -70,7 +72,7 @@ export function PlatePreview({ compact = false, config, onLogoPositionChange }: 
     onLogoPositionChange(clampLogoPosition({
       x: ((clientX - bounds.left) / bounds.width) * 100,
       y: ((clientY - bounds.top) / bounds.height) * 100,
-    }, hasSlogan));
+    }));
   }
 
   return (
@@ -79,19 +81,19 @@ export function PlatePreview({ compact = false, config, onLogoPositionChange }: 
       ref={plateRef}
       style={{ aspectRatio }}
     >
-      <PlateBorderFrame innerBorder={config.innerBorder} outerBorder={config.outerBorder} />
+      <PlateBorderFrame innerBorder={config.innerBorder} outerBorder={config.outerBorder} roadLegal={config.useType === "road-legal"} />
 
       {hasLogo ? (
         <div
           aria-label={interactiveLogo ? "Move selected logo. Use arrow keys for fine adjustment." : undefined}
-          className={`absolute z-20 grid h-[10%] w-[17%] -translate-x-1/2 -translate-y-1/2 place-items-center ${interactiveLogo ? "cursor-move touch-none rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]" : "pointer-events-none"}`}
+          className={`absolute z-20 grid h-[18%] w-[22%] -translate-x-1/2 -translate-y-1/2 place-items-center ${interactiveLogo ? "cursor-move touch-none rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]" : "pointer-events-none"}`}
           onKeyDown={interactiveLogo ? (event) => {
             const distance = event.shiftKey ? 5 : 1;
             const offsets: Partial<Record<string, [number, number]>> = { ArrowLeft: [-distance, 0], ArrowRight: [distance, 0], ArrowUp: [0, -distance], ArrowDown: [0, distance] };
             const offset = offsets[event.key];
             if (!offset || !onLogoPositionChange) return;
             event.preventDefault();
-            onLogoPositionChange(clampLogoPosition({ x: config.logoPosition.x + offset[0], y: config.logoPosition.y + offset[1] }, hasSlogan));
+            onLogoPositionChange(clampLogoPosition({ x: config.logoPosition.x + offset[0], y: config.logoPosition.y + offset[1] }));
           } : undefined}
           onPointerDown={interactiveLogo ? (event) => { event.currentTarget.setPointerCapture(event.pointerId); updateLogoFromPointer(event.clientX, event.clientY); } : undefined}
           onPointerMove={interactiveLogo ? (event) => { if (event.currentTarget.hasPointerCapture(event.pointerId)) updateLogoFromPointer(event.clientX, event.clientY); } : undefined}
@@ -103,13 +105,32 @@ export function PlatePreview({ compact = false, config, onLogoPositionChange }: 
         </div>
       ) : null}
 
-      {flagAsset ? <div className="plate-flag absolute z-10 flex flex-col items-center"><div className="plate-flag-art relative w-full"><Image alt={`${config.countryFlag} country flag`} className="object-contain" fill sizes={compact ? "18px" : "56px"} src={flagAsset} /></div><span className="plate-flag-identifier font-bold leading-none text-[var(--plate-ink)]">{flagIdentifier(config.countryFlag)}</span></div> : null}
+      {flagAsset ? (
+        <div
+          className="plate-flag absolute z-10"
+          data-orientation={flagDefinition.orientation}
+          style={{
+            left: `${flagDefinition.printableRegion.left}%`,
+            top: `${flagDefinition.printableRegion.top}%`,
+            width: `${flagDefinition.printableRegion.width}%`,
+            height: `${flagDefinition.printableRegion.height}%`,
+          }}
+        >
+          <Image
+            alt={flagDefinition.label}
+            className="object-contain"
+            fill
+            sizes={compact ? "24px" : "64px"}
+            src={flagAsset}
+          />
+        </div>
+      ) : null}
 
       <PlateRegistration borderCount={borderCount} hasFlag={hasFlag} hasLogo={hasLogo} hasSlogan={hasSlogan} lineOne={lineOne} lineTwo={lineTwo} maxFontSizeCqw={registrationMaxFontSize} singleLine={singleLine} />
 
-      {hasSlogan ? <div className="plate-slogan absolute z-10 text-center text-[var(--plate-ink)]" style={{ "--plate-slogan-size": `${sloganFontSize}cqw` } as CSSProperties}>{config.sloganText}</div> : null}
+      {hasSlogan ? <div className={`plate-slogan ${getSloganFontClass(config.sloganFont)} absolute z-10 text-center text-[var(--plate-ink)]`} style={{ "--plate-slogan-size": `${sloganFontSize}cqw` } as CSSProperties}>{config.sloganText}</div> : null}
 
-      {config.useType === "road-legal" ? <div aria-hidden className="absolute inset-x-[8%] bottom-[2.2%] z-10 flex items-end justify-between gap-3 text-[1.55cqw] font-semibold leading-none text-[var(--plate-ink)]"><span>License Plate Workshop Ltd RG1 6LB</span><span>BS AU 145e</span></div> : null}
+      {config.useType === "road-legal" ? <RoadLegalMarkings hasInnerBorder={config.innerBorder !== "None"} /> : null}
     </div>
   );
 }

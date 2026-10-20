@@ -1,6 +1,9 @@
 {
   "breadcrumb": ["Home", "Review"],
   "title": "Check your plate details",
+  "empty": "Your cart is empty. Create a plate before continuing.",
+  "createPlate": "Explore Our Plates",
+  "createAnother": "Create Another Plate",
   "edit": "Edit",
   "priceBreakdown": "Price breakdown",
   "itemTotal": "Item total",

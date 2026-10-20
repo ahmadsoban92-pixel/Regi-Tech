@@ -1,5 +1,5 @@
-import { getProductRule, OPTION_PRICES } from "@/lib/productCatalog";
-import type { PlateConfiguration, PriceLine } from "@/types/order";
+import { FIXING_OPTIONS, getCountryFlagDefinition, getProductRule, OPTION_PRICES } from "@/lib/productCatalog";
+import type { CartItem, PlateConfiguration, PriceLine } from "@/types/order";
 
 export function getPriceBreakdown(config: PlateConfiguration): PriceLine[] {
   const rule = getProductRule(config.productId);
@@ -16,14 +16,30 @@ export function getPriceBreakdown(config: PlateConfiguration): PriceLine[] {
   if (outerPrice) lines.push({ label: `${config.outerBorder} outer border`, amount: outerPrice });
   if (logoPrice) lines.push({ label: config.logo, amount: logoPrice });
   if (rule.slogan && config.sloganMode === "custom") lines.push({ label: "Slogan", amount: OPTION_PRICES.slogan });
-  if (flagPrice) lines.push({ label: `${config.countryFlag} country flag`, amount: flagPrice });
-  if (fixingPrice) lines.push({ label: config.fixing, amount: fixingPrice });
+  if (flagPrice) lines.push({ label: getCountryFlagDefinition(config.countryFlag).label, amount: flagPrice });
+  if (fixingPrice) lines.push({ label: FIXING_OPTIONS[config.fixing].label, amount: fixingPrice });
 
   return lines;
 }
 
 export function getOrderTotal(config: PlateConfiguration): number {
   return getPriceBreakdown(config).reduce((total, line) => total + line.amount, 0);
+}
+
+export function getOrderTotalPence(config: PlateConfiguration): number {
+  return getPriceBreakdown(config).reduce((total, line) => total + Math.round(line.amount * 100), 0);
+}
+
+export function getCartTotal(items: CartItem[]): number {
+  return items.reduce((total, item) => total + getOrderTotal(item.config) * item.quantity, 0);
+}
+
+export function getCartTotalPence(items: CartItem[]): number {
+  return items.reduce((total, item) => total + getOrderTotalPence(item.config) * item.quantity, 0);
+}
+
+export function getCartQuantity(items: CartItem[]): number {
+  return items.reduce((total, item) => total + item.quantity, 0);
 }
 
 export function formatPrice(value: number): string {

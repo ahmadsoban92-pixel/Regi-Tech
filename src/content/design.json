@@ -3,8 +3,9 @@
   "title": "Hand Crafted SHOW PLATE",
   "badge": "Show plate",
   "changeStyle": "Change Plate Style",
-  "previewNote": "Front and rear previews are yellow and update live with your design.",
+  "previewNote": "Your plate preview updates live with your design.",
   "roadLegalPreviewNote": "Road-legal motorcycle plates use the fixed 7×9-inch rear format and include the required manufacturer markings.",
+  "professionalReviewNote": "Logo & Slogan — Your design will be professionally reviewed and refined by our team to achieve the best possible result.",
   "stepLabels": {
     "registration": "Registration",
     "size": "Size",
@@ -23,15 +24,20 @@
   },
   "size": {
     "title": "Size",
-    "widthLabel": "Width in inches",
-    "heightLabel": "Height in inches",
+    "widthLabel": "Width",
+    "heightLabel": "Height",
+    "unitLabel": "Measurement unit",
+    "units": [
+      { "value": "in", "label": "Inches" },
+      { "value": "cm", "label": "Centimetres" }
+    ],
     "options": [
       { "value": "3×7″", "description": "Compact tail-tidy size.", "price": 0 },
       { "value": "4×6″", "description": "Compact and popular for track and show bikes.", "price": 0 },
       { "value": "5×7″", "description": "A balanced size for sportbikes and supermotos.", "price": 0, "badge": "POPULAR" },
       { "value": "6×8″", "description": "Traditional UK motorcycle plate proportions.", "price": 0 },
       { "value": "7×9″", "description": "Fixed road-legal motorcycle plate size.", "price": 0 },
-      { "value": "Custom", "description": "Choose your own width and height in inches.", "price": 3 }
+      { "value": "Custom", "description": "Choose your own width, height and measurement unit.", "price": 3 }
     ]
   },
   "borders": {
@@ -59,6 +65,7 @@
     ],
     "uploadLabel": "Upload logo artwork",
     "uploadHint": "PNG, JPG, SVG or PDF.",
+    "reselectHint": "Please select this file again before checkout because uploaded artwork is not stored in your browser.",
     "dragHint": "Drag the logo on the preview, or focus it and use the arrow keys.",
     "resetPosition": "Reset logo position"
   },
@@ -71,26 +78,27 @@
     "placeholder": "Ride with passion",
     "fontLabel": "Font",
     "fonts": ["The Boss", "The Scribbler", "Rebel"],
-    "fontPending": "Font file required",
+    "fontPending": "Licensed webfont required",
     "price": 2
   },
   "countryFlag": {
     "title": "Country Flag",
     "description": "Optional identifier displayed on the left of a supported road-legal plate.",
     "options": [
-      { "value": "None", "price": 0 },
-      { "value": "Union Jack", "price": 2, "icon": "/assets/regitech/flag-union-jack.png" },
-      { "value": "England", "price": 2, "icon": "/assets/regitech/flag-england.png" },
-      { "value": "Scotland", "price": 2, "icon": "/assets/regitech/flag-scotland.png" },
-      { "value": "Wales", "price": 2, "icon": "/assets/regitech/flag-wales.png" }
+      { "value": "none", "label": "None", "price": 0 },
+      { "value": "uk", "label": "United Kingdom — UK", "price": 2, "icon": "/assets/regitech/country-flags/uk.png" },
+      { "value": "eng", "label": "England — ENG", "price": 2, "icon": "/assets/regitech/country-flags/eng.png" },
+      { "value": "cymru", "label": "Wales — CYMRU", "price": 2, "icon": "/assets/regitech/country-flags/cymru.png" },
+      { "value": "sco", "label": "Scotland — SCO", "price": 2, "icon": "/assets/regitech/country-flags/sco.png" }
     ]
   },
   "fixings": {
     "title": "Fixings",
     "options": [
-      { "value": "No Fixing", "description": "Use your existing motorcycle bracket or hardware.", "price": 0 },
-      { "value": "Nylon Fixing Set", "description": "2 nuts, 2 black nylon screws and 2 yellow nylon screws.", "price": 1 },
-      { "value": "3M Adhesive Tape", "description": "4 × 3M adhesive tape strips.", "price": 1 }
+      { "value": "none", "label": "No Fixing", "description": "Use your existing motorcycle bracket or hardware.", "price": 0 },
+      { "value": "fixing-kit", "label": "Fixing Kit Included", "description": "Four nylon screws, two black and two yellow, plus stainless-steel Nyloc nuts.", "price": 1 },
+      { "value": "adhesive-kit", "label": "Adhesive Fixing Kit Included", "description": "Four 3M VHB double-sided adhesive strips.", "price": 1 },
+      { "value": "complete-bundle", "label": "Complete Fixing Bundle", "description": "Nylon screws, stainless-steel Nyloc nuts, and four 3M VHB adhesive strips.", "price": 2 }
     ],
     "specialLabel": "Special Requirements (optional)",
     "specialPlaceholder": "Add a note for our team"
@@ -101,5 +109,7 @@
   "total": "Total",
   "back": "Back",
   "continue": "Continue",
-  "addToCart": "Add to Cart"
+  "addToCart": "Add to Cart",
+  "updateCart": "Update Plate",
+  "cartLimitError": "An order can contain at most 20 plates. Reduce a cart quantity before adding another plate."
 }

@@ -9,6 +9,8 @@ import {
   CHECKOUT_TOWN_MAX,
   CUSTOM_DIMENSION_MAX,
   ORDER_NOTES_MAX,
+  ORDER_QUANTITY_MAX,
+  PRODUCT_LABEL_MAX,
   REGISTRATION_MAX,
   ROAD_LEGAL_REGISTRATION_MAX,
   SLOGAN_MAX,
@@ -25,6 +27,7 @@ export function createConfiguratorSchema(useType: PlateUseType) {
     registration: useType === "road-legal" ? roadLegalRegistrationSchema : showRegistrationSchema,
     customWidth: z.string().max(CUSTOM_DIMENSION_MAX, `Width must be ${CUSTOM_DIMENSION_MAX} characters or fewer.`),
     customHeight: z.string().max(CUSTOM_DIMENSION_MAX, `Height must be ${CUSTOM_DIMENSION_MAX} characters or fewer.`),
+    customDimensionUnit: z.enum(["in", "cm"]),
     uploadedLogoName: z.string().max(UPLOADED_FILE_NAME_MAX, `File name must be ${UPLOADED_FILE_NAME_MAX} characters or fewer.`),
     sloganText: z.string().max(SLOGAN_MAX, `Slogan must be ${SLOGAN_MAX} characters or fewer.`),
     specialRequirements: z.string().max(SPECIAL_REQUIREMENTS_MAX, `Special requirements must be ${SPECIAL_REQUIREMENTS_MAX} characters or fewer.`),
@@ -56,7 +59,7 @@ const optionalAddressSchema = z.object({
   country: z.string().max(CHECKOUT_COUNTRY_MAX, `Country must be ${CHECKOUT_COUNTRY_MAX} characters or fewer.`),
 });
 
-export const checkoutSchema = z.object({
+const checkoutCustomerBaseSchema = z.object({
   firstName: z.string().trim().min(1, "Enter your first name.").max(CHECKOUT_NAME_MAX, `First name must be ${CHECKOUT_NAME_MAX} characters or fewer.`),
   lastName: z.string().trim().min(1, "Enter your last name.").max(CHECKOUT_NAME_MAX, `Last name must be ${CHECKOUT_NAME_MAX} characters or fewer.`),
   email: z.string().trim().min(1, "Enter your email address.").max(CHECKOUT_EMAIL_MAX, `Email must be ${CHECKOUT_EMAIL_MAX} characters or fewer.`).email("Enter a valid email address."),
@@ -65,11 +68,75 @@ export const checkoutSchema = z.object({
   billingSameAsDelivery: z.boolean(),
   billingAddress: optionalAddressSchema,
   additionalNotes: z.string().max(ORDER_NOTES_MAX, `Additional notes must be ${ORDER_NOTES_MAX} characters or fewer.`),
-}).superRefine((values, context) => {
+});
+
+function validateBillingAddress(
+  values: z.infer<typeof checkoutCustomerBaseSchema>,
+  context: z.RefinementCtx,
+) {
   if (values.billingSameAsDelivery) return;
   const result = requiredAddressSchema.safeParse(values.billingAddress);
   if (result.success) return;
   result.error.issues.forEach((issue) => context.addIssue({ ...issue, path: ["billingAddress", ...issue.path] }));
+}
+
+export const customerDetailsSchema = checkoutCustomerBaseSchema.superRefine(validateBillingAddress);
+
+export function createCheckoutSchema() {
+  return checkoutCustomerBaseSchema.superRefine(validateBillingAddress);
+}
+
+export const checkoutSchema = createCheckoutSchema();
+
+const productIdSchema = z.enum(["hand-crafted-show-plate", "2d-road-legal", "2d-show-plate", "crystal-3d", "black-4d"]);
+const plateSizeSchema = z.enum(["3×7″", "4×6″", "5×7″", "6×8″", "7×9″", "Custom"]);
+const borderOptionSchema = z.enum(["None", "Black", "Mirror Silver"]);
+const logoOptionSchema = z.enum(["No Logo", "BMW", "Ducati", "Harley-Davidson", "Honda", "Kawasaki", "Triumph", "KTM", "Other Logo"]);
+const sloganFontSchema = z.enum(["The Boss", "The Scribbler", "Rebel"]);
+const countryFlagSchema = z.enum(["none", "uk", "eng", "cymru", "sco"]);
+const fixingOptionSchema = z.enum(["none", "fixing-kit", "adhesive-kit", "complete-bundle"]);
+
+export const plateConfigurationSchema = z.object({
+  productId: productIdSchema,
+  productName: z.string().max(PRODUCT_LABEL_MAX, `Product name must be ${PRODUCT_LABEL_MAX} characters or fewer.`),
+  badge: z.string().max(PRODUCT_LABEL_MAX, `Badge must be ${PRODUCT_LABEL_MAX} characters or fewer.`),
+  useType: z.enum(["show", "road-legal"]),
+  registration: z.string().max(REGISTRATION_MAX, `Registration must be ${REGISTRATION_MAX} characters or fewer.`),
+  size: plateSizeSchema,
+  customWidth: z.string().max(CUSTOM_DIMENSION_MAX, `Width must be ${CUSTOM_DIMENSION_MAX} characters or fewer.`),
+  customHeight: z.string().max(CUSTOM_DIMENSION_MAX, `Height must be ${CUSTOM_DIMENSION_MAX} characters or fewer.`),
+  customDimensionUnit: z.enum(["in", "cm"]),
+  innerBorder: borderOptionSchema,
+  outerBorder: borderOptionSchema,
+  logo: logoOptionSchema,
+  logoPosition: z.object({ x: z.number().finite().min(0).max(100), y: z.number().finite().min(0).max(100) }),
+  uploadedLogoName: z.string().max(UPLOADED_FILE_NAME_MAX, `File name must be ${UPLOADED_FILE_NAME_MAX} characters or fewer.`),
+  uploadedLogoPreviewUrl: z.string().max(2048, "Artwork preview URL is too long."),
+  uploadedLogoMimeType: z.string().max(120, "Artwork MIME type is too long."),
+  sloganMode: z.enum(["none", "custom"]),
+  sloganText: z.string().max(SLOGAN_MAX, `Slogan must be ${SLOGAN_MAX} characters or fewer.`),
+  sloganFont: sloganFontSchema,
+  countryFlag: countryFlagSchema,
+  fixing: fixingOptionSchema,
+  specialRequirements: z.string().max(SPECIAL_REQUIREMENTS_MAX, `Special requirements must be ${SPECIAL_REQUIREMENTS_MAX} characters or fewer.`),
+  basePrice: z.number().finite().nonnegative(),
+});
+
+export const cartItemSchema = z.object({
+  id: z.string().min(1).max(64).regex(/^[A-Za-z0-9-]+$/, "Cart item identifier is invalid."),
+  config: plateConfigurationSchema,
+  quantity: z.number().int().min(1).max(ORDER_QUANTITY_MAX),
+});
+
+export const checkoutSubmissionSchema = z.object({
+  items: z.array(cartItemSchema).min(1, "Add at least one plate to the cart.").max(ORDER_QUANTITY_MAX),
+  customer: customerDetailsSchema,
+  orderNotes: z.string().max(ORDER_NOTES_MAX, `Order notes must be ${ORDER_NOTES_MAX} characters or fewer.`),
+}).superRefine((value, context) => {
+  const totalQuantity = value.items.reduce((total, item) => total + item.quantity, 0);
+  if (totalQuantity > ORDER_QUANTITY_MAX) {
+    context.addIssue({ code: "custom", message: `An order can contain at most ${ORDER_QUANTITY_MAX} plates.`, path: ["items"] });
+  }
 });
 
 export const addressLookupQuerySchema = z.object({
@@ -79,4 +146,5 @@ export const addressLookupQuerySchema = z.object({
 
 export type ConfiguratorFormValues = z.infer<ReturnType<typeof createConfiguratorSchema>>;
 export type ReviewFormValues = z.infer<typeof reviewSchema>;
-export type CheckoutFormValues = z.infer<typeof checkoutSchema>;
+export type CheckoutFormValues = z.infer<ReturnType<typeof createCheckoutSchema>>;
+export type CheckoutSubmissionValues = z.infer<typeof checkoutSubmissionSchema>;

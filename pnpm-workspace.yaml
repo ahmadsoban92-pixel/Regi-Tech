@@ -3,3 +3,9 @@ minimumReleaseAgeExclude:
   - motion-dom@14.2.0
   - motion-utils@14.1.1
   - motion@14.2.0
+  - '@supabase/auth-js@2.118.0'
+  - '@supabase/functions-js@2.118.0'
+  - '@supabase/postgrest-js@2.118.0'
+  - '@supabase/realtime-js@2.118.0'
+  - '@supabase/storage-js@2.118.0'
+  - '@supabase/supabase-js@2.118.0'

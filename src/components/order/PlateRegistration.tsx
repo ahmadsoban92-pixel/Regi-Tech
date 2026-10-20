@@ -54,7 +54,7 @@ export function PlateRegistration({ borderCount = 0, lineOne, lineTwo, hasFlag =
 
     const resizeObserver = new ResizeObserver(measure);
     resizeObserver.observe(container);
-    document.fonts?.load("700 100px Inter", `${lineOne} ${lineTwo}`).then(() => { if (active) measure(); }).catch(() => undefined);
+    document.fonts?.load("400 100px UKNumberPlate", `${lineOne} ${lineTwo}`).then(() => { if (active) measure(); }).catch(() => undefined);
     document.fonts?.ready.then(() => { if (active) measure(); }).catch(() => undefined);
     measure();
 

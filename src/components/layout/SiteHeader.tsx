@@ -15,7 +15,8 @@ export function SiteHeader() {
   const [open, setOpen] = useState(false);
   const reduceMotion = useReducedMotion();
   const nav = shared.nav as NavItem[];
-  const { hasCartItem, quantity, setCartOpen } = useOrderFlow();
+  const { items, setCartOpen, totalQuantity } = useOrderFlow();
+  const hasCartItem = items.length > 0;
 
   return (
     <>
@@ -45,13 +46,13 @@ export function SiteHeader() {
           </nav>
 
           <div className="hidden items-center gap-3 lg:flex">
-            <button aria-label={`Open cart, ${hasCartItem ? quantity : 0} items`} className="relative grid size-11 place-items-center rounded-md text-[var(--foreground)] hover:bg-[var(--surface)]" onClick={() => setCartOpen(true)} type="button">
+            <button aria-label={`Open cart, ${totalQuantity} plates`} className="relative grid size-11 place-items-center rounded-md text-[var(--foreground)] hover:bg-[var(--surface)]" onClick={() => setCartOpen(true)} type="button">
               <ShoppingBag aria-hidden size={20} strokeWidth={1.6} />
               <AnimatePresence initial={false}>
-                {hasCartItem ? <m.span animate={{ opacity: 1, scale: 1 }} className="absolute right-1 top-1 grid size-4 place-items-center rounded-full bg-[var(--accent)] text-[0.6rem] font-bold text-[var(--foreground-on-light)]" exit={{ opacity: 0, scale: reduceMotion ? 1 : 0.75 }} initial={reduceMotion ? false : { opacity: 0, scale: 0.75 }} key={quantity}>{quantity}</m.span> : null}
+                {hasCartItem ? <m.span animate={{ opacity: 1, scale: 1 }} className="absolute right-1 top-1 grid size-4 place-items-center rounded-full bg-[var(--accent)] text-[0.6rem] font-bold text-[var(--foreground-on-light)]" exit={{ opacity: 0, scale: reduceMotion ? 1 : 0.75 }} initial={reduceMotion ? false : { opacity: 0, scale: 0.75 }} key={totalQuantity}>{totalQuantity}</m.span> : null}
               </AnimatePresence>
             </button>
-            <Link className="primary-button" href="/design">
+            <Link className="primary-button" href="/our-plates">
               {shared.primaryCta}
             </Link>
           </div>
@@ -87,8 +88,8 @@ export function SiteHeader() {
                 {item.label}
               </Link>
             ))}
-            <button className="secondary-button mt-2" onClick={() => { setOpen(false); setCartOpen(true); }} type="button">Open Cart{hasCartItem ? ` (${quantity})` : ""}</button>
-            <Link className="primary-button mt-2" href="/design" onClick={() => setOpen(false)}>
+            <button className="secondary-button mt-2" onClick={() => { setOpen(false); setCartOpen(true); }} type="button">Open Cart{hasCartItem ? ` (${totalQuantity})` : ""}</button>
+            <Link className="primary-button mt-2" href="/our-plates" onClick={() => setOpen(false)}>
               {shared.primaryCta}
             </Link>
           </m.nav>

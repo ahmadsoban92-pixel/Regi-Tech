@@ -5,8 +5,24 @@ export type BorderOption = "None" | "Black" | "Mirror Silver";
 export type LogoOption = "No Logo" | "BMW" | "Ducati" | "Harley-Davidson" | "Honda" | "Kawasaki" | "Triumph" | "KTM" | "Other Logo";
 export type SloganFont = "The Boss" | "The Scribbler" | "Rebel";
 export type SloganMode = "none" | "custom";
-export type CountryFlag = "None" | "Union Jack" | "England" | "Scotland" | "Wales";
-export type FixingOption = "No Fixing" | "Nylon Fixing Set" | "3M Adhesive Tape";
+export type CountryFlag = "none" | "uk" | "eng" | "cymru" | "sco";
+export type CountryFlagOrientation = "stacked";
+export type CountryFlagPrintableRegion = {
+  left: number;
+  top: number;
+  width: number;
+  height: number;
+};
+export type CountryFlagDefinition = {
+  value: CountryFlag;
+  label: string;
+  code: string;
+  assetPath: string | null;
+  orientation: CountryFlagOrientation;
+  printableRegion: CountryFlagPrintableRegion;
+};
+export type CustomDimensionUnit = "in" | "cm";
+export type FixingId = "none" | "fixing-kit" | "adhesive-kit" | "complete-bundle";
 export type ConfiguratorStepKey = "registration" | "size" | "borders" | "logo" | "slogan" | "countryFlag" | "fixings";
 
 export type LogoPosition = {
@@ -28,7 +44,7 @@ export type ProductRule = {
   logos: LogoOption[];
   slogan: boolean;
   countryFlags: CountryFlag[];
-  fixings: FixingOption[];
+  fixings: FixingId[];
 };
 
 export type PlateConfiguration = {
@@ -40,6 +56,7 @@ export type PlateConfiguration = {
   size: PlateSize;
   customWidth: string;
   customHeight: string;
+  customDimensionUnit: CustomDimensionUnit;
   innerBorder: BorderOption;
   outerBorder: BorderOption;
   logo: LogoOption;
@@ -51,10 +68,15 @@ export type PlateConfiguration = {
   sloganText: string;
   sloganFont: SloganFont;
   countryFlag: CountryFlag;
-  fixing: FixingOption;
+  fixing: FixingId;
   specialRequirements: string;
-  orderNotes: string;
   basePrice: number;
+};
+
+export type CartItem = {
+  id: string;
+  config: PlateConfiguration;
+  quantity: number;
 };
 
 export type AddressDetails = {

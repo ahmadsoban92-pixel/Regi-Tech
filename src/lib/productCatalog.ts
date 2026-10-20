@@ -1,7 +1,8 @@
 import type {
   BorderOption,
+  CountryFlagDefinition,
   CountryFlag,
-  FixingOption,
+  FixingId,
   LogoOption,
   PlateConfiguration,
   PlateSize,
@@ -13,8 +14,15 @@ const STANDARD_SIZES: PlateSize[] = ["3×7″", "4×6″", "5×7″", "6×8″"]
 const SHOW_SIZES: PlateSize[] = [...STANDARD_SIZES, "Custom"];
 const SHOW_BORDERS: BorderOption[] = ["None", "Black", "Mirror Silver"];
 const ALL_LOGOS: LogoOption[] = ["No Logo", "BMW", "Ducati", "Harley-Davidson", "Honda", "Kawasaki", "Triumph", "KTM", "Other Logo"];
-const ALL_FLAGS: CountryFlag[] = ["None", "Union Jack", "England", "Scotland", "Wales"];
-const ALL_FIXINGS: FixingOption[] = ["No Fixing", "Nylon Fixing Set", "3M Adhesive Tape"];
+const ALL_FLAGS: CountryFlag[] = ["none", "uk", "eng", "cymru", "sco"];
+const ALL_FIXINGS: FixingId[] = ["none", "fixing-kit", "adhesive-kit", "complete-bundle"];
+
+export const FIXING_OPTIONS: Record<FixingId, { label: string; description: string; price: number }> = {
+  none: { label: "No Fixing", description: "Use your existing motorcycle bracket or hardware.", price: 0 },
+  "fixing-kit": { label: "Fixing Kit Included", description: "Four nylon screws, two black and two yellow, plus stainless-steel Nyloc nuts.", price: 1 },
+  "adhesive-kit": { label: "Adhesive Fixing Kit Included", description: "Four 3M VHB double-sided adhesive strips.", price: 1 },
+  "complete-bundle": { label: "Complete Fixing Bundle", description: "Nylon screws, stainless-steel Nyloc nuts, and four 3M VHB adhesive strips.", price: 2 },
+};
 
 export const PRODUCT_RULES: Record<ProductId, ProductRule> = {
   "hand-crafted-show-plate": {
@@ -30,7 +38,7 @@ export const PRODUCT_RULES: Record<ProductId, ProductRule> = {
     outerBorders: SHOW_BORDERS,
     logos: ALL_LOGOS,
     slogan: true,
-    countryFlags: ["None"],
+    countryFlags: ["none"],
     fixings: ALL_FIXINGS,
   },
   "2d-road-legal": {
@@ -62,7 +70,7 @@ export const PRODUCT_RULES: Record<ProductId, ProductRule> = {
     outerBorders: ["None"],
     logos: ALL_LOGOS,
     slogan: true,
-    countryFlags: ["None"],
+    countryFlags: ["none"],
     fixings: ALL_FIXINGS,
   },
   "crystal-3d": {
@@ -78,7 +86,7 @@ export const PRODUCT_RULES: Record<ProductId, ProductRule> = {
     outerBorders: SHOW_BORDERS,
     logos: ALL_LOGOS,
     slogan: true,
-    countryFlags: ["None"],
+    countryFlags: ["none"],
     fixings: ALL_FIXINGS,
   },
   "black-4d": {
@@ -94,7 +102,7 @@ export const PRODUCT_RULES: Record<ProductId, ProductRule> = {
     outerBorders: SHOW_BORDERS,
     logos: ALL_LOGOS,
     slogan: true,
-    countryFlags: ["None"],
+    countryFlags: ["none"],
     fixings: ALL_FIXINGS,
   },
 };
@@ -104,8 +112,8 @@ export const OPTION_PRICES = {
   borders: { Black: 2, "Mirror Silver": 5 } as Partial<Record<BorderOption, number>>,
   logos: Object.fromEntries(ALL_LOGOS.filter((logo) => logo !== "No Logo").map((logo) => [logo, 2])) as Partial<Record<LogoOption, number>>,
   slogan: 2,
-  countryFlags: Object.fromEntries(ALL_FLAGS.filter((flag) => flag !== "None").map((flag) => [flag, 2])) as Partial<Record<CountryFlag, number>>,
-  fixings: { "Nylon Fixing Set": 1, "3M Adhesive Tape": 1 } as Partial<Record<FixingOption, number>>,
+  countryFlags: Object.fromEntries(ALL_FLAGS.filter((flag) => flag !== "none").map((flag) => [flag, 2])) as Partial<Record<CountryFlag, number>>,
+  fixings: Object.fromEntries(Object.entries(FIXING_OPTIONS).map(([id, option]) => [id, option.price])) as Record<FixingId, number>,
 };
 
 export const LOGO_ASSETS: Partial<Record<LogoOption, string>> = {
@@ -118,12 +126,17 @@ export const LOGO_ASSETS: Partial<Record<LogoOption, string>> = {
   KTM: "/assets/regitech/logo-brand-ktm.png",
 };
 
-export const FLAG_ASSETS: Partial<Record<CountryFlag, string>> = {
-  "Union Jack": "/assets/regitech/flag-union-jack.png",
-  England: "/assets/regitech/flag-england.png",
-  Scotland: "/assets/regitech/flag-scotland.png",
-  Wales: "/assets/regitech/flag-wales.png",
+export const COUNTRY_FLAG_DEFINITIONS: Record<CountryFlag, CountryFlagDefinition> = {
+  none: { value: "none", label: "None", code: "", assetPath: null, orientation: "stacked", printableRegion: { left: 0, top: 0, width: 0, height: 0 } },
+  uk: { value: "uk", label: "United Kingdom — UK", code: "UK", assetPath: "/assets/regitech/country-flags/uk.png", orientation: "stacked", printableRegion: { left: 5.4, top: 59, width: 11, height: 27 } },
+  eng: { value: "eng", label: "England — ENG", code: "ENG", assetPath: "/assets/regitech/country-flags/eng.png", orientation: "stacked", printableRegion: { left: 5.4, top: 59, width: 11, height: 27 } },
+  cymru: { value: "cymru", label: "Wales — CYMRU", code: "CYMRU", assetPath: "/assets/regitech/country-flags/cymru.png", orientation: "stacked", printableRegion: { left: 5.7, top: 53, width: 10, height: 35 } },
+  sco: { value: "sco", label: "Scotland — SCO", code: "SCO", assetPath: "/assets/regitech/country-flags/sco.png", orientation: "stacked", printableRegion: { left: 6.4, top: 59, width: 11, height: 27 } },
 };
+
+export function getCountryFlagDefinition(flag: CountryFlag): CountryFlagDefinition {
+  return COUNTRY_FLAG_DEFINITIONS[flag];
+}
 
 export function isProductId(value: string): value is ProductId {
   return value in PRODUCT_RULES;
@@ -145,6 +158,7 @@ export function createDefaultConfiguration(productId: string, registration = "")
     size: rule.defaultSize,
     customWidth: "",
     customHeight: "",
+    customDimensionUnit: "in",
     innerBorder: "None",
     outerBorder: "None",
     logo: "No Logo",
@@ -155,12 +169,17 @@ export function createDefaultConfiguration(productId: string, registration = "")
     sloganMode: "none",
     sloganText: "Ride with passion",
     sloganFont: "Rebel",
-    countryFlag: "None",
-    fixing: "No Fixing",
+    countryFlag: "none",
+    fixing: "none",
     specialRequirements: "",
-    orderNotes: "",
     basePrice: rule.basePrice,
   };
+}
+
+export function formatPlateSize(config: PlateConfiguration): string {
+  if (config.size !== "Custom") return config.size;
+  const unit = config.customDimensionUnit === "cm" ? "cm" : "in";
+  return `Custom: ${config.customWidth} × ${config.customHeight} ${unit}`;
 }
 
 export function getPlateAspectRatio(config: PlateConfiguration): number {
