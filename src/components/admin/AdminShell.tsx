@@ -12,6 +12,14 @@ const links = [
   { href: "/admin/orders", label: adminContent.navigation.orders, icon: ClipboardList }
 ];
 
+function AdminLogo() {
+  return (
+    <div className="relative h-[65px] w-[200px] shrink-0">
+      <Image alt="Regi-Tech" className="object-cover" fill priority sizes="200px" src="/assets/regitech/admin-logo.png" />
+    </div>
+  );
+}
+
 function AdminNavigation({ onNavigate }: { onNavigate?: () => void }) {
   const pathname = usePathname();
   return (
@@ -22,10 +30,11 @@ function AdminNavigation({ onNavigate }: { onNavigate?: () => void }) {
           return (
             <Link
               aria-current={active ? "page" : undefined}
-              className={`mb-1 flex min-h-9 items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors ${active ? "bg-[var(--accent)] text-[#111]" : "text-white/80 hover:bg-white/5 hover:text-white"}`}
+              className={`mb-1 flex min-h-9 items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors ${active ? "bg-[var(--accent)]" : "hover:bg-white/5"}`}
               href={href}
               key={href}
               onClick={onNavigate}
+              style={{ color: active ? "#111111" : "#ffffff" }}
             >
               <Icon aria-hidden size={16} strokeWidth={1.7} />{label}
             </Link>
@@ -34,7 +43,7 @@ function AdminNavigation({ onNavigate }: { onNavigate?: () => void }) {
       </nav>
       <div className="border-t border-white/10 p-3">
         <p className="truncate px-3 pb-2 text-xs text-white/45">{adminContent.email}</p>
-        <Link className="flex min-h-9 items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-white/80 hover:bg-white/5 hover:text-white" href="/admin/login" onClick={onNavigate}>
+        <Link className="flex min-h-9 items-center gap-3 rounded-md px-3 py-2 text-sm font-medium hover:bg-white/5" href="/admin/login" onClick={onNavigate} style={{ color: "#ffffff" }}>
           <LogOut aria-hidden size={16} strokeWidth={1.7} />{adminContent.navigation.logout}
         </Link>
       </div>
@@ -51,7 +60,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
     <div className="min-h-dvh bg-[#111] text-[#111] lg:grid lg:grid-cols-[240px_minmax(0,1fr)]">
       <aside className="hidden min-h-dvh flex-col bg-[#2b2d31] lg:fixed lg:inset-y-0 lg:left-0 lg:flex lg:w-60">
         <div className="flex h-16 items-center border-b border-white/10 px-5">
-          <Image alt="Regi-Tech" className="w-[170px] object-contain" height={85} priority src="/assets/regitech/logo.png" style={{ height: "auto" }} width={170} />
+          <AdminLogo />
         </div>
         <AdminNavigation />
       </aside>
@@ -61,7 +70,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
           <button aria-label={adminContent.navigation.closeMenu} className="absolute inset-0 bg-black/70" onClick={() => setMenuOpen(false)} type="button" />
           <aside className="relative flex h-full w-[min(82vw,280px)] flex-col bg-[#2b2d31] shadow-2xl">
             <div className="flex h-16 items-center justify-between border-b border-white/10 px-4">
-              <Image alt="Regi-Tech" className="w-[160px] object-contain" height={80} priority src="/assets/regitech/logo.png" style={{ height: "auto" }} width={160} />
+              <AdminLogo />
               <button aria-label={adminContent.navigation.closeMenu} className="grid size-10 place-items-center rounded text-white/80 hover:bg-white/10" onClick={() => setMenuOpen(false)} type="button"><X aria-hidden size={20} /></button>
             </div>
             <AdminNavigation onNavigate={() => setMenuOpen(false)} />
