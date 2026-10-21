@@ -1,9 +1,7 @@
 "use server";
 
-import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
-import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { adminRepository } from "@/services/admin.service";
 import { requireAdmin } from "@/services/adminAuth.service";
 
@@ -75,9 +73,4 @@ export async function cancelAdminOrder(_state: AdminActionState, formData: FormD
     return { success: false, message: error instanceof Error ? error.message : "Unable to cancel the order." };
   }
 }
-
-export async function logoutAdmin() {
-  const supabase = await createSupabaseServerClient();
-  await supabase.auth.signOut();
-  redirect("/admin/login");
-}
+// Logout uses a stable POST Route Handler so open tabs survive Server Action ID rotation between deployments.

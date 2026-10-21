@@ -6,7 +6,6 @@ import { usePathname } from "next/navigation";
 import { ClipboardList, LayoutDashboard, LogOut, Menu, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import adminContent from "@/content/admin.json";
-import { logoutAdmin } from "@/app/admin/actions";
 
 const links = [
   { href: "/admin", label: adminContent.navigation.dashboard, icon: LayoutDashboard },
@@ -44,7 +43,7 @@ function AdminNavigation({ adminEmail, onNavigate }: { adminEmail: string; onNav
       </nav>
       <div className="border-t border-white/10 p-3">
         <p className="truncate px-3 pb-2 text-xs text-white/45">{adminEmail}</p>
-        <form action={logoutAdmin}><button className="flex min-h-9 w-full items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-white hover:bg-white/5" onClick={onNavigate} type="submit"><LogOut aria-hidden size={16} strokeWidth={1.7} />{adminContent.navigation.logout}</button></form>
+        <form action="/api/v1/admin/logout" method="post"><button className="flex min-h-9 w-full items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-white hover:bg-white/5" onClick={onNavigate} type="submit"><LogOut aria-hidden size={16} strokeWidth={1.7} />{adminContent.navigation.logout}</button></form>
       </div>
     </>
   );
