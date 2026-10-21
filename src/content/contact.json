@@ -16,6 +16,9 @@
     "optional": "optional",
     "message": "Message"
   },
-  "submit": "Please contact us by email or WhatsApp.",
-  "note": "This form is not connected yet. Reach us directly using the details on the left."
+  "submit": "Send message",
+  "sending": "Sending…",
+  "sent": "Message received",
+  "note": "We store your message securely so our team can respond.",
+  "errors": { "unavailable": "We could not send your message. Please use email or WhatsApp instead." }
 }

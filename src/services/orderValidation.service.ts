@@ -3,9 +3,9 @@ import { getOrderTotalPence, getPriceBreakdown } from "@/lib/orderPricing";
 import { getProductRule } from "@/lib/productCatalog";
 import type { CheckoutSubmissionValues } from "@/lib/orderSchemas";
 import type { PlateConfiguration } from "@/types/order";
-import type { ValidatedOrderFile } from "@/lib/orderFiles";
+import type { ResolvedOrderUpload } from "@/services/orderUpload.service";
 
-export type OrderItemFiles = { artwork: ValidatedOrderFile | null; v5c: ValidatedOrderFile | null };
+export type OrderItemFiles = { artwork: ResolvedOrderUpload | null; v5c: ResolvedOrderUpload | null };
 
 export class OrderValidationError extends Error {
   constructor(message: string, public readonly errors?: Record<string, string[]>) {
@@ -69,8 +69,8 @@ function canonicalizeItem(item: CheckoutSubmissionValues["items"][number], files
     customWidth: configuratorResult.data.customWidth,
     customHeight: configuratorResult.data.customHeight,
     customDimensionUnit: configuratorResult.data.customDimensionUnit,
-    uploadedLogoName: files.artwork?.originalName ?? "",
-    uploadedLogoMimeType: files.artwork?.mimeType ?? "",
+    uploadedLogoName: files.artwork?.file.originalName ?? "",
+    uploadedLogoMimeType: files.artwork?.file.mimeType ?? "",
     uploadedLogoPreviewUrl: "",
     sloganMode: rule.slogan ? config.sloganMode : "none",
     sloganText: rule.slogan && config.sloganMode === "custom" ? configuratorResult.data.sloganText : "",

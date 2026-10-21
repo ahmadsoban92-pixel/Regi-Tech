@@ -2,32 +2,27 @@ import type { NextRequest } from "next/server";
 import { sendCreated, sendError } from "@/lib/apiResponse";
 import { ServerConfigurationError } from "@/lib/env";
 import { ORDER_ACCESS_COOKIE, ORDER_ACCESS_MAX_AGE_SECONDS } from "@/lib/orderAccess";
-import { validateOrderFile } from "@/lib/orderFiles";
 import { ORDER_PAYLOAD_MAX_BYTES } from "@/lib/formLimits";
+import { hashOrderUploadSession, isOrderUploadSessionToken, ORDER_UPLOAD_SESSION_COOKIE } from "@/lib/orderUploadSession";
 import { checkOrderCheckoutRateLimit } from "@/lib/rateLimit";
 import { getRequestIdentifier } from "@/lib/request";
 import { createCheckoutOrder } from "@/services/order.service";
 import { OrderValidationError, parseCheckoutSubmission } from "@/services/orderValidation.service";
+import { resolvePendingOrderUploads } from "@/services/orderUpload.service";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
 
-function asFile(value: FormDataEntryValue | null) {
-  return value instanceof File && value.size > 0 ? value : null;
-}
-
 export async function POST(request: NextRequest) {
-  const rateLimit = checkOrderCheckoutRateLimit(getRequestIdentifier(request));
-  if (!rateLimit.allowed) {
-    const response = sendError("Too many checkout attempts. Please wait a moment and try again.", 429);
-    response.headers.set("Retry-After", String(rateLimit.retryAfterSeconds));
-    return response;
-  }
-
   try {
-    const formData = await request.formData();
-    const rawOrder = formData.get("order");
-    if (typeof rawOrder !== "string" || Buffer.byteLength(rawOrder, "utf8") > ORDER_PAYLOAD_MAX_BYTES) {
+    const rateLimit = await checkOrderCheckoutRateLimit(getRequestIdentifier(request));
+    if (!rateLimit.allowed) {
+      const response = sendError("Too many checkout attempts. Please wait a moment and try again.", 429);
+      response.headers.set("Retry-After", String(rateLimit.retryAfterSeconds));
+      return response;
+    }
+    const rawOrder = await request.text();
+    if (!rawOrder || Buffer.byteLength(rawOrder, "utf8") > ORDER_PAYLOAD_MAX_BYTES) {
       return sendError("The order payload is missing or too large.", 400);
     }
     let parsedJson: unknown;
@@ -37,22 +32,20 @@ export async function POST(request: NextRequest) {
       return sendError("The order payload is not valid JSON.", 400);
     }
     const submission = parseCheckoutSubmission(parsedJson);
-    const itemIds = new Set(submission.items.map((item) => item.id));
-    const fileEntries = [...formData.entries()].filter((entry): entry is [string, File] => entry[1] instanceof File && entry[1].size > 0);
-    for (const [key] of fileEntries) {
-      const match = /^(v5c|artwork)-([A-Za-z0-9-]{1,64})$/.exec(key);
-      if (!match || !itemIds.has(match[2])) return sendError("An uploaded file is not associated with a valid cart line.", 400);
-    }
-    const filesByItemId = Object.fromEntries(await Promise.all(submission.items.map(async (item) => {
-      const v5cInput = asFile(formData.get(`v5c-${item.id}`));
-      const artworkInput = asFile(formData.get(`artwork-${item.id}`));
-      const [v5c, artwork] = await Promise.all([
-        v5cInput ? validateOrderFile(v5cInput, "v5c") : Promise.resolve(null),
-        artworkInput ? validateOrderFile(artworkInput, "artwork") : Promise.resolve(null),
-      ]);
-      return [item.id, { artwork, v5c }] as const;
-    })));
-    const result = await createCheckoutOrder(submission, filesByItemId);
+    const uploadIds = submission.items.flatMap((item) => [item.v5cUploadId, item.artworkUploadId]).filter((value): value is string => Boolean(value));
+    if (new Set(uploadIds).size !== uploadIds.length) return sendError("Each private upload can only be used once.", 400);
+    const uploadToken = request.cookies.get(ORDER_UPLOAD_SESSION_COOKIE)?.value;
+    if (uploadIds.length && !isOrderUploadSessionToken(uploadToken)) return sendError("The private upload session is missing or expired.", 401);
+    const uploadSessionHash = uploadToken ? hashOrderUploadSession(uploadToken) : "";
+    const uploads = await resolvePendingOrderUploads(uploadIds, uploadSessionHash);
+    const filesByItemId = Object.fromEntries(submission.items.map((item) => {
+      const v5c = item.v5cUploadId ? uploads.get(item.v5cUploadId) ?? null : null;
+      const artwork = item.artworkUploadId ? uploads.get(item.artworkUploadId) ?? null : null;
+      if (v5c && (v5c.cartItemId !== item.id || v5c.kind !== "v5c")) throw new OrderValidationError("A V5C upload is not associated with the correct cart line.");
+      if (artwork && (artwork.cartItemId !== item.id || artwork.kind !== "artwork")) throw new OrderValidationError("An artwork upload is not associated with the correct cart line.");
+      return [item.id, { artwork, v5c }];
+    }));
+    const result = await createCheckoutOrder(submission, filesByItemId, uploadSessionHash);
     const response = sendCreated({ reference: result.reference, checkoutUrl: result.checkoutUrl }, "Checkout session created.");
     response.cookies.set(ORDER_ACCESS_COOKIE, result.cookieValue, {
       httpOnly: true,

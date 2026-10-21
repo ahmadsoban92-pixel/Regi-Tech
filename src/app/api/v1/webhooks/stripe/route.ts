@@ -1,5 +1,5 @@
 import { sendError, sendSuccess } from "@/lib/apiResponse";
-import { getOrderServerEnv, ServerConfigurationError } from "@/lib/env";
+import { getStripeWebhookEnv, ServerConfigurationError } from "@/lib/env";
 import { getStripeClient } from "@/lib/stripeClient";
 import { applyStripeCheckoutEvent } from "@/services/order.service";
 
@@ -11,7 +11,7 @@ export async function POST(request: Request) {
     const signature = request.headers.get("stripe-signature");
     if (!signature) return sendError("Missing Stripe signature.", 400);
     const body = await request.text();
-    const event = getStripeClient().webhooks.constructEvent(body, signature, getOrderServerEnv().stripeWebhookSecret);
+    const event = getStripeClient().webhooks.constructEvent(body, signature, getStripeWebhookEnv().stripeWebhookSecret);
     const result = await applyStripeCheckoutEvent(event);
     return sendSuccess(result, result.ignored ? "Event ignored." : "Event received.");
   } catch (error) {

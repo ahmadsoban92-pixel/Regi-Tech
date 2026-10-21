@@ -4,7 +4,7 @@ export type PaymentStatus = "pending_payment" | "paid" | "payment_failed" | "exp
 export type VerificationStatus = "not_required" | "pending" | "approved" | "rejected";
 
 export type CheckoutSubmission = {
-  items: CartItem[];
+  items: Array<CartItem & { v5cUploadId?: string; artworkUploadId?: string }>;
   customer: CustomerDetails;
   orderNotes: string;
 };

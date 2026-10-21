@@ -1,12 +1,13 @@
 import "server-only";
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
-import { getOrderServerEnv } from "@/lib/env";
+import { getSupabaseServerEnv } from "@/lib/env";
+import type { Database } from "@/types/database";
 
-let client: SupabaseClient | null = null;
+let client: SupabaseClient<Database> | null = null;
 
-export function getSupabaseAdmin(): SupabaseClient {
+export function getSupabaseAdmin(): SupabaseClient<Database> {
   if (client) return client;
-  const env = getOrderServerEnv();
+  const env = getSupabaseServerEnv();
   client = createClient(env.supabaseUrl, env.supabaseSecretKey, {
     auth: { autoRefreshToken: false, persistSession: false },
   });

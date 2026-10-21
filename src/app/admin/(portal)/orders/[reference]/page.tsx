@@ -4,7 +4,7 @@ import { ChevronRight } from "lucide-react";
 import { notFound } from "next/navigation";
 import adminContent from "@/content/admin.json";
 import { AdminOrderDetail } from "@/components/admin/AdminOrderDetail";
-import { adminFixtureRepository } from "@/services/adminFixture.service";
+import { adminRepository } from "@/services/admin.service";
 
 type AdminOrderPageProps = { params: Promise<{ reference: string }> };
 
@@ -15,7 +15,7 @@ export async function generateMetadata({ params }: AdminOrderPageProps): Promise
 
 export default async function AdminOrderPage({ params }: AdminOrderPageProps) {
   const { reference } = await params;
-  const order = await adminFixtureRepository.getOrder(reference);
+  const order = await adminRepository.getOrder(reference);
   if (!order) notFound();
   return (
     <div className="mx-auto w-full max-w-[1280px] p-4 md:p-6">

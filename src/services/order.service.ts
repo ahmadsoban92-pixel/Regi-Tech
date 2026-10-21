@@ -1,15 +1,15 @@
 import "server-only";
-import { randomInt, randomUUID } from "node:crypto";
+import { randomBytes, randomInt, randomUUID } from "node:crypto";
 import type Stripe from "stripe";
-import { getOrderServerEnv } from "@/lib/env";
+import { getStripeServerEnv } from "@/lib/env";
 import { createOrderAccess, verifyOrderAccessToken } from "@/lib/orderAccess";
-import type { ValidatedOrderFile } from "@/lib/orderFiles";
 import { getStripeClient } from "@/lib/stripeClient";
 import { getSupabaseAdmin } from "@/lib/supabaseAdmin";
 import type { CheckoutSubmissionValues } from "@/lib/orderSchemas";
 import type { OrderConfirmationData, PaymentStatus, VerificationStatus } from "@/types/orderApi";
 import type { PlateConfiguration, PriceLine } from "@/types/order";
 import { canonicalizeCheckoutSubmission, type OrderItemFiles, OrderValidationError } from "@/services/orderValidation.service";
+import type { ResolvedOrderUpload } from "@/services/orderUpload.service";
 
 type StoredOrderItem = {
   id: string;
@@ -47,10 +47,16 @@ function stripePaymentIntentId(session: Stripe.Checkout.Session) {
   return typeof session.payment_intent === "string" ? session.payment_intent : session.payment_intent?.id ?? null;
 }
 
+function integrationIdentifier() {
+  const letters = "abcdefghijklmnopqrstuvwxyz";
+  return `regitech_web_${[...randomBytes(8)].map((value) => letters[value % letters.length]).join("")}`;
+}
+
 async function createStripeCheckoutSession(order: StoredOrder, attemptNumber: number) {
   const stripe = getStripeClient();
-  const env = getOrderServerEnv();
+  const env = getStripeServerEnv();
   const session = await stripe.checkout.sessions.create({
+    integration_identifier: integrationIdentifier(),
     mode: "payment",
     customer_email: order.customer.email,
     client_reference_id: order.id,
@@ -71,21 +77,30 @@ async function createStripeCheckoutSession(order: StoredOrder, attemptNumber: nu
   return session;
 }
 
-async function uploadOrderFile(orderId: string, orderItemId: string, kind: "v5c" | "artwork", file: ValidatedOrderFile) {
+async function attachPendingOrderFile(orderId: string, orderItemId: string, upload: ResolvedOrderUpload, sessionHash: string) {
   const supabase = getSupabaseAdmin();
-  const bucket = kind === "v5c" ? "v5c-documents" : "order-artwork";
-  const objectPath = `${orderId}/${orderItemId}/${kind}-${randomUUID()}.${file.extension}`;
-  const { error: uploadError } = await supabase.storage.from(bucket).upload(objectPath, file.bytes, { contentType: file.mimeType, upsert: false });
-  if (uploadError) throw new Error(`Unable to store the ${kind} file.`);
-  const { error: fileError } = await supabase.from("order_files").insert({
-    order_id: orderId, order_item_id: orderItemId, kind, bucket, object_path: objectPath,
-    original_name: file.originalName, mime_type: file.mimeType, size_bytes: file.size,
+  const finalPath = `${orderId}/${orderItemId}/${upload.kind}-${randomUUID()}.${upload.file.extension}`;
+  const { data: claimed, error: claimError } = await supabase.rpc("claim_pending_order_upload", {
+    p_upload_id: upload.id, p_session_hash: sessionHash, p_order_id: orderId, p_order_item_id: orderItemId,
   });
-  if (fileError) {
-    await supabase.storage.from(bucket).remove([objectPath]);
-    throw new Error(`Unable to associate the ${kind} file with the order.`);
+  if (claimError || !claimed) throw new Error("The uploaded file has expired or was already used.");
+  try {
+    const { error: moveError } = await supabase.storage.from(upload.bucket).move(upload.objectPath, finalPath);
+    if (moveError) throw new Error(`Unable to finalize the ${upload.kind} file.`);
+    const { error: pendingError } = await supabase.from("pending_order_uploads").update({ object_path: finalPath }).eq("id", upload.id);
+    if (pendingError) throw new Error(`Unable to finalize the ${upload.kind} upload record.`);
+    const { error: fileError } = await supabase.from("order_files").insert({
+      order_id: orderId, order_item_id: orderItemId, kind: upload.kind, bucket: upload.bucket, object_path: finalPath,
+      original_name: upload.file.originalName, mime_type: upload.file.mimeType, size_bytes: upload.file.size,
+    });
+    if (fileError) throw new Error(`Unable to associate the ${upload.kind} file with the order.`);
+    const { error: cleanupError } = await supabase.from("pending_order_uploads").delete().eq("id", upload.id);
+    if (cleanupError) throw new Error(`Unable to complete the ${upload.kind} upload handoff.`);
+  } catch (error) {
+    await supabase.storage.from(upload.bucket).remove([upload.objectPath, finalPath]);
+    throw error;
   }
-  return { bucket, objectPath };
+  return { bucket: upload.bucket, objectPath: finalPath };
 }
 
 async function cleanupFailedOrder(orderId: string, uploads: Array<{ bucket: string; objectPath: string }>) {
@@ -94,7 +109,7 @@ async function cleanupFailedOrder(orderId: string, uploads: Array<{ bucket: stri
   await supabase.from("orders").delete().eq("id", orderId);
 }
 
-export async function createCheckoutOrder(submission: CheckoutSubmissionValues, filesByItemId: Record<string, OrderItemFiles>) {
+export async function createCheckoutOrder(submission: CheckoutSubmissionValues, filesByItemId: Record<string, OrderItemFiles>, uploadSessionHash: string) {
   const canonical = canonicalizeCheckoutSubmission(submission, filesByItemId);
   const supabase = getSupabaseAdmin();
   const orderId = randomUUID();
@@ -116,7 +131,6 @@ export async function createCheckoutOrder(submission: CheckoutSubmissionValues, 
   };
   const { error: orderError } = await supabase.from("orders").insert(insert);
   if (orderError) throw new Error("Unable to create the order record.");
-
   const storedItems: StoredOrderItem[] = canonical.items.map((item, position) => ({
     id: randomUUID(), position, configuration: item.config,
     price_breakdown: item.priceBreakdown.map((line) => ({ label: line.label, amountPence: Math.round(line.amount * 100) })),
@@ -124,13 +138,15 @@ export async function createCheckoutOrder(submission: CheckoutSubmissionValues, 
   }));
   const uploads: Array<{ bucket: string; objectPath: string }> = [];
   try {
+    const { error: eventError } = await supabase.from("order_events").insert({ order_id: orderId, event_type: "order_created", title: "Order placed", actor_name: "System", source_key: `order-created:${orderId}` });
+    if (eventError) throw new Error("Unable to create the order activity record.");
     const { error: itemsError } = await supabase.from("order_items").insert(storedItems.map((item) => ({ ...item, order_id: orderId })));
     if (itemsError) throw new Error("Unable to create the order items.");
     for (let index = 0; index < canonical.items.length; index += 1) {
       const item = canonical.items[index];
       const storedItem = storedItems[index];
-      if (item.files.v5c) uploads.push(await uploadOrderFile(orderId, storedItem.id, "v5c", item.files.v5c));
-      if (item.files.artwork) uploads.push(await uploadOrderFile(orderId, storedItem.id, "artwork", item.files.artwork));
+      if (item.files.v5c) uploads.push(await attachPendingOrderFile(orderId, storedItem.id, item.files.v5c, uploadSessionHash));
+      if (item.files.artwork) uploads.push(await attachPendingOrderFile(orderId, storedItem.id, item.files.artwork, uploadSessionHash));
     }
     const storedOrder: StoredOrder = { ...insert, items: storedItems, stripe_checkout_session_id: null, created_at: new Date().toISOString() };
     const session = await createStripeCheckoutSession(storedOrder, 1);
@@ -177,10 +193,10 @@ export async function getOrderConfirmationBySessionId(sessionId: string, accessT
   const { data: items, error: itemsError } = await supabase.from("order_items").select("id,position,configuration,price_breakdown,quantity,unit_total_pence,line_total_pence").eq("order_id", attempt.order_id).order("position", { ascending: true });
   if (itemsError || !items) return null;
   return {
-    reference: data.reference, paymentStatus: data.payment_status, verificationStatus: data.verification_status,
+    reference: data.reference, paymentStatus: data.payment_status as PaymentStatus, verificationStatus: data.verification_status as VerificationStatus,
     items: (items as StoredOrderItem[]).map((item) => ({ id: item.id, position: item.position, config: item.configuration, quantity: item.quantity, priceBreakdown: item.price_breakdown.map((line) => ({ label: line.label, amount: line.amountPence / 100 })), unitTotalPence: item.unit_total_pence, lineTotalPence: item.line_total_pence })),
     orderNotes: data.order_notes, subtotalPence: data.subtotal_pence, deliveryPence: data.delivery_pence,
-    totalPence: data.total_pence, currency: data.currency, createdAt: data.created_at,
+    totalPence: data.total_pence, currency: data.currency as "gbp", createdAt: data.created_at,
   };
 }
 
@@ -193,7 +209,7 @@ export async function applyStripeCheckoutEvent(event: Stripe.Event) {
   if (event.type === "checkout.session.async_payment_failed") { paymentStatus = "payment_failed"; attemptStatus = "failed"; }
   else if (event.type === "checkout.session.expired") { paymentStatus = "expired"; attemptStatus = "expired"; }
   else if (event.type === "checkout.session.async_payment_succeeded" || session.payment_status === "paid") { paymentStatus = "paid"; attemptStatus = "complete"; }
-  const { data, error } = await getSupabaseAdmin().rpc("apply_stripe_event", { p_event_id: event.id, p_event_type: event.type, p_session_id: session.id, p_payment_status: paymentStatus, p_attempt_status: attemptStatus, p_payment_intent_id: stripePaymentIntentId(session), p_paid_at: paymentStatus === "paid" ? new Date().toISOString() : null });
+  const { data, error } = await getSupabaseAdmin().rpc("apply_stripe_event", { p_event_id: event.id, p_event_type: event.type, p_session_id: session.id, p_payment_status: paymentStatus, p_attempt_status: attemptStatus, p_payment_intent_id: stripePaymentIntentId(session) as string, p_paid_at: (paymentStatus === "paid" ? new Date().toISOString() : null) as string });
   if (error) throw new Error("Unable to apply the Stripe event.");
   return { processed: Boolean(data), ignored: false };
 }

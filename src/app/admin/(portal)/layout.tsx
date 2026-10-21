@@ -1,5 +1,7 @@
 import { AdminShell } from "@/components/admin/AdminShell";
+import { requireAdmin } from "@/services/adminAuth.service";
 
-export default function AdminPortalLayout({ children }: { children: React.ReactNode }) {
-  return <AdminShell>{children}</AdminShell>;
+export default async function AdminPortalLayout({ children }: { children: React.ReactNode }) {
+  const admin = await requireAdmin();
+  return <AdminShell adminEmail={admin.email}>{children}</AdminShell>;
 }

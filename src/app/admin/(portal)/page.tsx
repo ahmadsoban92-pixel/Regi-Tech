@@ -4,12 +4,12 @@ import { PackageCheck, PoundSterling, ShieldCheck, ShoppingCart } from "lucide-r
 import adminContent from "@/content/admin.json";
 import { AdminOrdersTable } from "@/components/admin/AdminOrdersTable";
 import { formatAdminMoney } from "@/lib/adminFormatting";
-import { adminFixtureRepository } from "@/services/adminFixture.service";
+import { adminRepository } from "@/services/admin.service";
 
 export const metadata: Metadata = { title: "Admin Dashboard" };
 
 export default async function AdminDashboardPage() {
-  const { metrics, latestOrders } = await adminFixtureRepository.getDashboard();
+  const { metrics, latestOrders } = await adminRepository.getDashboard();
   const cards = [
     { label: adminContent.dashboard.metrics.total, value: String(metrics.totalOrders), icon: ShoppingCart },
     { label: adminContent.dashboard.metrics.fulfilment, value: String(metrics.awaitingFulfilment), icon: PackageCheck },

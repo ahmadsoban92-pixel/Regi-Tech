@@ -72,7 +72,13 @@ export type AdminOrderFilters = {
   to: string;
   payment: PaymentStatus | "all";
   fulfilment: AdminFulfilmentStatus | "all";
+  page: number;
 };
+
+export type AdminOrderList = { orders: AdminOrder[]; total: number; page: number; pageSize: number; totalPages: number };
+
+export type AdminActor = { userId: string; displayName: string };
+export type AdminFulfilmentDetails = { carrier?: string; trackingReference?: string; cancellationReason?: string };
 
 export type AdminDashboardMetrics = {
   totalOrders: number;
@@ -83,11 +89,11 @@ export type AdminDashboardMetrics = {
 
 export type AdminOrderRepository = {
   getDashboard(): Promise<{ metrics: AdminDashboardMetrics; latestOrders: AdminOrder[] }>;
-  listOrders(filters: AdminOrderFilters): Promise<AdminOrder[]>;
+  listOrders(filters: AdminOrderFilters): Promise<AdminOrderList>;
   getOrder(reference: string): Promise<AdminOrder | null>;
-  updateFulfilment(reference: string, status: AdminFulfilmentStatus): Promise<AdminOrder>;
-  updateVerification(reference: string, status: VerificationStatus): Promise<AdminOrder>;
-  saveCarrier(reference: string, carrier: string, trackingReference: string): Promise<AdminOrder>;
-  addNote(reference: string, body: string): Promise<AdminOrder>;
-  cancelOrder(reference: string): Promise<AdminOrder>;
+  updateFulfilment(reference: string, status: AdminFulfilmentStatus, actor: AdminActor, details?: AdminFulfilmentDetails): Promise<AdminOrder>;
+  updateVerification(reference: string, status: VerificationStatus, actor: AdminActor): Promise<AdminOrder>;
+  saveCarrier(reference: string, carrier: string, trackingReference: string, actor: AdminActor): Promise<AdminOrder>;
+  addNote(reference: string, body: string, actor: AdminActor): Promise<AdminOrder>;
+  cancelOrder(reference: string, reason: string, actor: AdminActor): Promise<AdminOrder>;
 };

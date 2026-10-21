@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { ClipboardList, LayoutDashboard, LogOut, Menu, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import adminContent from "@/content/admin.json";
+import { logoutAdmin } from "@/app/admin/actions";
 
 const links = [
   { href: "/admin", label: adminContent.navigation.dashboard, icon: LayoutDashboard },
@@ -20,7 +21,7 @@ function AdminLogo() {
   );
 }
 
-function AdminNavigation({ onNavigate }: { onNavigate?: () => void }) {
+function AdminNavigation({ adminEmail, onNavigate }: { adminEmail: string; onNavigate?: () => void }) {
   const pathname = usePathname();
   return (
     <>
@@ -42,16 +43,14 @@ function AdminNavigation({ onNavigate }: { onNavigate?: () => void }) {
         })}
       </nav>
       <div className="border-t border-white/10 p-3">
-        <p className="truncate px-3 pb-2 text-xs text-white/45">{adminContent.email}</p>
-        <Link className="flex min-h-9 items-center gap-3 rounded-md px-3 py-2 text-sm font-medium hover:bg-white/5" href="/admin/login" onClick={onNavigate} style={{ color: "#ffffff" }}>
-          <LogOut aria-hidden size={16} strokeWidth={1.7} />{adminContent.navigation.logout}
-        </Link>
+        <p className="truncate px-3 pb-2 text-xs text-white/45">{adminEmail}</p>
+        <form action={logoutAdmin}><button className="flex min-h-9 w-full items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-white hover:bg-white/5" onClick={onNavigate} type="submit"><LogOut aria-hidden size={16} strokeWidth={1.7} />{adminContent.navigation.logout}</button></form>
       </div>
     </>
   );
 }
 
-export function AdminShell({ children }: { children: React.ReactNode }) {
+export function AdminShell({ adminEmail, children }: { adminEmail: string; children: React.ReactNode }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const pathname = usePathname();
   useEffect(() => setMenuOpen(false), [pathname]);
@@ -62,7 +61,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
         <div className="flex h-16 items-center border-b border-white/10 px-5">
           <AdminLogo />
         </div>
-        <AdminNavigation />
+        <AdminNavigation adminEmail={adminEmail} />
       </aside>
 
       {menuOpen ? (
@@ -73,7 +72,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
               <AdminLogo />
               <button aria-label={adminContent.navigation.closeMenu} className="grid size-10 place-items-center rounded text-white/80 hover:bg-white/10" onClick={() => setMenuOpen(false)} type="button"><X aria-hidden size={20} /></button>
             </div>
-            <AdminNavigation onNavigate={() => setMenuOpen(false)} />
+            <AdminNavigation adminEmail={adminEmail} onNavigate={() => setMenuOpen(false)} />
           </aside>
         </div>
       ) : null}
@@ -82,7 +81,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
         <header className="flex h-16 items-center gap-3 bg-[#111] px-4 text-white md:px-6">
           <button aria-expanded={menuOpen} aria-label={adminContent.navigation.openMenu} className="grid size-10 place-items-center rounded text-white/80 hover:bg-white/10 lg:hidden" onClick={() => setMenuOpen(true)} type="button"><Menu aria-hidden size={21} /></button>
           <strong className="text-base font-semibold">{adminContent.brandTitle}</strong>
-          <span className="ml-auto hidden text-sm text-white/65 sm:block">{adminContent.email}</span>
+          <span className="ml-auto hidden text-sm text-white/65 sm:block">{adminEmail}</span>
         </header>
         <main className="min-h-[calc(100dvh-4rem)] bg-white">{children}</main>
       </div>

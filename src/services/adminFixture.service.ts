@@ -177,13 +177,14 @@ export const adminFixtureRepository: AdminOrderRepository = {
     };
   },
   async listOrders(filters: AdminOrderFilters) {
-    return orders
+    const filtered = orders
       .filter((order) => matchesQuery(order, filters.query))
       .filter((order) => matchesDate(order.createdAt, filters.from, filters.to))
       .filter((order) => filters.payment === "all" || order.paymentStatus === filters.payment)
       .filter((order) => filters.fulfilment === "all" || order.fulfilmentStatus === filters.fulfilment)
       .sort((left, right) => right.createdAt.localeCompare(left.createdAt))
       .map(cloneOrder);
+    return { orders: filtered, total: filtered.length, page: 1, pageSize: 25, totalPages: 1 };
   },
   async getOrder(reference: string) {
     const order = orders.find((item) => item.reference.toLocaleLowerCase("en-GB") === reference.toLocaleLowerCase("en-GB"));

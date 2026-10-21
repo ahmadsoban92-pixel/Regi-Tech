@@ -128,8 +128,14 @@ export const cartItemSchema = z.object({
   quantity: z.number().int().min(1).max(ORDER_QUANTITY_MAX),
 });
 
+const uploadIdSchema = z.string().uuid("The upload identifier is invalid.").optional();
+export const checkoutItemSchema = cartItemSchema.extend({
+  v5cUploadId: uploadIdSchema,
+  artworkUploadId: uploadIdSchema,
+});
+
 export const checkoutSubmissionSchema = z.object({
-  items: z.array(cartItemSchema).min(1, "Add at least one plate to the cart.").max(ORDER_QUANTITY_MAX),
+  items: z.array(checkoutItemSchema).min(1, "Add at least one plate to the cart.").max(ORDER_QUANTITY_MAX),
   customer: customerDetailsSchema,
   orderNotes: z.string().max(ORDER_NOTES_MAX, `Order notes must be ${ORDER_NOTES_MAX} characters or fewer.`),
 }).superRefine((value, context) => {
@@ -137,6 +143,16 @@ export const checkoutSubmissionSchema = z.object({
   if (totalQuantity > ORDER_QUANTITY_MAX) {
     context.addIssue({ code: "custom", message: `An order can contain at most ${ORDER_QUANTITY_MAX} plates.`, path: ["items"] });
   }
+});
+
+export const orderUploadRequestSchema = z.object({
+  cartItemId: z.string().min(1).max(64).regex(/^[A-Za-z0-9-]+$/, "Cart item identifier is invalid."),
+  kind: z.enum(["v5c", "artwork"]),
+  filename: z.string().trim().min(1).max(UPLOADED_FILE_NAME_MAX),
+  mimeType: z.enum(["application/pdf", "image/jpeg", "image/png", "image/svg+xml"]),
+  size: z.number().int().min(1).max(10 * 1024 * 1024),
+}).superRefine((value, context) => {
+  if (value.kind === "v5c" && value.mimeType === "image/svg+xml") context.addIssue({ code: "custom", path: ["mimeType"], message: "V5C documents must be PDF, JPG or PNG." });
 });
 
 export const addressLookupQuerySchema = z.object({
@@ -148,3 +164,4 @@ export type ConfiguratorFormValues = z.infer<ReturnType<typeof createConfigurato
 export type ReviewFormValues = z.infer<typeof reviewSchema>;
 export type CheckoutFormValues = z.infer<ReturnType<typeof createCheckoutSchema>>;
 export type CheckoutSubmissionValues = z.infer<typeof checkoutSubmissionSchema>;
+export type OrderUploadRequestValues = z.infer<typeof orderUploadRequestSchema>;
