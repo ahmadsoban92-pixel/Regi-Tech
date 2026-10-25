@@ -7,16 +7,14 @@
     { "label": "Contact", "href": "/contact" }
   ],
   "primaryCta": "Explore Our Plates",
+  "whatsappHref": "https://wa.me/447438773936",
   "footer": {
     "description": "Regi-Tech — Specialists in motorcycle number plates.",
     "operator": "Operated by License Plate Workshop Ltd.",
     "products": ["Our Plates", "How to Order", "Show vs Road-Legal"],
     "help": ["FAQs", "Contact", "Delivery Information"],
     "policies": ["Terms & Conditions", "Cancellations & Refunds", "24-Month Warranty", "Privacy Policy"],
-    "addressLine1": "38 Portway Close, Reading,",
-    "addressLine2": "RG1 6LB, United Kingdom",
     "email": "info@lpworkshop.co.uk",
-    "phone": "+44 7438 773936",
     "copyright": "© 2026 License Plate Workshop Ltd. All rights reserved."
   },
   "whatsapp": "Chat on WhatsApp"

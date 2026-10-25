@@ -116,15 +116,26 @@ export const OPTION_PRICES = {
   fixings: Object.fromEntries(Object.entries(FIXING_OPTIONS).map(([id, option]) => [id, option.price])) as Record<FixingId, number>,
 };
 
-export const LOGO_ASSETS: Partial<Record<LogoOption, string>> = {
-  BMW: "/assets/regitech/logo-brand-bmw.png",
-  Ducati: "/assets/regitech/logo-brand-ducati.png",
-  "Harley-Davidson": "/assets/regitech/logo-brand-harley-davidson.png",
-  Honda: "/assets/regitech/logo-brand-honda.png",
-  Kawasaki: "/assets/regitech/logo-brand-kawasaki.png",
-  Triumph: "/assets/regitech/logo-brand-triumph.png",
-  KTM: "/assets/regitech/logo-brand-ktm.png",
+export type LogoDefinition = {
+  assetPath: string;
+  sourceWidth: number;
+  sourceHeight: number;
+  contentBounds: { x: number; y: number; width: number; height: number };
 };
+
+export const LOGO_DEFINITIONS: Partial<Record<LogoOption, LogoDefinition>> = {
+  BMW: { assetPath: "/assets/regitech/logo-brand-bmw.png", sourceWidth: 116, sourceHeight: 118, contentBounds: { x: 9, y: 9, width: 97, height: 97 } },
+  Ducati: { assetPath: "/assets/regitech/logo-brand-ducati.png", sourceWidth: 104, sourceHeight: 116, contentBounds: { x: 8, y: 8, width: 90, height: 96 } },
+  "Harley-Davidson": { assetPath: "/assets/regitech/logo-brand-harley-davidson.png", sourceWidth: 140, sourceHeight: 110, contentBounds: { x: 14, y: 15, width: 102, height: 79 } },
+  Honda: { assetPath: "/assets/regitech/logo-brand-honda.png", sourceWidth: 135, sourceHeight: 112, contentBounds: { x: 15, y: 8, width: 100, height: 80 } },
+  Kawasaki: { assetPath: "/assets/regitech/logo-brand-kawasaki.png", sourceWidth: 174, sourceHeight: 68, contentBounds: { x: 14, y: 22, width: 148, height: 20 } },
+  KTM: { assetPath: "/assets/regitech/logo-brand-ktm.png", sourceWidth: 185, sourceHeight: 92, contentBounds: { x: 17, y: 18, width: 153, height: 61 } },
+  Triumph: { assetPath: "/assets/regitech/logo-brand-triumph.png", sourceWidth: 180, sourceHeight: 74, contentBounds: { x: 13, y: 23, width: 148, height: 41 } },
+};
+
+export function getLogoDefinition(logo: LogoOption): LogoDefinition | null {
+  return LOGO_DEFINITIONS[logo] ?? null;
+}
 
 export const COUNTRY_FLAG_DEFINITIONS: Record<CountryFlag, CountryFlagDefinition> = {
   none: { value: "none", label: "None", code: "", assetPath: null, orientation: "stacked", printableRegion: { left: 0, top: 0, width: 0, height: 0 } },
@@ -173,6 +184,25 @@ export function createDefaultConfiguration(productId: string, registration = "")
     fixing: "none",
     specialRequirements: "",
     basePrice: rule.basePrice,
+  };
+}
+
+export function normalizePlateConfiguration(config: PlateConfiguration): PlateConfiguration {
+  const rule = getProductRule(config.productId);
+  return {
+    ...config,
+    productId: rule.id,
+    productName: rule.name,
+    badge: rule.badge,
+    useType: rule.useType,
+    basePrice: rule.basePrice,
+    size: rule.sizes.includes(config.size) ? config.size : rule.defaultSize,
+    innerBorder: rule.innerBorders.includes(config.innerBorder) ? config.innerBorder : "None",
+    outerBorder: rule.outerBorders.includes(config.outerBorder) ? config.outerBorder : "None",
+    logo: rule.logos.includes(config.logo) ? config.logo : "No Logo",
+    sloganMode: rule.slogan ? config.sloganMode : "none",
+    countryFlag: rule.countryFlags.includes(config.countryFlag) ? config.countryFlag : "none",
+    fixing: rule.fixings.includes(config.fixing) ? config.fixing : "none",
   };
 }
 

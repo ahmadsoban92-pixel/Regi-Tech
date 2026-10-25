@@ -27,7 +27,7 @@ export function ProductCard({ product, eager = false }: { product: Product; eage
         </div>
         <div className="mt-4 grid grid-cols-2 gap-2">
           <Link className="secondary-button min-h-10 px-2 text-xs" href={`/our-plates#${product.id}`}>View Details</Link>
-          <Link className="primary-button min-h-10 px-2 text-xs" href={`/design?product=${product.id}`}>Customise</Link>
+          <Link className="primary-button min-h-10 px-2 text-xs" href={`/design?product=${product.id}&new=1`}>Customise</Link>
         </div>
       </div>
     </article>

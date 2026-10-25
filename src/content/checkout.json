@@ -38,14 +38,13 @@
   },
   "v5c": {
     "title": "Road-legal verification",
-    "body": "Upload a clear, readable copy of the vehicle V5C that matches the registration being ordered.",
-    "label": "V5C document",
+    "body": "You can optionally upload a clear, readable copy of the vehicle V5C that matches the registration being ordered. You can still complete your order without attaching it now.",
+    "label": "V5C document (optional)",
     "selected": "Selected file",
     "typeError": "Upload a PDF, JPG or PNG V5C document.",
     "sizeError": "The V5C document must be 10 MB or smaller.",
     "privacy": "Your V5C is stored privately with this order and is not used for unrelated marketing.",
-    "dispatch": "Road-legal dispatch may be delayed until registration verification is complete.",
-    "required": "Upload a clear PDF, JPG or PNG copy of the V5C document for this plate."
+    "dispatch": "Road-legal dispatch may be delayed until registration verification is complete."
   },
   "artwork": {
     "title": "Other Logo artwork",

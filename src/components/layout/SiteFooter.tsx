@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { Mail, MapPin, MessageCircle, Phone } from "lucide-react";
+import { Mail, MessageCircle } from "lucide-react";
 import shared from "@/content/shared.json";
 
 const hrefs: Record<string, string> = {
@@ -49,10 +49,8 @@ export function SiteFooter() {
         <div>
           <h2 className="mb-4 text-sm font-semibold text-[var(--foreground)]">Contact</h2>
           <div className="space-y-3 text-sm text-[var(--muted)]">
-            <p className="flex gap-2"><MapPin aria-hidden className="mt-0.5 shrink-0" size={16} /><span>{footer.addressLine1}<br />{footer.addressLine2}</span></p>
             <a className="flex items-center gap-2 hover:text-[var(--foreground)]" href={`mailto:${footer.email}`}><Mail aria-hidden size={16} />{footer.email}</a>
-            <a className="flex items-center gap-2 hover:text-[var(--foreground)]" href="tel:+447438773936"><Phone aria-hidden size={16} />{footer.phone}</a>
-            <a className="flex items-center gap-2 hover:text-[var(--foreground)]" href="https://wa.me/447438773936"><MessageCircle aria-hidden size={16} />WhatsApp</a>
+            <a aria-label="Chat with Regi-Tech on WhatsApp" className="primary-button mt-5 w-fit gap-2 px-4 text-xs" href={shared.whatsappHref}><MessageCircle aria-hidden size={16} />{shared.whatsapp}</a>
           </div>
         </div>
       </div>

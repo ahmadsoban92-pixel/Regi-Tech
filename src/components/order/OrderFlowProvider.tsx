@@ -18,6 +18,7 @@ type OrderFlowContextValue = {
   items: CartItem[];
   editingItemId: string | null;
   totalQuantity: number;
+  editorRevision: number;
   orderNotes: string;
   setOrderNotes: (value: string) => void;
   customer: CustomerDetails;
@@ -33,7 +34,7 @@ type OrderFlowContextValue = {
   editCartItem: (itemId: string) => void;
   removeCartItem: (itemId: string) => void;
   setItemQuantity: (itemId: string, quantity: number) => void;
-  startAnotherPlate: () => void;
+  beginNewPlate: (productId?: string) => void;
   resetOrder: () => void;
 };
 
@@ -45,6 +46,7 @@ export function OrderFlowProvider({ children }: { children: React.ReactNode }) {
   const [cartOpen, setCartOpen] = useState(false);
   const [uploadedLogoFile, setUploadedLogoFile] = useState<File | null>(null);
   const [artworkFiles, setArtworkFiles] = useState<Record<string, File>>({});
+  const [editorRevision, setEditorRevision] = useState(0);
 
   const setConfig = useCallback<React.Dispatch<React.SetStateAction<PlateConfiguration>>>((action) => {
     updateOrderDraft((current) => ({
@@ -58,13 +60,16 @@ export function OrderFlowProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const selectProduct = useCallback((productId: string) => {
-    updateOrderDraft((current) => ({
-      ...current,
-      activeConfig: current.activeConfig.productId === productId
-        ? current.activeConfig
-        : createDefaultConfiguration(productId, current.activeConfig.registration),
-    }));
-    setUploadedLogoFile(null);
+    let changed = false;
+    updateOrderDraft((current) => {
+      if (current.activeConfig.productId === productId) return current;
+      changed = true;
+      return { ...current, activeConfig: createDefaultConfiguration(productId, current.activeConfig.registration) };
+    });
+    if (changed) {
+      setEditorRevision((current) => current + 1);
+      setUploadedLogoFile(null);
+    }
   }, []);
 
   const addOrUpdateCartItem = useCallback((config: PlateConfiguration) => {
@@ -97,10 +102,13 @@ export function OrderFlowProvider({ children }: { children: React.ReactNode }) {
   }, [uploadedLogoFile]);
 
   const editCartItem = useCallback((itemId: string) => {
+    let found = false;
     updateOrderDraft((current) => {
       const item = current.items.find((entry) => entry.id === itemId);
+      found = Boolean(item);
       return item ? { ...current, activeConfig: item.config, editingItemId: itemId } : current;
     });
+    if (found) setEditorRevision((current) => current + 1);
     setUploadedLogoFile(artworkFiles[itemId] ?? null);
     setCartOpen(false);
   }, [artworkFiles]);
@@ -128,10 +136,11 @@ export function OrderFlowProvider({ children }: { children: React.ReactNode }) {
     });
   }, []);
 
-  const startAnotherPlate = useCallback(() => {
-    updateOrderDraft((current) => ({ ...current, activeConfig: createDefaultConfiguration("hand-crafted-show-plate"), editingItemId: null }));
+  const beginNewPlate = useCallback((productId = "hand-crafted-show-plate") => {
+    updateOrderDraft((current) => ({ ...current, activeConfig: createDefaultConfiguration(productId), editingItemId: null }));
     setUploadedLogoFile(null);
     setCartOpen(false);
+    setEditorRevision((current) => current + 1);
   }, []);
 
   const setArtworkFileForItem = useCallback((itemId: string, file: File | null) => {
@@ -151,12 +160,12 @@ export function OrderFlowProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const value = useMemo<OrderFlowContextValue>(() => ({
-    config: draft.activeConfig, setConfig, items: draft.items, editingItemId: draft.editingItemId,
+    config: draft.activeConfig, setConfig, items: draft.items, editingItemId: draft.editingItemId, editorRevision,
     totalQuantity: getCartQuantity(draft.items), orderNotes: draft.orderNotes, setOrderNotes,
     customer, setCustomer, cartOpen, setCartOpen, uploadedLogoFile, setUploadedLogoFile,
     artworkFiles, setArtworkFileForItem, selectProduct, addOrUpdateCartItem, editCartItem,
-    removeCartItem, setItemQuantity, startAnotherPlate, resetOrder,
-  }), [addOrUpdateCartItem, artworkFiles, cartOpen, customer, draft, editCartItem, removeCartItem, resetOrder, selectProduct, setArtworkFileForItem, setConfig, setItemQuantity, setOrderNotes, startAnotherPlate, uploadedLogoFile]);
+    removeCartItem, setItemQuantity, beginNewPlate, resetOrder,
+  }), [addOrUpdateCartItem, artworkFiles, beginNewPlate, cartOpen, customer, draft, editCartItem, editorRevision, removeCartItem, resetOrder, selectProduct, setArtworkFileForItem, setConfig, setItemQuantity, setOrderNotes, uploadedLogoFile]);
 
   return <OrderFlowContext.Provider value={value}>{children}</OrderFlowContext.Provider>;
 }

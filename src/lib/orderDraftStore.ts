@@ -1,7 +1,7 @@
 "use client";
 
 import { plateConfigurationSchema } from "@/lib/orderSchemas";
-import { createDefaultConfiguration, isProductId } from "@/lib/productCatalog";
+import { createDefaultConfiguration, isProductId, normalizePlateConfiguration } from "@/lib/productCatalog";
 import type { CartItem, FixingId, PlateConfiguration } from "@/types/order";
 
 const STORAGE_KEY = "regitech-order-draft";
@@ -46,7 +46,7 @@ function parseConfig(value: unknown): PlateConfiguration | null {
     uploadedLogoPreviewUrl: "",
   };
   const result = plateConfigurationSchema.safeParse(candidate);
-  return result.success ? result.data : null;
+  return result.success ? normalizePlateConfiguration(result.data) : null;
 }
 
 function sanitizeItem(value: unknown, index: number): CartItem | null {

@@ -66,7 +66,7 @@
     "uploadLabel": "Upload logo artwork",
     "uploadHint": "PNG, JPG, SVG or PDF.",
     "reselectHint": "Please select this file again before checkout because uploaded artwork is not stored in your browser.",
-    "dragHint": "Drag the logo on the preview, or focus it and use the arrow keys.",
+    "dragHint": "Drag the logo itself to position it on the plate.",
     "resetPosition": "Reset logo position"
   },
   "slogan": {

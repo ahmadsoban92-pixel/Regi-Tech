@@ -38,6 +38,7 @@ export function AdminOrderDetail({ order }: { order: AdminOrder }) {
 
           {order.items.sort((left, right) => left.position - right.position).map((item, index) => {
             const details = getAdminPlateDetails(item.config);
+            const hasV5c = order.uploads.some((upload) => upload.itemId === item.id && upload.kind === "v5c");
             return (
               <section className="rounded-lg border border-[#e5e7eb] bg-white p-5" key={item.id}>
                 <div className="flex items-center justify-between gap-3"><h2 className="font-semibold">{adminContent.detail.plate}{order.items.length > 1 ? ` ${index + 1}` : ""}</h2><span className="text-xs text-[#2b2d31]/55">{item.config.badge}</span></div>
@@ -55,6 +56,7 @@ export function AdminOrderDetail({ order }: { order: AdminOrder }) {
                     <DetailRow label={adminContent.detail.slogan} value={details.slogan} />
                     <DetailRow label={adminContent.detail.fixing} value={details.fixing} />
                     <DetailRow label={adminContent.detail.quantity} value={item.quantity} />
+                    {item.config.useType === "road-legal" ? <DetailRow label={adminContent.detail.v5cLabel} value={<span className={hasV5c ? "font-semibold text-emerald-700" : "font-semibold text-amber-700"}>{hasV5c ? adminContent.detail.v5cSupplied : adminContent.detail.v5cNotSupplied}</span>} /> : null}
                   </dl>
                 </div>
                 <div className="mt-4 border-t border-[#e5e7eb] pt-4"><h3 className="text-xs font-semibold">{adminContent.detail.priceBreakdown}</h3><dl className="mt-2 space-y-1.5 text-xs">{item.priceBreakdown.map((line) => <DetailRow key={line.label} label={line.label} value={formatAdminMoney(Math.round(line.amount * item.quantity * 100))} />)}<div className="border-t border-[#e5e7eb] pt-2 font-semibold"><DetailRow label={adminContent.detail.lineTotal} value={formatAdminMoney(item.lineTotalPence)} /></div></dl></div>

@@ -4,6 +4,7 @@ import { FaqAccordion } from "@/components/faqs/FaqAccordion";
 import { Breadcrumb } from "@/components/layout/Breadcrumb";
 import { PageShell } from "@/components/layout/PageShell";
 import content from "@/content/faqs.json";
+import shared from "@/content/shared.json";
 import type { FaqItem } from "@/types/content";
 
 export const metadata: Metadata = { title: content.breadcrumb };
@@ -19,7 +20,7 @@ export default function FaqsPage() {
           <div className="panel mx-auto mt-8 max-w-[1000px] px-6 py-8 text-center">
             <h2 className="text-xl font-semibold">{content.supportTitle}</h2><p className="mt-2 text-sm text-[var(--label)]">{content.supportBody}</p>
             <div className="mt-5 flex flex-col justify-center gap-3 sm:flex-row">
-              <a className="primary-button gap-2" href="https://wa.me/447438773936"><MessageCircle aria-hidden size={18} />{content.whatsapp}</a>
+              <a className="primary-button gap-2" href={shared.whatsappHref}><MessageCircle aria-hidden size={18} />{content.whatsapp}</a>
               <a className="secondary-button gap-2" href="mailto:info@lpworkshop.co.uk"><Mail aria-hidden size={18} />{content.email}</a>
             </div>
           </div>

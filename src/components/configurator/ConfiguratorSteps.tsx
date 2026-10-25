@@ -2,6 +2,8 @@ import type { FieldErrors, UseFormRegister, UseFormSetValue } from "react-hook-f
 import { ChoiceCard } from "@/components/configurator/ChoiceCard";
 import content from "@/content/design.json";
 import { CUSTOM_DIMENSION_MAX, REGISTRATION_MAX, ROAD_LEGAL_REGISTRATION_MAX, SLOGAN_MAX, SPECIAL_REQUIREMENTS_MAX } from "@/lib/formLimits";
+import { createTrimmedArtworkPreview } from "@/lib/imagePreview";
+import { getDefaultLogoPosition } from "@/lib/logoLayout";
 import type { ConfiguratorFormValues } from "@/lib/orderSchemas";
 import type { BorderOption, CountryFlag, CustomDimensionUnit, FixingId, LogoOption, PlateConfiguration, PlateSize, ProductRule, SloganFont } from "@/types/order";
 
@@ -92,11 +94,27 @@ export function BordersStep({ config, rule, update }: StepProps) {
 
 export function LogoStep({ config, errors, onUploadedLogoFileChange, rule, setValue, update }: StepProps) {
   const options = content.logo.options.filter((option) => rule.logos.includes(option.value as LogoOption));
+
+  async function handleUploadedLogo(file: File | null) {
+    const fileName = file?.name ?? "";
+    if (config.uploadedLogoPreviewUrl.startsWith("blob:")) URL.revokeObjectURL(config.uploadedLogoPreviewUrl);
+    const previewUrl = file ? await createTrimmedArtworkPreview(file) : "";
+    const nextConfig = { ...config, logo: "Other Logo" as const, uploadedLogoName: fileName, uploadedLogoMimeType: file?.type ?? "", uploadedLogoPreviewUrl: previewUrl };
+    onUploadedLogoFileChange(file);
+    setValue("uploadedLogoName", fileName, { shouldDirty: true, shouldValidate: true });
+    update({
+      uploadedLogoName: fileName,
+      uploadedLogoMimeType: file?.type ?? "",
+      uploadedLogoPreviewUrl: previewUrl,
+      logoPosition: getDefaultLogoPosition(nextConfig),
+    });
+  }
+
   return (
     <div>
-      <div className="grid gap-3 sm:grid-cols-2">{options.map((option) => <ChoiceCard description={option.description} icon={option.icon} key={option.value} label={option.value} onClick={() => { if (option.value !== "Other Logo") onUploadedLogoFileChange(null); update({ logo: option.value as LogoOption, logoPosition: { x: 50, y: 12 }, ...(option.value !== "Other Logo" ? { uploadedLogoName: "", uploadedLogoMimeType: "", uploadedLogoPreviewUrl: "" } : {}) }); }} price={option.price} selected={config.logo === option.value} />)}</div>
-      {config.logo === "Other Logo" ? <label className="mt-4 block text-sm font-medium">{content.logo.uploadLabel}<input accept=".png,.jpg,.jpeg,.svg,.pdf" className="field mt-2 file:mr-3 file:rounded file:border-0 file:bg-[var(--accent)] file:px-3 file:py-2 file:text-[var(--foreground-on-light)]" onChange={(event) => { const file = event.target.files?.[0] ?? null; const fileName = file?.name ?? ""; if (config.uploadedLogoPreviewUrl.startsWith("blob:")) URL.revokeObjectURL(config.uploadedLogoPreviewUrl); const previewUrl = file?.type.startsWith("image/") ? URL.createObjectURL(file) : ""; onUploadedLogoFileChange(file); setValue("uploadedLogoName", fileName, { shouldDirty: true, shouldValidate: true }); update({ uploadedLogoName: fileName, uploadedLogoMimeType: file?.type ?? "", uploadedLogoPreviewUrl: previewUrl, logoPosition: { x: 50, y: 12 } }); }} type="file" /><span className="mt-2 block text-xs text-[var(--muted)]">{content.logo.uploadHint}</span>{config.uploadedLogoName && !config.uploadedLogoPreviewUrl ? <span className="mt-2 block text-xs text-[var(--accent)]">{content.logo.reselectHint}</span> : null}{errors.uploadedLogoName ? <span className="field-error mt-2 block">{errors.uploadedLogoName.message}</span> : null}</label> : null}
-      {config.logo !== "No Logo" ? <div className="mt-4 flex flex-wrap items-center justify-between gap-3"><p className="text-xs text-[var(--muted)]">{content.logo.dragHint}</p><button className="secondary-button min-h-8 px-3 py-1 text-xs" onClick={() => update({ logoPosition: { x: 50, y: 12 } })} type="button">{content.logo.resetPosition}</button></div> : null}
+      <div className="grid gap-3 sm:grid-cols-2">{options.map((option) => <ChoiceCard description={option.description} icon={option.icon} key={option.value} label={option.value} onClick={() => { const logo = option.value as LogoOption; const nextConfig = { ...config, logo }; if (logo !== "Other Logo") { if (config.uploadedLogoPreviewUrl.startsWith("blob:")) URL.revokeObjectURL(config.uploadedLogoPreviewUrl); onUploadedLogoFileChange(null); } update({ logo, logoPosition: getDefaultLogoPosition(nextConfig), ...(logo !== "Other Logo" ? { uploadedLogoName: "", uploadedLogoMimeType: "", uploadedLogoPreviewUrl: "" } : {}) }); }} price={option.price} selected={config.logo === option.value} />)}</div>
+      {config.logo === "Other Logo" ? <label className="mt-4 block text-sm font-medium">{content.logo.uploadLabel}<input accept=".png,.jpg,.jpeg,.svg,.pdf" className="field mt-2 file:mr-3 file:rounded file:border-0 file:bg-[var(--accent)] file:px-3 file:py-2 file:text-[var(--foreground-on-light)]" onChange={(event) => { void handleUploadedLogo(event.target.files?.[0] ?? null); }} type="file" /><span className="mt-2 block text-xs text-[var(--muted)]">{content.logo.uploadHint}</span>{config.uploadedLogoName && !config.uploadedLogoPreviewUrl ? <span className="mt-2 block text-xs text-[var(--accent)]">{content.logo.reselectHint}</span> : null}{errors.uploadedLogoName ? <span className="field-error mt-2 block">{errors.uploadedLogoName.message}</span> : null}</label> : null}
+      {config.logo !== "No Logo" ? <div className="mt-4 flex flex-wrap items-center justify-between gap-3"><p className="text-xs text-[var(--muted)]">{content.logo.dragHint}</p><button className="secondary-button min-h-8 px-3 py-1 text-xs" onClick={() => update({ logoPosition: getDefaultLogoPosition(config) })} type="button">{content.logo.resetPosition}</button></div> : null}
     </div>
   );
 }

@@ -1,7 +1,15 @@
 import Image from "next/image";
 import content from "@/content/home.json";
+import { PlatePreview } from "@/components/order/PlatePreview";
 import { ButtonLink } from "@/components/ui/ButtonLink";
-import { PlateRegistration } from "@/components/order/PlateRegistration";
+import { createDefaultConfiguration } from "@/lib/productCatalog";
+import type { PlateConfiguration } from "@/types/order";
+
+const showcasePlate: PlateConfiguration = {
+  ...createDefaultConfiguration("hand-crafted-show-plate", "AB76 BCD"),
+  size: "6×8″",
+  innerBorder: "Black",
+};
 
 export function CraftSection() {
   return (
@@ -9,28 +17,19 @@ export function CraftSection() {
       <div className="site-container grid items-start gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:gap-9">
         <div className="grid min-w-0 grid-cols-2 gap-3 overflow-hidden sm:gap-4">
           <div className="panel col-span-2 p-4 sm:p-8">
-            <div className="plate-canvas relative aspect-[598/452] overflow-hidden">
-              <Image alt="Hand-crafted AB76 BCD motorcycle plate" className="object-fill" fill sizes="(max-width: 1023px) calc(100vw - 64px), 55vw" src="/assets/regitech/craft-plate-main.svg" />
-              <Image alt="" aria-hidden className="pointer-events-none absolute inset-[4%_3%] h-[92%] w-[94%]" height={420} src="/assets/regitech/craft-outline-main.svg" width={567} />
-              <PlateRegistration lineOne="AB76" lineTwo="BCD" />
+            <span className="sr-only">Hand-crafted AB76 BCD motorcycle plate</span>
+            <PlatePreview config={showcasePlate} fluid />
+          </div>
+          <div className="panel relative aspect-square overflow-hidden">
+            <span className="sr-only">Close-up of AB76 BCD plate lettering</span>
+            <div className="absolute -left-[64%] -top-[48%] w-[230%]">
+              <PlatePreview config={showcasePlate} fluid />
             </div>
           </div>
           <div className="panel relative aspect-square overflow-hidden">
-            <div className="absolute -left-[64%] -top-[49%] w-[225%]">
-              <div className="plate-canvas relative aspect-[742/560]">
-                <Image alt="Close-up of AB76 BCD plate lettering" className="object-fill" fill sizes="55vw" src="/assets/regitech/craft-plate-crop-left.svg" />
-                <Image alt="" aria-hidden className="pointer-events-none absolute inset-[4%_3%] h-[92%] w-[94%]" height={521} src="/assets/regitech/craft-outline-left.svg" width={703} />
-                <PlateRegistration lineOne="AB76" lineTwo="BCD" />
-              </div>
-            </div>
-          </div>
-          <div className="panel relative aspect-square overflow-hidden">
-            <div className="absolute -left-[16%] -top-[14%] w-[255%]">
-              <div className="plate-canvas relative aspect-[839/633]">
-                <Image alt="Close-up of the hand-crafted plate edge" className="object-fill" fill sizes="55vw" src="/assets/regitech/craft-plate-crop-right.svg" />
-                <Image alt="" aria-hidden className="pointer-events-none absolute inset-[4%_3%] h-[92%] w-[94%]" height={589} src="/assets/regitech/craft-outline-right.svg" width={795} />
-                <PlateRegistration lineOne="AB76" lineTwo="BCD" />
-              </div>
+            <span className="sr-only">Close-up of the hand-crafted plate edge</span>
+            <div className="absolute -left-[18%] -top-[14%] w-[255%]">
+              <PlatePreview config={showcasePlate} fluid />
             </div>
           </div>
         </div>

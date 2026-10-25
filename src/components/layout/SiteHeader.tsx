@@ -10,12 +10,24 @@ import shared from "@/content/shared.json";
 import type { NavItem } from "@/types/content";
 import { useOrderFlow } from "@/components/order/OrderFlowProvider";
 
+function WhatsAppHeaderLink({ className = "" }: { className?: string }) {
+  return (
+    <a
+      aria-label="Chat with Regi-Tech on WhatsApp"
+      className={`whatsapp-header-link grid size-11 place-items-center rounded-md transition-colors hover:bg-[var(--surface)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)] ${className}`}
+      href={shared.whatsappHref}
+    >
+      <span aria-hidden className="size-[22px] bg-current [mask:url('/assets/regitech/whatsapp-mark.svg')_center/contain_no-repeat]" />
+    </a>
+  );
+}
+
 export function SiteHeader() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const reduceMotion = useReducedMotion();
   const nav = shared.nav as NavItem[];
-  const { items, setCartOpen, totalQuantity } = useOrderFlow();
+  const { beginNewPlate, items, setCartOpen, totalQuantity } = useOrderFlow();
   const hasCartItem = items.length > 0;
 
   return (
@@ -46,26 +58,30 @@ export function SiteHeader() {
           </nav>
 
           <div className="hidden items-center gap-3 lg:flex">
+            <WhatsAppHeaderLink />
             <button aria-label={`Open cart, ${totalQuantity} plates`} className="relative grid size-11 place-items-center rounded-md text-[var(--foreground)] hover:bg-[var(--surface)]" onClick={() => setCartOpen(true)} type="button">
               <ShoppingBag aria-hidden size={20} strokeWidth={1.6} />
               <AnimatePresence initial={false}>
                 {hasCartItem ? <m.span animate={{ opacity: 1, scale: 1 }} className="absolute right-1 top-1 grid size-4 place-items-center rounded-full bg-[var(--accent)] text-[0.6rem] font-bold text-[var(--foreground-on-light)]" exit={{ opacity: 0, scale: reduceMotion ? 1 : 0.75 }} initial={reduceMotion ? false : { opacity: 0, scale: 0.75 }} key={totalQuantity}>{totalQuantity}</m.span> : null}
               </AnimatePresence>
             </button>
-            <Link className="primary-button" href="/our-plates">
+            <Link className="primary-button" href="/our-plates" onClick={() => beginNewPlate()}>
               {shared.primaryCta}
             </Link>
           </div>
 
-          <button
-            aria-expanded={open}
-            aria-label={open ? "Close navigation" : "Open navigation"}
-            className="grid size-11 place-items-center rounded-md border border-[var(--line)] text-[var(--foreground)] lg:hidden"
-            onClick={() => setOpen((value) => !value)}
-            type="button"
-          >
-            {open ? <X aria-hidden size={22} /> : <Menu aria-hidden size={22} />}
-          </button>
+          <div className="flex items-center gap-1 lg:hidden">
+            <WhatsAppHeaderLink />
+            <button
+              aria-expanded={open}
+              aria-label={open ? "Close navigation" : "Open navigation"}
+              className="grid size-11 place-items-center rounded-md border border-[var(--line)] text-[var(--foreground)]"
+              onClick={() => setOpen((value) => !value)}
+              type="button"
+            >
+              {open ? <X aria-hidden size={22} /> : <Menu aria-hidden size={22} />}
+            </button>
+          </div>
         </div>
 
         <AnimatePresence initial={false}>
@@ -89,7 +105,7 @@ export function SiteHeader() {
               </Link>
             ))}
             <button className="secondary-button mt-2" onClick={() => { setOpen(false); setCartOpen(true); }} type="button">Open Cart{hasCartItem ? ` (${totalQuantity})` : ""}</button>
-            <Link className="primary-button mt-2" href="/our-plates" onClick={() => setOpen(false)}>
+            <Link className="primary-button mt-2" href="/our-plates" onClick={() => { beginNewPlate(); setOpen(false); }}>
               {shared.primaryCta}
             </Link>
           </m.nav>

@@ -25,7 +25,7 @@ function itemDetails(item: CartItem) {
 }
 
 export function CartDrawer() {
-  const { cartOpen, editCartItem, items, removeCartItem, setCartOpen, setItemQuantity, startAnotherPlate } = useOrderFlow();
+  const { beginNewPlate, cartOpen, editCartItem, items, removeCartItem, setCartOpen, setItemQuantity } = useOrderFlow();
   const reduceMotion = useReducedMotion();
   const total = getCartTotal(items);
 
@@ -48,7 +48,7 @@ export function CartDrawer() {
                 );
               }) : <div className="grid min-h-56 place-items-center text-center"><div><ShoppingBag aria-hidden className="mx-auto text-[var(--muted)]" size={32} /><h3 className="mt-4 text-lg font-semibold">{content.emptyTitle}</h3><p className="mt-2 text-sm text-[var(--muted)]">{content.emptyBody}</p></div></div>}
             </div>
-            <footer className="border-t border-[var(--line)] p-5"><dl className="space-y-2 text-sm"><div className="flex justify-between text-[var(--muted)]"><dt>{content.subtotal}</dt><dd>{formatPrice(total)}</dd></div><div className="flex justify-between text-[var(--muted)]"><dt>{content.delivery}</dt><dd className="rounded bg-[var(--accent)] px-1.5 font-bold text-[var(--foreground-on-light)]">{content.free}</dd></div><div className="flex justify-between border-t border-[var(--line)] pt-3 font-bold"><dt>{content.total}</dt><dd>{formatPrice(total)}</dd></div></dl><div className="mt-6 grid gap-2 sm:grid-cols-[1fr_auto]"><Link className="secondary-button" href="/our-plates" onClick={startAnotherPlate}>{content.continue}</Link>{items.length ? <Link className="primary-button" href="/review" onClick={() => setCartOpen(false)}>{content.review}</Link> : <Link className="primary-button" href="/our-plates" onClick={() => setCartOpen(false)}>Explore Our Plates</Link>}</div></footer>
+            <footer className="border-t border-[var(--line)] p-5"><dl className="space-y-2 text-sm"><div className="flex justify-between text-[var(--muted)]"><dt>{content.subtotal}</dt><dd>{formatPrice(total)}</dd></div><div className="flex justify-between text-[var(--muted)]"><dt>{content.delivery}</dt><dd className="rounded bg-[var(--accent)] px-1.5 font-bold text-[var(--foreground-on-light)]">{content.free}</dd></div><div className="flex justify-between border-t border-[var(--line)] pt-3 font-bold"><dt>{content.total}</dt><dd>{formatPrice(total)}</dd></div></dl><div className="mt-6 grid gap-2 sm:grid-cols-[1fr_auto]"><Link className="secondary-button" href="/our-plates" onClick={() => beginNewPlate()}>{content.continue}</Link>{items.length ? <Link className="primary-button" href="/review" onClick={() => setCartOpen(false)}>{content.review}</Link> : <Link className="primary-button" href="/our-plates" onClick={() => beginNewPlate()}>Explore Our Plates</Link>}</div></footer>
           </m.aside>
         </m.div>
       ) : null}

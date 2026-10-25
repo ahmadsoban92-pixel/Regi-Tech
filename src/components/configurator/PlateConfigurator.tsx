@@ -15,15 +15,15 @@ import { createConfiguratorSchema, type ConfiguratorFormValues } from "@/lib/ord
 import { getProductRule } from "@/lib/productCatalog";
 import type { ConfiguratorStepKey, PlateConfiguration } from "@/types/order";
 
-export function PlateConfigurator({ productId }: { productId: string }) {
-  const { addOrUpdateCartItem, config, editingItemId, selectProduct, setCartOpen, setConfig, setUploadedLogoFile, uploadedLogoFile } = useOrderFlow();
+export function PlateConfigurator({ productId, startFresh = false }: { productId: string; startFresh?: boolean }) {
+  const { addOrUpdateCartItem, beginNewPlate, config, editingItemId, editorRevision, selectProduct, setCartOpen, setConfig, setUploadedLogoFile, uploadedLogoFile } = useOrderFlow();
   const rule = getProductRule(productId);
   const [stepIndex, setStepIndex] = useState(0);
   const [direction, setDirection] = useState<1 | -1>(1);
   const [cartError, setCartError] = useState("");
   const reduceMotion = useReducedMotion();
   const currentStep = rule.steps[stepIndex] ?? rule.steps[0];
-  const { formState: { errors }, handleSubmit, register, setError, setValue, trigger } = useForm<ConfiguratorFormValues>({
+  const { formState: { errors }, handleSubmit, register, reset, setError, setValue, trigger } = useForm<ConfiguratorFormValues>({
     resolver: zodResolver(createConfiguratorSchema(rule.useType)),
     defaultValues: {
       registration: config.registration,
@@ -37,9 +37,22 @@ export function PlateConfigurator({ productId }: { productId: string }) {
   });
 
   useEffect(() => {
-    selectProduct(productId);
+    if (startFresh && !editingItemId) beginNewPlate(productId);
+    else selectProduct(productId);
     setStepIndex(0);
-  }, [productId, selectProduct]);
+  }, [beginNewPlate, editingItemId, productId, selectProduct, startFresh]);
+
+  useEffect(() => {
+    reset({
+      registration: config.registration,
+      customWidth: config.customWidth,
+      customHeight: config.customHeight,
+      customDimensionUnit: config.customDimensionUnit,
+      uploadedLogoName: config.uploadedLogoName,
+      sloganText: config.sloganText,
+      specialRequirements: config.specialRequirements,
+    });
+  }, [editorRevision, reset]);
 
   function update(patch: Partial<PlateConfiguration>) {
     setConfig((current) => ({ ...current, ...patch }));

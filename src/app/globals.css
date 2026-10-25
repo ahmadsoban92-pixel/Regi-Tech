@@ -108,11 +108,29 @@ a {
   display: none;
 }
 
+.whatsapp-header-link {
+  color: var(--accent);
+}
+
+.whatsapp-header-link:hover {
+  color: var(--foreground);
+}
+
 .plate-canvas {
-  background: var(--plate-surface);
-  border: 1px solid var(--plate-edge);
-  border-radius: clamp(4px, 0.45vw, 7px);
+  background: var(--plate-canvas-material, var(--plate-surface));
+  border: 1px solid var(--plate-canvas-edge, var(--plate-edge));
+  border-radius: var(--plate-self-corner-x, 2.75%) / var(--plate-self-corner-y, 3.7%);
   container-type: inline-size;
+}
+
+.plate-canvas-outer-black {
+  --plate-canvas-material: var(--plate-ink);
+  --plate-canvas-edge: var(--plate-ink);
+}
+
+.plate-canvas-outer-silver {
+  --plate-canvas-material: var(--mirror-silver);
+  --plate-canvas-edge: var(--mirror-silver);
 }
 
 .plate-registration {
@@ -129,34 +147,10 @@ a {
   z-index: 10;
 }
 
-.plate-registration-has-logo:not(.plate-registration-has-slogan) .plate-registration-line-first {
-  top: 24%;
-}
-
-.plate-registration-has-logo:not(.plate-registration-has-slogan) .plate-registration-line-second {
-  top: 55%;
-}
-
-.plate-registration-has-slogan:not(.plate-registration-has-logo) .plate-registration-line-first {
-  top: 10.13%;
-}
-
-.plate-registration-has-slogan:not(.plate-registration-has-logo) .plate-registration-line-second {
-  top: 53.27%;
-}
-
-.plate-registration-has-logo.plate-registration-has-slogan .plate-registration-line-first {
-  top: 23%;
-}
-
-.plate-registration-has-logo.plate-registration-has-slogan .plate-registration-line-second {
-  top: 54%;
-}
-
 .plate-registration-line {
   position: absolute;
-  right: 5.5%;
-  left: 5.5%;
+  right: var(--plate-registration-inset, 5.5%);
+  left: var(--plate-registration-inset, 5.5%);
   display: block;
   transform: translateY(-10%);
 }
@@ -179,15 +173,15 @@ a {
 }
 
 .plate-registration-line-first {
-  top: 10.13%;
+  top: var(--plate-registration-first-top, 10.13%);
 }
 
 .plate-registration-line-second {
-  top: 53.27%;
+  top: var(--plate-registration-second-top, 53.27%);
 }
 
 .plate-registration-single .plate-registration-line {
-  top: 47%;
+  top: var(--plate-registration-single-top, 47%);
   right: 3.5%;
   left: 3.5%;
   line-height: 0.92;
@@ -213,21 +207,9 @@ a {
   left: 19%;
 }
 
-.plate-registration-single.plate-registration-has-logo .plate-registration-line {
-  top: 53%;
-}
-
-.plate-registration-single.plate-registration-has-slogan .plate-registration-line {
-  top: 47%;
-}
-
-.plate-registration-single.plate-registration-has-logo.plate-registration-has-slogan .plate-registration-line {
-  top: 51%;
-}
-
 .plate-slogan {
   right: 12%;
-  bottom: 7%;
+  bottom: var(--plate-slogan-bottom, 7%);
   left: 12%;
   font-size: var(--plate-slogan-size);
   line-height: 1;
@@ -252,43 +234,39 @@ a {
 .plate-border-frame {
   position: absolute;
   z-index: 5;
-  border-radius: 1.25cqw;
+  border-radius: var(--plate-frame-radius, var(--plate-corner-radius, 2.75cqw));
   overflow: hidden;
   pointer-events: none;
 }
 
 .plate-border-frame-single {
   background: var(--plate-border-material);
-  --plate-border-width: 2.35cqw;
+  --plate-border-width: var(--plate-outer-band, 2.35cqw);
 }
 
 .plate-border-frame-inner {
-  inset: 2.35cqw;
-  --plate-border-width: 1.85cqw;
+  inset: var(--plate-inner-inset, 2.35cqw);
+  --plate-border-width: var(--plate-inner-band, 1.85cqw);
+  --plate-frame-radius: max(0px, calc(var(--plate-corner-radius, 2.75cqw) - var(--plate-inner-inset, 2.35cqw)));
 }
 
 .plate-border-frame-outer {
   inset: 0;
-  border-radius: inherit;
-}
-
-.plate-border-frame-road-legal.plate-border-frame-inner {
-  inset: 1.35cqw;
-  --plate-border-width: 1.35cqw;
+  --plate-frame-radius: var(--plate-corner-radius, 2.75cqw);
 }
 
 .plate-border-frame-double {
   inset: 0;
-  border-radius: inherit;
+  --plate-frame-radius: var(--plate-corner-radius, 2.75cqw);
   background: var(--plate-border-material);
 }
 
 .plate-border-frame-double-same {
-  --plate-border-width: 2.35cqw;
+  --plate-border-width: var(--plate-double-band, 3.35cqw);
 }
 
 .plate-border-frame-double-mixed {
-  --plate-border-width: 1.48cqw;
+  --plate-border-width: var(--plate-mixed-band, 1.675cqw);
 }
 
 .plate-border-band,
@@ -298,14 +276,15 @@ a {
 
 .plate-border-band-inner {
   inset: var(--plate-border-width);
-  border-radius: 0.75cqw;
+  --plate-frame-radius: max(0px, calc(var(--plate-corner-radius, 2.75cqw) - var(--plate-border-width)));
+  border-radius: var(--plate-frame-radius);
   background: var(--plate-border-material);
-  --plate-border-width: 1.48cqw;
+  --plate-border-width: var(--plate-mixed-band, 1.675cqw);
 }
 
 .plate-border-cutout {
   inset: var(--plate-border-width);
-  border-radius: 0.55cqw;
+  border-radius: max(0px, calc(var(--plate-frame-radius, var(--plate-corner-radius, 2.75cqw)) - var(--plate-border-width)));
   background: var(--plate-surface);
 }
 
@@ -353,17 +332,17 @@ a {
 }
 
 .plate-canvas-landscape .plate-slogan {
-  bottom: 8.5%;
+  bottom: var(--plate-slogan-bottom, 8.5%);
   font-size: var(--plate-slogan-size);
   max-height: 16%;
 }
 
 .plate-canvas-landscape .plate-slogan-border-1 {
-  bottom: 10.5%;
+  bottom: var(--plate-slogan-bordered-bottom, 10.5%);
 }
 
 .plate-canvas-landscape .plate-slogan-border-2 {
-  bottom: 11.5%;
+  bottom: var(--plate-slogan-bordered-bottom, 11.5%);
 }
 
 .section-heading {

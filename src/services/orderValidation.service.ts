@@ -54,7 +54,6 @@ function canonicalizeItem(item: CheckoutSubmissionValues["items"][number], files
     const height = Number(config.customHeight);
     if (!Number.isFinite(width) || width <= 0 || !Number.isFinite(height) || height <= 0) reject("Enter valid positive custom dimensions.", `items.${item.id}.size`);
   }
-  if (rule.useType === "road-legal" && !files.v5c) reject("Upload a clear PDF, JPG or PNG copy of the V5C document for every road-legal plate.", `v5c-${item.id}`);
   if (rule.useType !== "road-legal" && files.v5c) reject("V5C documents can only be attached to road-legal plates.", `v5c-${item.id}`);
   if (config.logo === "Other Logo" && !files.artwork) reject("Upload the Other Logo artwork for every applicable plate.", `artwork-${item.id}`);
   if (config.logo !== "Other Logo" && files.artwork) reject("Uploaded artwork is only accepted when Other Logo is selected.", `artwork-${item.id}`);

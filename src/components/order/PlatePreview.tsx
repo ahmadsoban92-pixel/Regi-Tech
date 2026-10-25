@@ -1,11 +1,13 @@
 "use client";
 
 import Image from "next/image";
-import { useRef, type CSSProperties } from "react";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { PlateBorderFrame } from "@/components/order/PlateBorderFrame";
 import { PlateRegistration } from "@/components/order/PlateRegistration";
 import { RoadLegalMarkings } from "@/components/order/RoadLegalMarkings";
-import { getCountryFlagDefinition, getPlateAspectRatio, LOGO_ASSETS } from "@/lib/productCatalog";
+import { clampLogoPosition, fitLogoVisualSize, getLogoAspectRatio } from "@/lib/logoLayout";
+import { getPlateGeometry } from "@/lib/plateGeometry";
+import { getCountryFlagDefinition, getLogoDefinition } from "@/lib/productCatalog";
 import type { LogoPosition, PlateConfiguration } from "@/types/order";
 
 function splitRegistration(config: PlateConfiguration, singleLine: boolean): [string, string] {
@@ -23,99 +25,112 @@ function splitRegistration(config: PlateConfiguration, singleLine: boolean): [st
   return [value.slice(0, midpoint), value.slice(midpoint)];
 }
 
-function clamp(value: number, minimum: number, maximum: number) {
-  return Math.min(maximum, Math.max(minimum, value));
-}
-
-function clampLogoPosition(position: LogoPosition): LogoPosition {
-  return { x: clamp(position.x, 11, 89), y: clamp(position.y, 9, 91) };
-}
-
-function getRegistrationMaxFontSize(singleLine: boolean, hasLogo: boolean, hasSlogan: boolean) {
-  // Use the supplied reference geometry as the upper bound, then let the
-  // measured fitter reduce long lines to the printable width. Accessory-heavy
-  // show plates use a modestly lower cap so their dedicated safe areas remain
-  // separate without moving the registration block sharply upward.
-  if (singleLine) return hasLogo ? 26 : 30;
-  if (hasLogo && hasSlogan) return 27.5;
-  if (hasLogo) return 30;
-  if (hasSlogan) return 28;
-  return 36;
-}
-
-function getRegistrationHorizontalScale(singleLine: boolean, hasLogo: boolean, hasSlogan: boolean) {
-  if (singleLine) return hasLogo ? 0.87 : 0.78;
-  if (hasLogo && hasSlogan) return 1.28;
-  if (hasSlogan) return 1.38;
-  if (hasLogo) return 1.24;
-  return 1.18;
-}
-
 function getSloganFontClass(font: PlateConfiguration["sloganFont"]) {
   if (font === "The Boss") return "plate-slogan-font-boss";
   if (font === "The Scribbler") return "plate-slogan-font-scribbler";
   return "plate-slogan-font-rebel";
 }
 
-function getSloganFontSize(text: string, singleLine: boolean) {
-  const maximum = singleLine ? 2.8 : 3.5;
+function getSloganFontSize(text: string, maximum: number) {
   return Number(Math.max(2.15, Math.min(maximum, 84 / Math.max(text.length, 1))).toFixed(2));
 }
 
-export function PlatePreview({ compact = false, config, onLogoPositionChange }: { compact?: boolean; config: PlateConfiguration; onLogoPositionChange?: (position: LogoPosition) => void }) {
+export function PlatePreview({ compact = false, config, fluid = false, onLogoPositionChange }: { compact?: boolean; config: PlateConfiguration; fluid?: boolean; onLogoPositionChange?: (position: LogoPosition) => void }) {
   const plateRef = useRef<HTMLDivElement>(null);
-  const aspectRatio = getPlateAspectRatio(config);
-  const singleLine = config.useType === "show" && aspectRatio >= 1.75;
+  const dragOffsetRef = useRef<LogoPosition>({ x: 0, y: 0 });
+  const [uploadedAspectRatio, setUploadedAspectRatio] = useState<number | null>(null);
+  const geometry = getPlateGeometry(config);
+  const singleLine = geometry.registration.singleLine;
   const [lineOne, lineTwo] = splitRegistration(config, singleLine);
-  const logoAsset = config.logo === "Other Logo" ? config.uploadedLogoPreviewUrl : LOGO_ASSETS[config.logo];
+  const logoDefinition = getLogoDefinition(config.logo);
+  const logoAsset = config.logo === "Other Logo" ? config.uploadedLogoPreviewUrl : logoDefinition?.assetPath;
   const flagDefinition = getCountryFlagDefinition(config.countryFlag);
   const flagAsset = flagDefinition.assetPath;
   const hasLogo = config.logo !== "No Logo";
   const hasSlogan = config.sloganMode === "custom" && Boolean(config.sloganText);
   const hasFlag = Boolean(flagAsset);
   const interactiveLogo = hasLogo && Boolean(onLogoPositionChange) && !compact;
-  const logoPosition = clampLogoPosition(config.logoPosition);
-  const registrationMaxFontSize = getRegistrationMaxFontSize(singleLine, hasLogo, hasSlogan);
-  const registrationHorizontalScale = getRegistrationHorizontalScale(singleLine, hasLogo, hasSlogan);
+  const logoSize = fitLogoVisualSize(geometry, getLogoAspectRatio(config, uploadedAspectRatio));
+  const logoPosition = clampLogoPosition(config.logoPosition, config, geometry, logoSize);
   const borderCount = Number(config.innerBorder !== "None") + Number(config.outerBorder !== "None");
-  const sloganFontSize = getSloganFontSize(config.sloganText, singleLine);
+  const sloganFontSize = getSloganFontSize(config.sloganText, geometry.slogan.maxFontSizeCqw);
+  const registrationFirstTop = hasLogo ? hasSlogan ? geometry.registration.logoSloganFirstRowTopPercent : geometry.registration.logoFirstRowTopPercent : geometry.registration.firstRowTopPercent;
+  const registrationSecondTop = hasLogo ? hasSlogan ? geometry.registration.logoSloganSecondRowTopPercent : geometry.registration.logoSecondRowTopPercent : geometry.registration.secondRowTopPercent;
+  const registrationSingleTop = hasLogo ? hasSlogan ? geometry.registration.logoSloganSingleRowTopPercent : geometry.registration.logoSingleRowTopPercent : geometry.registration.singleRowTopPercent;
+  const outerMaterialClass = config.outerBorder === "Black" ? "plate-canvas-outer-black" : config.outerBorder === "Mirror Silver" ? "plate-canvas-outer-silver" : "";
+  const plateStyle = {
+    aspectRatio: geometry.aspectRatio,
+    "--plate-self-corner-x": `${geometry.cornerRadiusCqw}%`,
+    "--plate-self-corner-y": `${geometry.cornerRadiusCqw * geometry.aspectRatio}%`,
+    "--plate-corner-radius": `${geometry.cornerRadiusCqw}cqw`,
+    "--plate-inner-inset": `${geometry.innerInsetCqw}cqw`,
+    "--plate-inner-band": `${geometry.innerBandCqw}cqw`,
+    "--plate-outer-band": `${geometry.outerBandCqw}cqw`,
+    "--plate-double-band": `${geometry.doubleBandCqw}cqw`,
+    "--plate-mixed-band": `${geometry.doubleBandCqw / 2}cqw`,
+    "--plate-registration-inset": `${geometry.registration.horizontalInsetPercent}%`,
+    "--plate-registration-first-top": `${registrationFirstTop}%`,
+    "--plate-registration-second-top": `${registrationSecondTop}%`,
+    "--plate-registration-single-top": `${registrationSingleTop}%`,
+    "--plate-slogan-bottom": `${geometry.slogan.bottomPercent}%`,
+    "--plate-slogan-bordered-bottom": `${geometry.slogan.borderedBottomPercent}%`,
+  } as CSSProperties;
+
+  useEffect(() => setUploadedAspectRatio(null), [logoAsset]);
 
   function updateLogoFromPointer(clientX: number, clientY: number) {
     const bounds = plateRef.current?.getBoundingClientRect();
     if (!bounds || !onLogoPositionChange) return;
     onLogoPositionChange(clampLogoPosition({
-      x: ((clientX - bounds.left) / bounds.width) * 100,
-      y: ((clientY - bounds.top) / bounds.height) * 100,
-    }));
+      x: ((clientX - bounds.left) / bounds.width) * 100 - dragOffsetRef.current.x,
+      y: ((clientY - bounds.top) / bounds.height) * 100 - dragOffsetRef.current.y,
+    }, config, geometry, logoSize));
   }
 
   return (
     <div
-      className={`plate-canvas ${singleLine ? "plate-canvas-landscape" : "plate-canvas-stacked"} relative mx-auto w-full overflow-hidden ${compact ? "max-w-[155px]" : "max-w-[527px]"}`}
+      className={`plate-canvas ${singleLine ? "plate-canvas-landscape" : "plate-canvas-stacked"} ${outerMaterialClass} relative mx-auto w-full overflow-hidden ${compact ? "max-w-[155px]" : fluid ? "max-w-none" : "max-w-[527px]"}`}
       ref={plateRef}
-      style={{ aspectRatio }}
+      style={plateStyle}
     >
       <PlateBorderFrame innerBorder={config.innerBorder} outerBorder={config.outerBorder} roadLegal={config.useType === "road-legal"} />
 
       {hasLogo ? (
         <div
-          aria-label={interactiveLogo ? "Move selected logo. Use arrow keys for fine adjustment." : undefined}
-          className={`absolute z-20 grid h-[18%] w-[22%] -translate-x-1/2 -translate-y-1/2 place-items-center ${interactiveLogo ? "cursor-move touch-none rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]" : "pointer-events-none"}`}
-          onKeyDown={interactiveLogo ? (event) => {
-            const distance = event.shiftKey ? 5 : 1;
-            const offsets: Partial<Record<string, [number, number]>> = { ArrowLeft: [-distance, 0], ArrowRight: [distance, 0], ArrowUp: [0, -distance], ArrowDown: [0, distance] };
-            const offset = offsets[event.key];
-            if (!offset || !onLogoPositionChange) return;
+          className={`absolute z-20 -translate-x-1/2 -translate-y-1/2 overflow-hidden ${interactiveLogo ? "cursor-grab touch-none active:cursor-grabbing" : "pointer-events-none"}`}
+          onPointerCancel={interactiveLogo ? (event) => { if (event.currentTarget.hasPointerCapture(event.pointerId)) event.currentTarget.releasePointerCapture(event.pointerId); } : undefined}
+          onPointerDown={interactiveLogo ? (event) => {
+            const bounds = plateRef.current?.getBoundingClientRect();
+            if (!bounds) return;
             event.preventDefault();
-            onLogoPositionChange(clampLogoPosition({ x: config.logoPosition.x + offset[0], y: config.logoPosition.y + offset[1] }));
+            dragOffsetRef.current = {
+              x: ((event.clientX - bounds.left) / bounds.width) * 100 - logoPosition.x,
+              y: ((event.clientY - bounds.top) / bounds.height) * 100 - logoPosition.y,
+            };
+            event.currentTarget.setPointerCapture(event.pointerId);
           } : undefined}
-          onPointerDown={interactiveLogo ? (event) => { event.currentTarget.setPointerCapture(event.pointerId); updateLogoFromPointer(event.clientX, event.clientY); } : undefined}
           onPointerMove={interactiveLogo ? (event) => { if (event.currentTarget.hasPointerCapture(event.pointerId)) updateLogoFromPointer(event.clientX, event.clientY); } : undefined}
-          role={interactiveLogo ? "button" : undefined}
-          style={{ left: `${logoPosition.x}%`, top: `${logoPosition.y}%` }}
-          tabIndex={interactiveLogo ? 0 : undefined}
+          onPointerUp={interactiveLogo ? (event) => { if (event.currentTarget.hasPointerCapture(event.pointerId)) event.currentTarget.releasePointerCapture(event.pointerId); } : undefined}
+          style={{ left: `${logoPosition.x}%`, top: `${logoPosition.y}%`, width: `${logoSize.widthPercent}%`, height: `${logoSize.heightPercent}%` }}
         >
-          {logoAsset ? <Image alt={`${config.logo} logo`} className="pointer-events-none object-contain" draggable={false} fill sizes={compact ? "32px" : "100px"} src={logoAsset} unoptimized={logoAsset.startsWith("blob:")} /> : <span className="rounded border border-[var(--plate-ink)] px-[1.5cqw] py-[0.5cqw] text-[2.6cqw] font-bold text-[var(--plate-ink)]">PDF</span>}
+          {logoDefinition ? (
+            <Image
+              alt={`${config.logo} logo`}
+              className="pointer-events-none absolute max-w-none"
+              draggable={false}
+              height={logoDefinition.sourceHeight}
+              src={logoDefinition.assetPath}
+              style={{
+                left: `${-logoDefinition.contentBounds.x / logoDefinition.contentBounds.width * 100}%`,
+                top: `${-logoDefinition.contentBounds.y / logoDefinition.contentBounds.height * 100}%`,
+                width: `${logoDefinition.sourceWidth / logoDefinition.contentBounds.width * 100}%`,
+                height: `${logoDefinition.sourceHeight / logoDefinition.contentBounds.height * 100}%`,
+              }}
+              width={logoDefinition.sourceWidth}
+            />
+          ) : logoAsset ? (
+            <Image alt={`${config.logo} logo`} className="pointer-events-none object-contain" draggable={false} fill onLoad={(event) => { const image = event.currentTarget; if (image.naturalWidth && image.naturalHeight) setUploadedAspectRatio(image.naturalWidth / image.naturalHeight); }} sizes={compact ? "32px" : "100px"} src={logoAsset} unoptimized={logoAsset.startsWith("blob:")} />
+          ) : <span className="grid size-full place-items-center rounded border border-[var(--plate-ink)] text-[2.6cqw] font-bold text-[var(--plate-ink)]">PDF</span>}
         </div>
       ) : null}
 
@@ -140,7 +155,7 @@ export function PlatePreview({ compact = false, config, onLogoPositionChange }: 
         </div>
       ) : null}
 
-      <PlateRegistration borderCount={borderCount} hasFlag={hasFlag} hasLogo={hasLogo} hasSlogan={hasSlogan} horizontalScale={registrationHorizontalScale} lineOne={lineOne} lineTwo={lineTwo} maxFontSizeCqw={registrationMaxFontSize} singleLine={singleLine} />
+      <PlateRegistration borderCount={borderCount} hasFlag={hasFlag} hasLogo={hasLogo} hasSlogan={hasSlogan} horizontalScale={geometry.registration.horizontalScale} lineOne={lineOne} lineTwo={lineTwo} maxFontSizeCqw={geometry.registration.maxFontSizeCqw} singleLine={singleLine} />
 
       {hasSlogan ? <div className={`plate-slogan plate-slogan-border-${Math.min(borderCount, 2)} ${getSloganFontClass(config.sloganFont)} absolute z-10 text-center text-[var(--plate-ink)]`} style={{ "--plate-slogan-size": `${sloganFontSize}cqw` } as CSSProperties}>{config.sloganText}</div> : null}
 

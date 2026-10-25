@@ -22,7 +22,7 @@ type ContactFieldName = "firstName" | "lastName" | "email" | "telephone";
 type CheckoutFormProps = { cancelledReference?: string };
 
 export function CheckoutForm({ cancelledReference }: CheckoutFormProps) {
-  const { artworkFiles, customer, editCartItem, items, orderNotes, removeCartItem, setArtworkFileForItem, setCustomer, setItemQuantity } = useOrderFlow();
+  const { artworkFiles, beginNewPlate, customer, editCartItem, items, orderNotes, removeCartItem, setArtworkFileForItem, setCustomer, setItemQuantity } = useOrderFlow();
   const [v5cFiles, setV5cFiles] = useState<Record<string, File>>({});
   const [fileErrors, setFileErrors] = useState<Record<string, string>>({});
   const [requestStatus, setRequestStatus] = useState<"idle" | "submitting" | "retrying">("idle");
@@ -49,7 +49,6 @@ export function CheckoutForm({ cancelledReference }: CheckoutFormProps) {
   async function submit(values: CheckoutFormValues) {
     const nextErrors: Record<string, string> = {};
     for (const item of items) {
-      if (item.config.useType === "road-legal" && !v5cFiles[item.id]) nextErrors[`v5c-${item.id}`] = content.v5c.required;
       if (item.config.logo === "Other Logo" && !artworkFiles[item.id]) nextErrors[`artwork-${item.id}`] = content.errors.artworkRequired;
     }
     setFileErrors(nextErrors);
@@ -105,7 +104,7 @@ export function CheckoutForm({ cancelledReference }: CheckoutFormProps) {
     <div className="site-container py-10 sm:py-14">
       <Breadcrumb current={content.breadcrumb.at(-1) ?? "Checkout"} /><h1 className="page-heading">{content.title}</h1>
       {cancelledReference ? <section className="panel mt-6 border-[var(--accent-border)] p-5"><h2 className="text-base font-semibold">{content.cancelled.title}</h2><p className="mt-2 text-sm text-[var(--muted)]">{content.cancelled.body}</p><button className="primary-button mt-4" disabled={requestStatus !== "idle"} onClick={retryPayment} type="button">{requestStatus === "retrying" ? content.cancelled.retrying : content.cancelled.retry}</button></section> : null}
-      {!items.length ? <section className="panel mt-8 p-6"><p className="text-[var(--muted)]">{content.errors.emptyCart}</p><Link className="primary-button mt-5" href="/our-plates">Explore Our Plates</Link></section> : (
+      {!items.length ? <section className="panel mt-8 p-6"><p className="text-[var(--muted)]">{content.errors.emptyCart}</p><Link className="primary-button mt-5" href="/our-plates" onClick={() => beginNewPlate()}>Explore Our Plates</Link></section> : (
         <FormProvider {...methods}><form className="mt-8 grid min-w-0 grid-cols-[minmax(0,1fr)] items-start gap-7 lg:grid-cols-[minmax(0,1.8fr)_minmax(300px,0.9fr)]" onSubmit={handleSubmit(submit)}>
           <div className="min-w-0">
             <section><h2 className="text-lg font-semibold">{content.contactTitle}</h2><div className="mt-5 grid gap-5 sm:grid-cols-2">{input("firstName", content.fields.firstName)}{input("lastName", content.fields.lastName)}{input("email", content.fields.email, "email")}{input("telephone", content.fields.telephone, "tel")}</div></section>
