@@ -23,7 +23,7 @@ export function OrderCard({ config, editable = false, editHref = "/design", onEd
     rule.outerBorders.length > 1 ? `${config.outerBorder} outer border` : "",
     rule.logos.length > 1 ? (config.logo === "Other Logo" ? config.uploadedLogoName || config.logo : config.logo) : "",
     config.countryFlag !== "none" ? getCountryFlagDefinition(config.countryFlag).label : "",
-    rule.slogan ? (config.sloganMode === "custom" ? `Slogan “${config.sloganText}” (${config.sloganFont})` : "No slogan") : "",
+    rule.slogan ? (config.sloganMode === "custom" ? `Slogan “${config.sloganText}” (${config.sloganFont}${config.sloganPlacement === "border" ? ", in bottom border" : ""})` : "No slogan") : "",
     FIXING_OPTIONS[config.fixing].label,
   ].filter(Boolean);
   const lines = persistedPriceBreakdown ?? getPriceBreakdown(config);
@@ -32,7 +32,7 @@ export function OrderCard({ config, editable = false, editHref = "/design", onEd
   return (
     <article className="panel p-4 sm:p-6">
       <div className="grid gap-6 sm:grid-cols-[200px_minmax(0,1fr)]">
-        <div className="grid min-h-56 place-items-center rounded-md border border-[var(--line)] bg-[var(--background-deep)] p-5"><PlatePreview compact config={config} /></div>
+        <div className="grid min-h-56 place-items-center rounded-md border border-[var(--line)] bg-[var(--surface-soft)] p-5"><PlatePreview compact config={config} /></div>
         <div className="min-w-0">
           <div className="flex items-start justify-between gap-4"><div><h2 className="text-lg font-semibold">{config.productName}</h2><p className="mt-1 font-mono text-sm">{config.registration || "YOUR REJ"}{quantity > 1 ? ` · × ${quantity}` : ""}</p></div>{editable ? <Link className="secondary-button min-h-8 gap-1 px-3 py-1 text-xs" href={editHref} onClick={onEdit}><Pencil aria-hidden size={14} />Edit</Link> : null}</div>
           <ul className="mt-3 space-y-1 text-sm text-[var(--muted)]">{details.map((detail) => <li key={detail}>• {detail}</li>)}</ul>

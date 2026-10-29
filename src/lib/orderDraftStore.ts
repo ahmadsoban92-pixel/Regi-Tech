@@ -42,6 +42,7 @@ function parseConfig(value: unknown): PlateConfiguration | null {
     ...createDefaultConfiguration(productId),
     ...raw,
     customDimensionUnit: raw.customDimensionUnit === "cm" ? "cm" : "in",
+    sloganPlacement: raw.sloganPlacement === "border" ? "border" : "plate",
     fixing: migrateFixing(raw.fixing),
     uploadedLogoPreviewUrl: "",
   };

@@ -19,7 +19,7 @@ function itemDetails(item: CartItem) {
     rule.outerBorders.length > 1 ? `${config.outerBorder.toLowerCase()} outer border` : "",
     rule.logos.length > 1 ? config.logo : "",
     config.countryFlag !== "none" ? getCountryFlagDefinition(config.countryFlag).label : "",
-    rule.slogan ? (config.sloganMode === "custom" ? `Slogan “${config.sloganText}”` : "No slogan") : "",
+    rule.slogan ? (config.sloganMode === "custom" ? `Slogan “${config.sloganText}”${config.sloganPlacement === "border" ? " in bottom border" : ""}` : "No slogan") : "",
     FIXING_OPTIONS[config.fixing].label,
   ].filter(Boolean);
 }

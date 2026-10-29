@@ -25,7 +25,7 @@
           ]
         },
         { "type": "paragraph", "text": "Both options have their own characteristics, allowing you to choose the style that best suits your preferences." },
-        { "type": "paragraph", "parts": [{ "text": "Both our Hand-Crafted and 2D Printed plates are backed by a " }, { "text": "three-year warranty against colour fading and yellowing caused by sunlight", "strong": true }, { "text": ", subject to our warranty terms." }] }
+        { "type": "paragraph", "parts": [{ "text": "Our plates include a " }, { "text": "24-month warranty against manufacturing and material defects", "strong": true }, { "text": " under normal use. See the full warranty terms for coverage and exclusions." }] }
       ]
     },
     {
@@ -37,14 +37,14 @@
         { "type": "paragraph", "text": "This option is available for customers who want a distinctive mirror-silver finish for their Show Plates, whether for motorcycle displays, shows or decorative purposes." }
       ]
     },
-    { "question": "What is the difference between a show plate and a road-legal plate?", "answer": "Show plates are intended for display, events, private land or other permitted non-road use. Road-legal plates follow a stricter specification, include required markings and require V5C verification." },
+    { "question": "What is the difference between a show plate and a road-legal plate?", "answer": "Show plates are intended for display, events, private land or other permitted non-road use. Road-legal plates follow a stricter specification, include required markings and need registration verification before fulfilment. Uploading a V5C at checkout is optional; our team may request documentation later." },
     { "question": "Can I preview my plate before ordering?", "answer": "Yes. The configurator provides a live proportional preview so you can review your registration and selected options before ordering." },
     { "question": "Can I upload my own logo?", "answer": "Supported show-style products accept your own PNG, JPG, SVG or PDF artwork. You are responsible for permission to use supplied logos and images." },
     { "question": "How much is delivery?", "answer": "UK delivery with Royal Mail Tracked 48 is free." },
     { "question": "How long does delivery take?", "answer": "Royal Mail Tracked 48 is estimated at 2–3 working days after dispatch. Orders placed by 12:00 are targeted for same-day dispatch, subject to payment, verification and production requirements." },
     { "question": "Can I change my order?", "answer": "Contact us as soon as possible. Personalised or made-to-order changes may not be possible after production has started." },
     { "question": "How long can my slogan be?", "answer": "A slogan can contain up to 28 characters on supported plate styles." },
-    { "question": "What does the warranty cover?", "answer": "The 24-month warranty covers manufacturing and material defects under normal use. Separately, Hand-Crafted and 2D Printed plates have a three-year warranty against colour fading and yellowing caused by sunlight, subject to the warranty terms. Accidental damage, incorrect fitting, alteration, misuse and normal wear are not normally covered." }
+    { "question": "What does the warranty cover?", "answer": "The 24-month warranty covers manufacturing and material defects under normal use. Accidental damage, incorrect fitting, alteration, misuse and normal wear are not normally covered. See the full warranty terms for details." }
   ],
   "supportTitle": "Still have a question?",
   "supportBody": "Contact our team and we will help you.",

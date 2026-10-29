@@ -6,14 +6,14 @@ import shared from "@/content/shared.json";
 const hrefs: Record<string, string> = {
   "Our Plates": "/our-plates",
   "How to Order": "/how-it-works",
-  "Show vs Road-Legal": "/faqs",
+  "Show vs Road-Legal": "/information/road-legal-vs-show",
   FAQs: "/faqs",
   Contact: "/contact",
-  "Delivery Information": "/faqs",
-  "Terms & Conditions": "/faqs",
-  "Cancellations & Refunds": "/faqs",
-  "24-Month Warranty": "/faqs",
-  "Privacy Policy": "/faqs"
+  "Delivery Information": "/information/delivery",
+  "Terms & Conditions": "/information/terms",
+  "Cancellations & Refunds": "/information/cancellations-and-refunds",
+  "24-Month Warranty": "/information/warranty",
+  "Privacy Policy": "/information/privacy"
 };
 
 function FooterLinks({ title, items }: { title: string; items: string[] }) {

@@ -18,8 +18,8 @@ export default async function AdminOrderPage({ params }: AdminOrderPageProps) {
   const order = await adminRepository.getOrder(reference);
   if (!order) notFound();
   return (
-    <div className="mx-auto w-full max-w-[1280px] p-4 md:p-6">
-      <nav aria-label="Breadcrumb" className="mb-5 flex items-center gap-2 text-xs text-[#2b2d31]/55"><Link className="hover:text-[#111]" href="/admin/orders">{adminContent.navigation.orders}</Link><ChevronRight aria-hidden size={13} /><span className="font-['Source_Code_Pro'] text-[#111]">{order.reference}</span></nav>
+    <div className="admin-page-enter mx-auto w-full max-w-[1280px] p-4 md:p-6">
+      <nav aria-label="Breadcrumb" className="mb-5 flex items-center gap-2 text-xs text-[#2b2d31]/55"><Link className="admin-text-link" href="/admin/orders">{adminContent.navigation.orders}</Link><ChevronRight aria-hidden size={13} /><span className="font-['Source_Code_Pro'] text-[#111]">{order.reference}</span></nav>
       <AdminOrderDetail order={order} />
     </div>
   );

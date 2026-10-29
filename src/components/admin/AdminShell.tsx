@@ -30,7 +30,7 @@ function AdminNavigation({ adminEmail, onNavigate }: { adminEmail: string; onNav
           return (
             <Link
               aria-current={active ? "page" : undefined}
-              className={`mb-1 flex min-h-9 items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors ${active ? "bg-[var(--accent)]" : "hover:bg-white/5"}`}
+              className={`admin-nav-link mb-1 flex min-h-9 items-center gap-3 rounded-md px-3 py-2 text-sm font-medium ${active ? "admin-nav-link-active bg-[var(--accent)]" : ""}`}
               href={href}
               key={href}
               onClick={onNavigate}
@@ -43,7 +43,7 @@ function AdminNavigation({ adminEmail, onNavigate }: { adminEmail: string; onNav
       </nav>
       <div className="border-t border-white/10 p-3">
         <p className="truncate px-3 pb-2 text-xs text-white/45">{adminEmail}</p>
-        <form action="/api/v1/admin/logout" method="post"><button className="flex min-h-9 w-full items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-white hover:bg-white/5" onClick={onNavigate} type="submit"><LogOut aria-hidden size={16} strokeWidth={1.7} />{adminContent.navigation.logout}</button></form>
+        <form action="/api/v1/admin/logout" method="post"><button className="admin-nav-link flex min-h-9 w-full items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-white" onClick={onNavigate} type="submit"><LogOut aria-hidden size={16} strokeWidth={1.7} />{adminContent.navigation.logout}</button></form>
       </div>
     </>
   );
@@ -56,7 +56,7 @@ export function AdminShell({ adminEmail, children }: { adminEmail: string; child
 
   return (
     <div className="min-h-dvh bg-[#111] text-[#111] lg:grid lg:grid-cols-[240px_minmax(0,1fr)]">
-      <aside className="hidden min-h-dvh flex-col bg-[#2b2d31] lg:fixed lg:inset-y-0 lg:left-0 lg:flex lg:w-60">
+      <aside className="admin-sidebar hidden min-h-dvh flex-col bg-[#2b2d31] lg:fixed lg:inset-y-0 lg:left-0 lg:flex lg:w-60">
         <div className="flex h-16 items-center border-b border-white/10 px-5">
           <AdminLogo />
         </div>
@@ -65,11 +65,11 @@ export function AdminShell({ adminEmail, children }: { adminEmail: string; child
 
       {menuOpen ? (
         <div className="fixed inset-0 z-50 lg:hidden">
-          <button aria-label={adminContent.navigation.closeMenu} className="absolute inset-0 bg-black/70" onClick={() => setMenuOpen(false)} type="button" />
-          <aside className="relative flex h-full w-[min(82vw,280px)] flex-col bg-[#2b2d31] shadow-2xl">
+          <button aria-label={adminContent.navigation.closeMenu} className="admin-drawer-overlay absolute inset-0 bg-black/70" onClick={() => setMenuOpen(false)} type="button" />
+          <aside className="admin-drawer relative flex h-full w-[min(82vw,280px)] flex-col bg-[#2b2d31] shadow-2xl">
             <div className="flex h-16 items-center justify-between border-b border-white/10 px-4">
               <AdminLogo />
-              <button aria-label={adminContent.navigation.closeMenu} className="grid size-10 place-items-center rounded text-white/80 hover:bg-white/10" onClick={() => setMenuOpen(false)} type="button"><X aria-hidden size={20} /></button>
+              <button aria-label={adminContent.navigation.closeMenu} className="admin-icon-button grid size-10 place-items-center rounded text-white/80" onClick={() => setMenuOpen(false)} type="button"><X aria-hidden size={20} /></button>
             </div>
             <AdminNavigation adminEmail={adminEmail} onNavigate={() => setMenuOpen(false)} />
           </aside>
@@ -78,7 +78,7 @@ export function AdminShell({ adminEmail, children }: { adminEmail: string; child
 
       <div className="min-w-0 lg:col-start-2">
         <header className="flex h-16 items-center gap-3 bg-[#111] px-4 text-white md:px-6">
-          <button aria-expanded={menuOpen} aria-label={adminContent.navigation.openMenu} className="grid size-10 place-items-center rounded text-white/80 hover:bg-white/10 lg:hidden" onClick={() => setMenuOpen(true)} type="button"><Menu aria-hidden size={21} /></button>
+          <button aria-expanded={menuOpen} aria-label={adminContent.navigation.openMenu} className="admin-icon-button grid size-10 place-items-center rounded text-white/80 lg:hidden" onClick={() => setMenuOpen(true)} type="button"><Menu aria-hidden size={21} /></button>
           <strong className="text-base font-semibold">{adminContent.brandTitle}</strong>
           <span className="ml-auto hidden text-sm text-white/65 sm:block">{adminEmail}</span>
         </header>

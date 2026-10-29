@@ -114,6 +114,7 @@ export const plateConfigurationSchema = z.object({
   uploadedLogoPreviewUrl: z.string().max(2048, "Artwork preview URL is too long."),
   uploadedLogoMimeType: z.string().max(120, "Artwork MIME type is too long."),
   sloganMode: z.enum(["none", "custom"]),
+  sloganPlacement: z.enum(["plate", "border"]).default("plate"),
   sloganText: z.string().max(SLOGAN_MAX, `Slogan must be ${SLOGAN_MAX} characters or fewer.`),
   sloganFont: sloganFontSchema,
   countryFlag: countryFlagSchema,

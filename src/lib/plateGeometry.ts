@@ -21,7 +21,13 @@ export type PlateGeometry = {
     logoSloganSecondRowTopPercent: number;
     logoSloganSingleRowTopPercent: number;
     maxFontSizeCqw: number;
+    fallbackFontSizeCqw: number;
     horizontalScale: number;
+    sloganMaxFontSizeCqw: number;
+    logoMaxFontSizeCqw: number;
+    logoSloganMaxFontSizeCqw: number;
+    sloganFirstRowTopPercent: number;
+    sloganSecondRowTopPercent: number;
   };
   slogan: {
     bottomPercent: number;
@@ -37,6 +43,8 @@ export type PlateGeometry = {
 
 type StandardPlateSize = Exclude<PlateSize, "Custom">;
 
+// Character caps follow the client's approximate millimetre guide. The preview
+// still measures each registration and reduces its size when options need space.
 const STANDARD_GEOMETRY: Record<StandardPlateSize, Omit<PlateGeometry, "aspectRatio">> = {
   "3×7″": {
     cornerRadiusCqw: 2.55,
@@ -56,11 +64,17 @@ const STANDARD_GEOMETRY: Record<StandardPlateSize, Omit<PlateGeometry, "aspectRa
       logoSloganFirstRowTopPercent: 23,
       logoSloganSecondRowTopPercent: 54,
       logoSloganSingleRowTopPercent: 51,
-      maxFontSizeCqw: 29.5,
-      horizontalScale: 0.84,
+      maxFontSizeCqw: 40.5,
+      fallbackFontSizeCqw: 27,
+      horizontalScale: 0.63,
+      sloganMaxFontSizeCqw: 36,
+      logoMaxFontSizeCqw: 38,
+      logoSloganMaxFontSizeCqw: 35,
+      sloganFirstRowTopPercent: 47,
+      sloganSecondRowTopPercent: 53.25,
     },
     slogan: { bottomPercent: 7.5, borderedBottomPercent: 10.5, maxFontSizeCqw: 2.8 },
-    logo: { maxWidthPercent: 22, maxHeightPercent: 18, edgeInsetPercent: 1.25 },
+    logo: { maxWidthPercent: 20, maxHeightPercent: 16, edgeInsetPercent: 1.25 },
   },
   "4×6″": {
     cornerRadiusCqw: 3.45,
@@ -80,11 +94,17 @@ const STANDARD_GEOMETRY: Record<StandardPlateSize, Omit<PlateGeometry, "aspectRa
       logoSloganFirstRowTopPercent: 23,
       logoSloganSecondRowTopPercent: 54,
       logoSloganSingleRowTopPercent: 51,
-      maxFontSizeCqw: 36.5,
-      horizontalScale: 1.2,
+      maxFontSizeCqw: 38.8,
+      fallbackFontSizeCqw: 34,
+      horizontalScale: 0.95,
+      sloganMaxFontSizeCqw: 35,
+      logoMaxFontSizeCqw: 30,
+      logoSloganMaxFontSizeCqw: 29,
+      sloganFirstRowTopPercent: 8.5,
+      sloganSecondRowTopPercent: 48,
     },
     slogan: { bottomPercent: 5.5, borderedBottomPercent: 7.5, maxFontSizeCqw: 3.5 },
-    logo: { maxWidthPercent: 22, maxHeightPercent: 18, edgeInsetPercent: 1.5 },
+    logo: { maxWidthPercent: 20, maxHeightPercent: 16, edgeInsetPercent: 1.5 },
   },
   "5×7″": {
     cornerRadiusCqw: 3.1,
@@ -104,11 +124,17 @@ const STANDARD_GEOMETRY: Record<StandardPlateSize, Omit<PlateGeometry, "aspectRa
       logoSloganFirstRowTopPercent: 23,
       logoSloganSecondRowTopPercent: 54,
       logoSloganSingleRowTopPercent: 51,
-      maxFontSizeCqw: 34.5,
-      horizontalScale: 1.22,
+      maxFontSizeCqw: 40.7,
+      fallbackFontSizeCqw: 34,
+      horizontalScale: 0.95,
+      sloganMaxFontSizeCqw: 36,
+      logoMaxFontSizeCqw: 30,
+      logoSloganMaxFontSizeCqw: 29,
+      sloganFirstRowTopPercent: 9,
+      sloganSecondRowTopPercent: 49,
     },
     slogan: { bottomPercent: 5.75, borderedBottomPercent: 8, maxFontSizeCqw: 3.4 },
-    logo: { maxWidthPercent: 22, maxHeightPercent: 18, edgeInsetPercent: 1.5 },
+    logo: { maxWidthPercent: 20, maxHeightPercent: 16, edgeInsetPercent: 1.5 },
   },
   "6×8″": {
     cornerRadiusCqw: 2.9,
@@ -128,11 +154,17 @@ const STANDARD_GEOMETRY: Record<StandardPlateSize, Omit<PlateGeometry, "aspectRa
       logoSloganFirstRowTopPercent: 23,
       logoSloganSecondRowTopPercent: 54,
       logoSloganSingleRowTopPercent: 51,
-      maxFontSizeCqw: 33,
-      horizontalScale: 1.24,
+      maxFontSizeCqw: 40,
+      fallbackFontSizeCqw: 33,
+      horizontalScale: 0.95,
+      sloganMaxFontSizeCqw: 36,
+      logoMaxFontSizeCqw: 30,
+      logoSloganMaxFontSizeCqw: 29,
+      sloganFirstRowTopPercent: 9.5,
+      sloganSecondRowTopPercent: 49,
     },
     slogan: { bottomPercent: 6, borderedBottomPercent: 8.25, maxFontSizeCqw: 3.3 },
-    logo: { maxWidthPercent: 22, maxHeightPercent: 18, edgeInsetPercent: 1.5 },
+    logo: { maxWidthPercent: 20, maxHeightPercent: 16, edgeInsetPercent: 1.5 },
   },
   "7×9″": {
     cornerRadiusCqw: 2.75,
@@ -152,8 +184,14 @@ const STANDARD_GEOMETRY: Record<StandardPlateSize, Omit<PlateGeometry, "aspectRa
       logoSloganFirstRowTopPercent: 23,
       logoSloganSecondRowTopPercent: 54,
       logoSloganSingleRowTopPercent: 51,
-      maxFontSizeCqw: 31.5,
-      horizontalScale: 1.18,
+      maxFontSizeCqw: 40.5,
+      fallbackFontSizeCqw: 31.5,
+      horizontalScale: 0.95,
+      sloganMaxFontSizeCqw: 40.5,
+      logoMaxFontSizeCqw: 40.5,
+      logoSloganMaxFontSizeCqw: 40.5,
+      sloganFirstRowTopPercent: 9.75,
+      sloganSecondRowTopPercent: 52.75,
     },
     slogan: { bottomPercent: 6, borderedBottomPercent: 8.25, maxFontSizeCqw: 3.2 },
     logo: { maxWidthPercent: 22, maxHeightPercent: 18, edgeInsetPercent: 1.5 },

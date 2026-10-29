@@ -30,6 +30,8 @@ export type LogoPosition = {
   y: number;
 };
 
+export type SloganPlacement = "plate" | "border";
+
 export type ProductRule = {
   id: ProductId;
   name: string;
@@ -65,6 +67,7 @@ export type PlateConfiguration = {
   uploadedLogoPreviewUrl: string;
   uploadedLogoMimeType: string;
   sloganMode: SloganMode;
+  sloganPlacement: SloganPlacement;
   sloganText: string;
   sloganFont: SloganFont;
   countryFlag: CountryFlag;

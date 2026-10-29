@@ -37,6 +37,7 @@ function canonicalizeItem(item: CheckoutSubmissionValues["items"][number], files
   if (!rule.countryFlags.includes(config.countryFlag)) reject("The selected country flag is not available for this product.", `items.${item.id}.countryFlag`);
   if (!rule.fixings.includes(config.fixing)) reject("The selected fixing is not available for this product.", `items.${item.id}.fixing`);
   if (!rule.slogan && config.sloganMode !== "none") reject("A slogan is not available for this product.", `items.${item.id}.sloganMode`);
+  if (config.sloganPlacement === "border" && (config.innerBorder === "None" || config.sloganMode !== "custom" || !rule.slogan)) reject("A bottom-border slogan requires a slogan and an inner border.", `items.${item.id}.sloganPlacement`);
 
   const configuratorResult = createConfiguratorSchema(rule.useType).safeParse({
     registration: config.registration,
@@ -72,6 +73,7 @@ function canonicalizeItem(item: CheckoutSubmissionValues["items"][number], files
     uploadedLogoMimeType: files.artwork?.file.mimeType ?? "",
     uploadedLogoPreviewUrl: "",
     sloganMode: rule.slogan ? config.sloganMode : "none",
+    sloganPlacement: rule.slogan && config.sloganMode === "custom" ? config.sloganPlacement : "plate",
     sloganText: rule.slogan && config.sloganMode === "custom" ? configuratorResult.data.sloganText : "",
     countryFlag: rule.countryFlags.includes(config.countryFlag) ? config.countryFlag : "none",
     specialRequirements: configuratorResult.data.specialRequirements,

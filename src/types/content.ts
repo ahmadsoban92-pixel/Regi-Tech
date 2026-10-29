@@ -10,6 +10,7 @@ export type Product = {
   description: string;
   price: string;
   image: string;
+  gallery?: Array<{ src: string; alt: string }>;
 };
 
 export type FaqTextPart = {

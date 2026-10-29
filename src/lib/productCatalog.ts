@@ -178,6 +178,7 @@ export function createDefaultConfiguration(productId: string, registration = "")
     uploadedLogoPreviewUrl: "",
     uploadedLogoMimeType: "",
     sloganMode: "none",
+    sloganPlacement: "plate",
     sloganText: "Ride with passion",
     sloganFont: "Rebel",
     countryFlag: "none",
@@ -201,6 +202,7 @@ export function normalizePlateConfiguration(config: PlateConfiguration): PlateCo
     outerBorder: rule.outerBorders.includes(config.outerBorder) ? config.outerBorder : "None",
     logo: rule.logos.includes(config.logo) ? config.logo : "No Logo",
     sloganMode: rule.slogan ? config.sloganMode : "none",
+    sloganPlacement: rule.slogan && rule.innerBorders.includes(config.innerBorder) && config.innerBorder !== "None" && config.sloganMode === "custom" && config.sloganPlacement === "border" ? "border" : "plate",
     countryFlag: rule.countryFlags.includes(config.countryFlag) ? config.countryFlag : "none",
     fixing: rule.fixings.includes(config.fixing) ? config.fixing : "none",
   };

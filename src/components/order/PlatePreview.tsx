@@ -37,6 +37,7 @@ function getSloganFontSize(text: string, maximum: number) {
 
 export function PlatePreview({ compact = false, config, fluid = false, onLogoPositionChange }: { compact?: boolean; config: PlateConfiguration; fluid?: boolean; onLogoPositionChange?: (position: LogoPosition) => void }) {
   const plateRef = useRef<HTMLDivElement>(null);
+  const sloganRef = useRef<HTMLDivElement>(null);
   const dragOffsetRef = useRef<LogoPosition>({ x: 0, y: 0 });
   const [uploadedAspectRatio, setUploadedAspectRatio] = useState<number | null>(null);
   const geometry = getPlateGeometry(config);
@@ -48,15 +49,20 @@ export function PlatePreview({ compact = false, config, fluid = false, onLogoPos
   const flagAsset = flagDefinition.assetPath;
   const hasLogo = config.logo !== "No Logo";
   const hasSlogan = config.sloganMode === "custom" && Boolean(config.sloganText);
+  const borderSlogan = hasSlogan && config.sloganPlacement === "border" && config.innerBorder !== "None";
   const hasFlag = Boolean(flagAsset);
   const interactiveLogo = hasLogo && Boolean(onLogoPositionChange) && !compact;
   const logoSize = fitLogoVisualSize(geometry, getLogoAspectRatio(config, uploadedAspectRatio));
   const logoPosition = clampLogoPosition(config.logoPosition, config, geometry, logoSize);
   const borderCount = Number(config.innerBorder !== "None") + Number(config.outerBorder !== "None");
   const sloganFontSize = getSloganFontSize(config.sloganText, geometry.slogan.maxFontSizeCqw);
-  const registrationFirstTop = hasLogo ? hasSlogan ? geometry.registration.logoSloganFirstRowTopPercent : geometry.registration.logoFirstRowTopPercent : geometry.registration.firstRowTopPercent;
-  const registrationSecondTop = hasLogo ? hasSlogan ? geometry.registration.logoSloganSecondRowTopPercent : geometry.registration.logoSecondRowTopPercent : geometry.registration.secondRowTopPercent;
-  const registrationSingleTop = hasLogo ? hasSlogan ? geometry.registration.logoSloganSingleRowTopPercent : geometry.registration.logoSingleRowTopPercent : geometry.registration.singleRowTopPercent;
+  const frameInset = borderCount === 2 ? geometry.doubleBandCqw : config.innerBorder !== "None" ? geometry.innerInsetCqw + geometry.innerBandCqw : config.outerBorder !== "None" ? geometry.outerBandCqw : 0;
+  const logoBounds = hasLogo ? {
+    left: logoPosition.x - logoSize.widthPercent / 2,
+    right: logoPosition.x + logoSize.widthPercent / 2,
+    top: (logoPosition.y - logoSize.heightPercent / 2) / geometry.aspectRatio,
+    bottom: (logoPosition.y + logoSize.heightPercent / 2) / geometry.aspectRatio,
+  } : undefined;
   const outerMaterialClass = config.outerBorder === "Black" ? "plate-canvas-outer-black" : config.outerBorder === "Mirror Silver" ? "plate-canvas-outer-silver" : "";
   const plateStyle = {
     aspectRatio: geometry.aspectRatio,
@@ -69,9 +75,9 @@ export function PlatePreview({ compact = false, config, fluid = false, onLogoPos
     "--plate-double-band": `${geometry.doubleBandCqw}cqw`,
     "--plate-mixed-band": `${geometry.doubleBandCqw / 2}cqw`,
     "--plate-registration-inset": `${geometry.registration.horizontalInsetPercent}%`,
-    "--plate-registration-first-top": `${registrationFirstTop}%`,
-    "--plate-registration-second-top": `${registrationSecondTop}%`,
-    "--plate-registration-single-top": `${registrationSingleTop}%`,
+    "--plate-registration-first-top": `${geometry.registration.firstRowTopPercent}%`,
+    "--plate-registration-second-top": `${geometry.registration.secondRowTopPercent}%`,
+    "--plate-registration-single-top": `${geometry.registration.singleRowTopPercent}%`,
     "--plate-slogan-bottom": `${geometry.slogan.bottomPercent}%`,
     "--plate-slogan-bordered-bottom": `${geometry.slogan.borderedBottomPercent}%`,
   } as CSSProperties;
@@ -155,9 +161,10 @@ export function PlatePreview({ compact = false, config, fluid = false, onLogoPos
         </div>
       ) : null}
 
-      <PlateRegistration borderCount={borderCount} hasFlag={hasFlag} hasLogo={hasLogo} hasSlogan={hasSlogan} horizontalScale={geometry.registration.horizontalScale} lineOne={lineOne} lineTwo={lineTwo} maxFontSizeCqw={geometry.registration.maxFontSizeCqw} singleLine={singleLine} />
+      <PlateRegistration fallbackFontSizeCqw={geometry.registration.fallbackFontSizeCqw} frameInset={frameInset} geometry={geometry} hasFlag={hasFlag} horizontalScale={geometry.registration.horizontalScale} lineOne={lineOne} lineTwo={lineTwo} logoBounds={logoBounds} maxFontSizeCqw={geometry.registration.maxFontSizeCqw} roadLegal={config.useType === "road-legal"} sloganRef={sloganRef} sloganText={borderSlogan ? "" : hasSlogan ? config.sloganText : ""} />
 
-      {hasSlogan ? <div className={`plate-slogan plate-slogan-border-${Math.min(borderCount, 2)} ${getSloganFontClass(config.sloganFont)} absolute z-10 text-center text-[var(--plate-ink)]`} style={{ "--plate-slogan-size": `${sloganFontSize}cqw` } as CSSProperties}>{config.sloganText}</div> : null}
+      {hasSlogan && !borderSlogan ? <div className={`plate-slogan plate-slogan-border-${Math.min(borderCount, 2)} ${getSloganFontClass(config.sloganFont)} absolute z-10 text-center text-[var(--plate-ink)]`} ref={sloganRef} style={{ "--plate-slogan-size": `${sloganFontSize}cqw` } as CSSProperties}>{config.sloganText}</div> : null}
+      {borderSlogan ? <div className={`plate-slogan-border-gap ${getSloganFontClass(config.sloganFont)}`} style={{ "--plate-slogan-size": `${sloganFontSize}cqw`, "--plate-gap-height": `${frameInset}cqw` } as CSSProperties}>{config.sloganText}</div> : null}
 
       {config.useType === "road-legal" ? <RoadLegalMarkings hasInnerBorder={config.innerBorder !== "None"} /> : null}
     </div>

@@ -27,7 +27,7 @@ export function getAdminPlateDetails(config: PlateConfiguration) {
     size: formatPlateSize(config),
     flag: config.countryFlag === "none" ? "None" : getCountryFlagDefinition(config.countryFlag).label,
     logo: config.logo,
-    slogan: config.sloganMode === "custom" && config.sloganText ? config.sloganText : "None",
+    slogan: config.sloganMode === "custom" && config.sloganText ? `${config.sloganText}${config.sloganPlacement === "border" ? " (in bottom border)" : ""}` : "None",
     fixing: FIXING_OPTIONS[config.fixing].label
   };
 }

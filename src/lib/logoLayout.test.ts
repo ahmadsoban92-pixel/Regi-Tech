@@ -10,7 +10,7 @@ describe("logo layout", () => {
     const size = fitLogoVisualSize(geometry, getLogoAspectRatio(config));
 
     expect(getLogoAspectRatio(config)).toBeCloseTo(148 / 41);
-    expect(size.widthPercent).toBe(22);
+    expect(size.widthPercent).toBe(20);
     expect(size.heightPercent).toBeLessThan(9);
   });
 

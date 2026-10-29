@@ -1,0 +1,67 @@
+{
+  "terms": {
+    "title": "Terms & Conditions",
+    "updated": "01 Sep 2022",
+    "intro": ["These terms apply to products and services purchased through Regi-Tech, a trading brand operated by License Plate Workshop Ltd. By placing an order, you agree to these terms."],
+    "sections": [
+      { "heading": "Ordering", "paragraphs": ["Please check your registration, slogan, logo or artwork, font, plate type and delivery details before submitting your order. Our plates are made to order and changes may not be possible after production starts."] },
+      { "heading": "Road-legal number plates", "paragraphs": ["Road-legal plates are made for public-road use according to applicable UK number-plate requirements. Registration verification is required before fulfilment. You may provide a clear V5C document during checkout, or our team may contact you for the documentation needed to complete verification. Verification may delay or prevent dispatch if the information is unavailable or does not match the registration ordered.", "You are responsible for ensuring the registration belongs to your vehicle and that the plate is correctly fitted and displayed."] },
+      { "heading": "Show plates", "paragraphs": ["Show plates are intended for display, events, private land and other permitted uses. They should not be used on public roads where they do not meet legal requirements. Select the plate type suited to your intended use."] },
+      { "heading": "Customer-supplied information", "paragraphs": ["We manufacture to the details you provide. We are not responsible for errors caused by incorrect registration details, wording, slogans, logos, artwork or design choices supplied by the customer. If we make a manufacturing error, contact us so we can investigate and put it right where appropriate."] },
+      { "heading": "Delivery", "paragraphs": ["Orders are sent using the delivery service stated at checkout. Delivery times are estimates and may be affected by weekends, bank holidays, courier delays or circumstances outside our reasonable control. See our Delivery Information page for the current estimate."] },
+      { "heading": "Product appearance", "paragraphs": ["We make reasonable efforts to display products accurately. Finished colours and appearance may vary slightly with screen settings, lighting, photography and production."] },
+      { "heading": "Artwork and intellectual property", "paragraphs": ["You are responsible for obtaining permission to use any logo, artwork, image or other material you supply. By submitting it, you confirm that you have the right to use and reproduce it for your order."] },
+      { "heading": "Statutory rights", "paragraphs": ["Nothing in these terms affects your statutory consumer rights. Rights relating to goods that are faulty, damaged, not as described or otherwise unlawful remain unaffected."] }
+    ]
+  },
+  "cancellations-and-refunds": {
+    "title": "Cancellations & Refunds",
+    "intro": ["If you need to cancel an order, contact info@lpworkshop.co.uk as soon as possible."],
+    "sections": [
+      { "heading": "Before production", "paragraphs": ["If you request cancellation before production starts, we will make reasonable efforts to cancel and refund the order where applicable. Once production has started, cancellation may no longer be possible."] },
+      { "heading": "Personalised and made-to-order plates", "paragraphs": ["Plates are generally made to your requested registration, design, wording and specifications. Personalised or made-to-order goods may be exempt from the usual change-of-mind cancellation right, subject to your statutory consumer rights."] },
+      { "heading": "Faulty, damaged or incorrect plates", "paragraphs": ["If your plate arrives damaged, faulty, incorrectly manufactured or different from your order, contact us promptly with your order number and clear photographs. We will investigate and, where appropriate, offer a repair, replacement or refund in line with your legal rights."] },
+      { "heading": "Incorrect customer information", "paragraphs": ["If the plate matches the information you supplied but your registration, wording, slogan or other personalised detail was incorrect, a refund or replacement may not be available. Check your order carefully before confirming it."] },
+      { "heading": "Refunds", "paragraphs": ["Where a refund is agreed or legally required, it will normally go back to the original payment method. This policy does not affect your statutory consumer rights."] }
+    ]
+  },
+  "warranty": {
+    "title": "24-Month Warranty",
+    "intro": ["We provide a 24-month warranty against manufacturing and material defects arising under normal use."],
+    "sections": [
+      { "heading": "What is covered", "paragraphs": ["Manufacturing defects, material defects and defects arising from our manufacturing process are covered."] },
+      { "heading": "What is not normally covered", "paragraphs": ["Accidental or impact damage, incorrect fitting, modification, misuse, neglect, normal wear and tear, scratches or cosmetic damage after delivery, and damage from external factors are not normally covered."] },
+      { "heading": "Making a claim", "paragraphs": ["Email info@lpworkshop.co.uk with your order number and clear photographs of the issue. We will assess the claim and, where appropriate, repair or replace the product. This warranty is in addition to your statutory consumer rights."] }
+    ]
+  },
+  "privacy": {
+    "title": "Privacy Policy",
+    "updated": "01 Sep 2022",
+    "intro": ["Regi-Tech is a trading brand operated by License Plate Workshop Ltd. We respect the privacy of the personal information you provide to us."],
+    "sections": [
+      { "heading": "Information we collect", "paragraphs": ["Depending on your order or contact with us, this may include your name, billing and delivery addresses, email, telephone number, vehicle registration, V5C or other verification documents, order details, payment processing information, and information you send when contacting us. Card details are entered with our payment provider."] },
+      { "heading": "How we use information", "paragraphs": ["We use information to process and manufacture orders, verify registration details where required, arrange delivery, process payments and refunds, provide support, manage warranty claims, maintain required business and plate-supplier records, meet legal obligations, and improve our website and services."] },
+      { "heading": "V5C documents", "paragraphs": ["When a V5C is supplied for a road-legal order, we use it for registration verification, order processing, record keeping and compliance. We do not use V5C information for unrelated marketing."] },
+      { "heading": "Sharing", "paragraphs": ["We may share relevant information with payment providers, delivery companies, website and IT providers, professional advisers, and authorities when legally required. We do not sell personal information."] },
+      { "heading": "Retention", "paragraphs": ["We retain information for as long as reasonably needed for its purpose, including legal, accounting, regulatory and customer-service requirements. Some number-plate supplier records may need to be retained for a specific period under applicable regulations."] },
+      { "heading": "Your rights", "paragraphs": ["Depending on the circumstances, you may ask to access or correct your information, request deletion where applicable, object to some processing, or request a restriction. Email info@lpworkshop.co.uk for privacy requests. You may also raise a concern with the Information Commissioner's Office (ICO)."] }
+    ]
+  },
+  "delivery": {
+    "title": "Delivery Information",
+    "intro": ["Free UK delivery is provided with Royal Mail Tracked 48. We aim to process and dispatch orders as quickly as possible."],
+    "sections": [
+      { "heading": "Dispatch", "paragraphs": ["Orders placed by 12:00 may be dispatched the same day, subject to successful payment, registration verification where required, and production capacity. Same-day dispatch is a target, not a guarantee."] },
+      { "heading": "Estimated delivery", "paragraphs": ["Royal Mail Tracked 48 is estimated at 2–3 working days after dispatch. Weekends, bank holidays and courier delays can affect the delivery date."] },
+      { "heading": "Road-legal orders", "paragraphs": ["Dispatch may be delayed until registration verification is complete. A V5C upload is optional at checkout, but our team may ask for the documentation needed before fulfilment."] }
+    ]
+  },
+  "road-legal-vs-show": {
+    "title": "Road-Legal vs Show Plates",
+    "intro": ["Choose the plate type that matches how you plan to use it."],
+    "sections": [
+      { "heading": "Road-legal number plates", "paragraphs": ["Designed for use on public roads and made to the applicable specification, including required manufacturer and BS AU 145e markings. Registration verification is required before fulfilment. You can provide a V5C at checkout or respond to our team's follow-up request."] },
+      { "heading": "Show plates", "paragraphs": ["Designed for display, shows, events, private land and other permitted non-road uses. Show plates should not be used on public roads if they do not meet applicable legal requirements."] }
+    ]
+  }
+}

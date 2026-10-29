@@ -40,4 +40,11 @@ describe("product option normalization", () => {
       expect(config.outerBorder).toBe("None");
     }
   });
+
+  it("keeps a border slogan only while an eligible inner border and slogan are selected", () => {
+    const config = { ...createDefaultConfiguration("hand-crafted-show-plate"), innerBorder: "Black" as const, sloganMode: "custom" as const, sloganPlacement: "border" as const };
+    expect(normalizePlateConfiguration(config).sloganPlacement).toBe("border");
+    expect(normalizePlateConfiguration({ ...config, innerBorder: "None" }).sloganPlacement).toBe("plate");
+    expect(normalizePlateConfiguration({ ...config, sloganMode: "none" }).sloganPlacement).toBe("plate");
+  });
 });

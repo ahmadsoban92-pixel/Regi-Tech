@@ -31,4 +31,26 @@ describe("plate geometry", () => {
     expect(geometry.aspectRatio).toBeCloseTo(21 / 9);
     expect(geometry.registration.singleLine).toBe(true);
   });
+
+  it.each([
+    ["4×6″", 102, 41, 3.6],
+    ["5×7″", 127, 50, 7],
+    ["6×8″", 153, 56, 10],
+    ["7×9″", 178, 64, 11],
+  ] as const)("uses the client measurement guide as a balanced cap for %s", (size, plateHeightMm, characterHeightMm, rowGapMm) => {
+    const config = { ...createDefaultConfiguration(size === "7×9″" ? "2d-road-legal" : "hand-crafted-show-plate"), size };
+    const registration = getPlateGeometry(config).registration;
+    const estimatedGlyphHeightMm = registration.maxFontSizeCqw / 100 * (plateHeightMm * getPlateGeometry(config).aspectRatio) * 0.69;
+    const rowAdvanceMm = (registration.secondRowTopPercent - registration.firstRowTopPercent) / 100 * plateHeightMm;
+    expect(Math.abs(estimatedGlyphHeightMm - characterHeightMm)).toBeLessThan(1);
+    expect(Math.abs(rowAdvanceMm - characterHeightMm - rowGapMm)).toBeLessThan(3);
+  });
+
+  it("gives 3×7 a tall, narrow lettering cap for measured fitting", () => {
+    const config = { ...createDefaultConfiguration("hand-crafted-show-plate"), size: "3×7″" as PlateSize };
+    const registration = getPlateGeometry(config).registration;
+    expect(registration.maxFontSizeCqw / 100 * 178 * 0.69).toBeCloseTo(50, 0);
+    expect(registration.horizontalScale).toBeLessThan(1);
+    expect(registration.singleLine).toBe(true);
+  });
 });
