@@ -6,6 +6,7 @@
     "description": "Personalise your show plate with black or mirror-silver borders, a logo and a custom slogan.",
     "price": "£17.99",
     "image": "/assets/product-photos/handcrafted/ab99cde6x8handcrafted.jpg",
+    "processStoryId": "show-plate-process",
     "gallery": [
       { "src": "/assets/product-photos/handcrafted/ab99cde6x8handcrafted.jpg", "alt": "Hand Crafted 6×8 plate photographed front-on" },
       { "src": "/assets/product-photos/handcrafted/ab99cde3x7handcrafted1.jpg", "alt": "Hand Crafted 3×7 plate photographed front-on" },
@@ -20,7 +21,11 @@
     "badge": "Road-legal",
     "description": "A printed motorcycle plate with a fixed 7×9-inch format and optional country flag.",
     "price": "£13.99",
-    "image": "/assets/regitech/plate-road-legal.png"
+    "image": "/assets/product-photos/road-legal/ab88cde7x9roadlegal1.webp",
+    "gallery": [
+      { "src": "/assets/product-photos/road-legal/ab88cde7x9roadlegal1.webp", "alt": "Road-legal 7×9 motorcycle plate photographed front-on" },
+      { "src": "/assets/product-photos/road-legal/ab88cde7x9roadlegal.webp", "alt": "Road-legal 7×9 motorcycle plate photographed at an angle" }
+    ]
   },
   {
     "id": "2d-show-plate",
@@ -29,6 +34,7 @@
     "description": "A printed show plate with optional black inner border, logo and slogan.",
     "price": "£14.99",
     "image": "/assets/product-photos/2d-printed/2dprinted4x6showplate.jpg",
+    "processStoryId": "show-plate-process",
     "gallery": [
       { "src": "/assets/product-photos/2d-printed/2dprinted4x6showplate.jpg", "alt": "2D Printed 4×6 show plate" },
       { "src": "/assets/product-photos/2d-printed/2dprinted3sizesshowplate.jpg", "alt": "Three sizes of 2D Printed show plates" },
@@ -43,6 +49,7 @@
     "description": "A distinctive 3D show-plate appearance on a smooth, flat surface made with premium 4mm high-clarity PMMA.",
     "price": "£21.99",
     "image": "/assets/product-photos/crystal-3d/5x7regi-techcrystal3dinnerborder.jpg",
+    "processStoryId": "show-plate-process",
     "gallery": [
       { "src": "/assets/product-photos/crystal-3d/5x7regi-techcrystal3dinnerborder.jpg", "alt": "Crystal 3D 5×7 plate front-on" },
       { "src": "/assets/product-photos/crystal-3d/3x7regi-techcrystal3dblack-silverborder.jpg", "alt": "Crystal 3D 3×7 plate with black and silver border" },
@@ -58,6 +65,7 @@
     "description": "A bold 4D-style appearance with a flat finish and personalised details.",
     "price": "£18.99",
     "image": "/assets/product-photos/black-4d/4x6black4d.jpg",
+    "processStoryId": "show-plate-process",
     "gallery": [
       { "src": "/assets/product-photos/black-4d/4x6black4d.jpg", "alt": "Black 4D 4×6 plate front-on" },
       { "src": "/assets/product-photos/black-4d/3x7black4d.jpg", "alt": "Black 4D 3×7 plate front-on" },

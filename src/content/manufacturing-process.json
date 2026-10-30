@@ -1,0 +1,42 @@
+{
+  "id": "show-plate-process",
+  "eyebrow": "Behind the scenes",
+  "title": "How We Make Your Plate",
+  "description": "See the care and craftsmanship that goes into creating your personalised motorcycle plate.",
+  "closeLabel": "Close how we make your plate",
+  "previousLabel": "Previous step",
+  "nextLabel": "Next step",
+  "customiseLabel": "Customise This Plate",
+  "steps": [
+    {
+      "title": "Precision laser cutting",
+      "description": "Your chosen registration and plate details are precision cut to create clean, accurate lettering and edges.",
+      "image": "/assets/how-we-make/01-precision-laser-cutting.webp",
+      "alt": "A registration plate being precision cut by a laser machine"
+    },
+    {
+      "title": "Masking removal",
+      "description": "The protective masking is carefully removed to reveal the precisely cut registration and border details.",
+      "image": "/assets/how-we-make/02-masking-removal.webp",
+      "alt": "A cut motorcycle plate after its protective masking has been removed"
+    },
+    {
+      "title": "Glossy black finishing",
+      "description": "Glossy black finishing is applied to produce the deep, crisp detail selected for your plate design.",
+      "image": "/assets/how-we-make/03-glossy-black-finishing.webp",
+      "alt": "A motorcycle plate showing its glossy black finishing stage"
+    },
+    {
+      "title": "Mirror Silver finishing",
+      "description": "Where selected, Mirror Silver detailing is applied to create a bright, distinctive finish around the design.",
+      "image": "/assets/how-we-make/04-mirror-silver-finishing.webp",
+      "alt": "A motorcycle plate showing its Mirror Silver finishing stage"
+    },
+    {
+      "title": "Reflective layer and inspection",
+      "description": "The reflective yellow layer is applied before the completed plate is carefully checked and prepared for dispatch.",
+      "image": "/assets/how-we-make/05-reflective-layer-application.webp",
+      "alt": "A completed yellow motorcycle number plate ready for final inspection"
+    }
+  ]
+}

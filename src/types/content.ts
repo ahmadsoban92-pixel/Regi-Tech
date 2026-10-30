@@ -11,6 +11,26 @@ export type Product = {
   price: string;
   image: string;
   gallery?: Array<{ src: string; alt: string }>;
+  processStoryId?: string;
+};
+
+export type ManufacturingProcessStep = {
+  title: string;
+  description: string;
+  image: string;
+  alt: string;
+};
+
+export type ManufacturingProcessStory = {
+  id: string;
+  eyebrow: string;
+  title: string;
+  description: string;
+  closeLabel: string;
+  previousLabel: string;
+  nextLabel: string;
+  customiseLabel: string;
+  steps: ManufacturingProcessStep[];
 };
 
 export type FaqTextPart = {

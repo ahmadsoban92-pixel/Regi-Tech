@@ -1,8 +1,15 @@
 import Link from "next/link";
 import type { Product } from "@/types/content";
+import processContent from "@/content/manufacturing-process.json";
 import { ProductGallery } from "./ProductGallery";
 
-export function ProductCard({ product, eager = false }: { product: Product; eager?: boolean }) {
+type ProductCardProps = {
+  product: Product;
+  eager?: boolean;
+  onOpenProcess?: (product: Product) => void;
+};
+
+export function ProductCard({ product, eager = false, onOpenProcess }: ProductCardProps) {
   return (
     <article className="panel motion-card flex h-full flex-col overflow-hidden">
       <ProductGallery eager={eager} gallery={product.gallery} image={product.image} name={product.name} />
@@ -16,7 +23,10 @@ export function ProductCard({ product, eager = false }: { product: Product; eage
           <span className="text-sm text-[var(--muted)]">From</span>
           <strong className="text-xl text-[var(--foreground)]">{product.price}</strong>
         </div>
-        <div className="mt-4">
+        <div className={`mt-4 grid gap-2 ${product.processStoryId ? "sm:grid-cols-2" : ""}`}>
+          {product.processStoryId ? (
+            <button aria-haspopup="dialog" className="secondary-button min-h-10 w-full px-2 text-xs" onClick={() => onOpenProcess?.(product)} type="button">{processContent.title}</button>
+          ) : null}
           <Link className="primary-button min-h-10 w-full px-2 text-xs" href={`/design?product=${product.id}&new=1`}>Customise</Link>
         </div>
       </div>
