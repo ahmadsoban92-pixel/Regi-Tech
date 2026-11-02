@@ -43,7 +43,7 @@ function AdminNavigation({ adminEmail, onNavigate }: { adminEmail: string; onNav
       </nav>
       <div className="border-t border-white/10 p-3">
         <p className="truncate px-3 pb-2 text-xs text-white/45">{adminEmail}</p>
-        <form action="/api/v1/admin/logout" method="post"><button className="admin-nav-link flex min-h-9 w-full items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-white" onClick={onNavigate} type="submit"><LogOut aria-hidden size={16} strokeWidth={1.7} />{adminContent.navigation.logout}</button></form>
+        <form action="/api/v1/admin/logout" method="post"><button className="admin-nav-link flex min-h-9 w-full items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-white" type="submit"><LogOut aria-hidden size={16} strokeWidth={1.7} />{adminContent.navigation.logout}</button></form>
       </div>
     </>
   );

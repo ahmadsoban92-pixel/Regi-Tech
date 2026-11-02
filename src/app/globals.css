@@ -269,7 +269,11 @@ a {
 .plate-border-frame-inner {
   inset: var(--plate-inner-inset, 2.35cqw);
   --plate-border-width: var(--plate-inner-band, 1.85cqw);
-  --plate-frame-radius: max(0px, calc(var(--plate-corner-radius, 2.75cqw) - var(--plate-inner-inset, 2.35cqw)));
+  --plate-frame-radius: max(1.6cqw, calc(var(--plate-corner-radius, 2.75cqw) - (var(--plate-inner-inset, 2.35cqw) / 2)));
+}
+
+.plate-border-frame-inner .plate-border-cutout {
+  border-radius: max(1.1cqw, calc(var(--plate-frame-radius) - var(--plate-border-width)));
 }
 
 .plate-border-frame-outer {
