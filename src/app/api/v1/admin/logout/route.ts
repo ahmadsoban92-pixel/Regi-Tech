@@ -17,7 +17,7 @@ export async function POST(request: NextRequest) {
   const supabase = await createSupabaseServerClient();
   await supabase.auth.signOut({ scope: "local" });
 
-  const response = NextResponse.redirect(new URL("/admin/login", request.url), 303);
+  const response = NextResponse.redirect(new URL("/admin/login", expectedOrigin), 303);
   response.headers.set("Cache-Control", "no-store");
   return response;
 }

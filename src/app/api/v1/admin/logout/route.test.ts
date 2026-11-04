@@ -37,4 +37,20 @@ describe("admin logout", () => {
     expect(response.status).toBe(403);
     expect(signOut).not.toHaveBeenCalled();
   });
+
+  it("redirects to the public host when running behind a reverse proxy", async () => {
+    const request = new NextRequest("http://127.0.0.1:3000/api/v1/admin/logout", {
+      method: "POST",
+      headers: {
+        host: "regitech.co.uk",
+        origin: "https://regitech.co.uk",
+        "x-forwarded-proto": "https",
+      },
+    });
+
+    const response = await POST(request);
+
+    expect(response.status).toBe(303);
+    expect(response.headers.get("location")).toBe("https://regitech.co.uk/admin/login");
+  });
 });
