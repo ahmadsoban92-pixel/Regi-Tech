@@ -4,6 +4,7 @@
   "navigation": {
     "dashboard": "Dashboard",
     "orders": "Orders",
+    "users": "Admin Users",
     "logout": "Logout",
     "openMenu": "Open admin navigation",
     "closeMenu": "Close admin navigation"
@@ -49,6 +50,44 @@
     "reset": "Reset filters",
     "apply": "Apply filters",
     "empty": "No orders match these filters."
+  },
+  "users": {
+    "title": "Admin Users",
+    "intro": "Invite staff and manage who can access the portal.",
+    "inviteTitle": "Invite a new user",
+    "name": "Name",
+    "email": "Email address",
+    "role": "Role",
+    "owner": "Owner",
+    "admin": "Admin",
+    "invite": "Send invitation",
+    "inviting": "Sending…",
+    "currentUsers": "Current users",
+    "you": "You",
+    "active": "Active",
+    "inactive": "Inactive",
+    "save": "Save access",
+    "saving": "Saving…",
+    "remove": "Remove user",
+    "removing": "Removing…",
+    "removeConfirm": "Remove this user and their sign-in account? They will lose portal access immediately.",
+    "activity": "Recent account activity",
+    "noActivity": "No account changes yet.",
+    "ownerHint": "Owners can invite and manage users. Admins can manage orders but cannot manage accounts.",
+    "lastOwnerHint": "Your own owner access cannot be removed here."
+  },
+  "invitation": {
+    "title": "Accept your invitation",
+    "description": "Confirm your invitation to Regi-Tech Admin, then create your password.",
+    "confirm": "Accept invitation",
+    "confirming": "Confirming…",
+    "invalid": "This invitation link has expired or is invalid. Ask an owner to send a new one.",
+    "passwordTitle": "Create your password",
+    "passwordDescription": "Choose a password of at least 12 characters for your admin account.",
+    "password": "New password",
+    "confirmPassword": "Confirm password",
+    "savePassword": "Set password",
+    "savingPassword": "Saving…"
   },
   "table": {
     "order": "Order",

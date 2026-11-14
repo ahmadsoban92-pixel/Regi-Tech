@@ -11,6 +11,7 @@ const LIMITS = {
   retry: { maximum: 5, windowSeconds: 60 },
   contact: { maximum: 5, windowSeconds: 15 * 60 },
   adminLogin: { maximum: 10, windowSeconds: 15 * 60 },
+  adminUsers: { maximum: 20, windowSeconds: 15 * 60 },
   upload: { maximum: 60, windowSeconds: 15 * 60 },
 } as const;
 
@@ -37,4 +38,5 @@ export const checkOrderCheckoutRateLimit = (identifier: string) => checkRateLimi
 export const checkOrderRetryRateLimit = (identifier: string) => checkRateLimit(identifier, "retry");
 export const checkContactRateLimit = (identifier: string) => checkRateLimit(identifier, "contact");
 export const checkAdminLoginRateLimit = (identifier: string) => checkRateLimit(identifier, "adminLogin");
+export const checkAdminUsersRateLimit = (identifier: string) => checkRateLimit(identifier, "adminUsers");
 export const checkOrderUploadRateLimit = (identifier: string) => checkRateLimit(identifier, "upload");

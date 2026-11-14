@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ClipboardList, LayoutDashboard, LogOut, Menu, X } from "lucide-react";
+import { ClipboardList, LayoutDashboard, LogOut, Menu, Users, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import adminContent from "@/content/admin.json";
 
@@ -20,12 +20,13 @@ function AdminLogo() {
   );
 }
 
-function AdminNavigation({ adminEmail, onNavigate }: { adminEmail: string; onNavigate?: () => void }) {
+function AdminNavigation({ adminEmail, role, onNavigate }: { adminEmail: string; role: "owner" | "admin"; onNavigate?: () => void }) {
   const pathname = usePathname();
+  const visibleLinks = role === "owner" ? [...links, { href: "/admin/users", label: adminContent.navigation.users, icon: Users }] : links;
   return (
     <>
       <nav aria-label="Admin" className="flex-1 p-3">
-        {links.map(({ href, label, icon: Icon }) => {
+        {visibleLinks.map(({ href, label, icon: Icon }) => {
           const active = href === "/admin" ? pathname === href : pathname.startsWith(href);
           return (
             <Link
@@ -49,7 +50,7 @@ function AdminNavigation({ adminEmail, onNavigate }: { adminEmail: string; onNav
   );
 }
 
-export function AdminShell({ adminEmail, children }: { adminEmail: string; children: React.ReactNode }) {
+export function AdminShell({ adminEmail, role, children }: { adminEmail: string; role: "owner" | "admin"; children: React.ReactNode }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const pathname = usePathname();
   useEffect(() => setMenuOpen(false), [pathname]);
@@ -60,7 +61,7 @@ export function AdminShell({ adminEmail, children }: { adminEmail: string; child
         <div className="flex h-16 items-center border-b border-white/10 px-5">
           <AdminLogo />
         </div>
-        <AdminNavigation adminEmail={adminEmail} />
+        <AdminNavigation adminEmail={adminEmail} role={role} />
       </aside>
 
       {menuOpen ? (
@@ -71,7 +72,7 @@ export function AdminShell({ adminEmail, children }: { adminEmail: string; child
               <AdminLogo />
               <button aria-label={adminContent.navigation.closeMenu} className="admin-icon-button grid size-10 place-items-center rounded text-white/80" onClick={() => setMenuOpen(false)} type="button"><X aria-hidden size={20} /></button>
             </div>
-            <AdminNavigation adminEmail={adminEmail} onNavigate={() => setMenuOpen(false)} />
+            <AdminNavigation adminEmail={adminEmail} role={role} onNavigate={() => setMenuOpen(false)} />
           </aside>
         </div>
       ) : null}

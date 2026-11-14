@@ -14,6 +14,48 @@ export type Database = {
   }
   public: {
     Tables: {
+      admin_user_events: {
+        Row: {
+          id: string
+          actor_id: string | null
+          actor_name: string
+          target_user_id: string
+          target_email: string
+          action: string
+          previous_role: string | null
+          new_role: string | null
+          previous_active: boolean | null
+          new_active: boolean | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          actor_id?: string | null
+          actor_name: string
+          target_user_id: string
+          target_email: string
+          action: string
+          previous_role?: string | null
+          new_role?: string | null
+          previous_active?: boolean | null
+          new_active?: boolean | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          actor_id?: string | null
+          actor_name?: string
+          target_user_id?: string
+          target_email?: string
+          action?: string
+          previous_role?: string | null
+          new_role?: string | null
+          previous_active?: boolean | null
+          new_active?: boolean | null
+          created_at?: string
+        }
+        Relationships: []
+      }
       admin_users: {
         Row: {
           active: boolean
@@ -504,6 +546,32 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      admin_change_user: {
+        Args: {
+          p_actor_id: string
+          p_target_id: string
+          p_role: string
+          p_active: boolean
+        }
+        Returns: boolean
+      }
+      admin_invite_user: {
+        Args: {
+          p_actor_id: string
+          p_target_id: string
+          p_email: string
+          p_display_name: string
+          p_role: string
+        }
+        Returns: boolean
+      }
+      admin_remove_user: {
+        Args: {
+          p_actor_id: string
+          p_target_id: string
+        }
+        Returns: boolean
+      }
       admin_add_order_note: {
         Args: {
           p_actor_id: string

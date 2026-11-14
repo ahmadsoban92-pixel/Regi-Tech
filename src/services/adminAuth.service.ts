@@ -36,3 +36,9 @@ export async function requireAdmin() {
   if (!admin) redirect("/admin/login");
   return admin;
 }
+
+export async function requireOwner() {
+  const admin = await requireAdmin();
+  if (admin.role !== "owner") redirect("/admin");
+  return admin;
+}
