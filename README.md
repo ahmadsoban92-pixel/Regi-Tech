@@ -55,7 +55,7 @@ corepack pnpm build
 
 ## Font licensing
 
-The Boss uses Anita Semi-square by Gustavo Paz L., redistributed unmodified under CC BY-SA 4.0. See `public/assets/regitech/AnitaSemiSquare-LICENSE.txt` for attribution and the license link. Rebel uses the client-supplied New Rocker asset. The Scribbler remains unavailable until a web-redistributable license and file for Apple Chalkboard SE are supplied; the project does not ship an unlicensed substitute.
+The Boss uses Anita Semi-square by Gustavo Paz L., redistributed unmodified under CC BY-SA 4.0. See `public/assets/regitech/AnitaSemiSquare-LICENSE.txt` for attribution and the license link. Rebel uses the client-supplied New Rocker asset. The Scribbler uses the supplied Rock Salt font under the Apache 2.0 licence; see `public/assets/regitech/RockSalt-LICENSE.txt`.
 
 ## Current integration boundary
 
