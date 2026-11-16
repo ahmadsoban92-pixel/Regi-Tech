@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { createDefaultConfiguration } from "@/lib/productCatalog";
 import { getPlateGeometry } from "@/lib/plateGeometry";
-import { fitRegistrationLayout } from "@/lib/registrationLayout";
+import { fitRegistrationLayout, splitRegistration } from "@/lib/registrationLayout";
 
 const geometry = getPlateGeometry({ ...createDefaultConfiguration("hand-crafted-show-plate"), size: "6×8″" });
 const first = { width: 220, ascent: 70, descent: 0 };
@@ -9,6 +9,13 @@ const second = { width: 170, ascent: 70, descent: 0 };
 const input = { geometry, first, second, maxFontSize: geometry.registration.maxFontSizeCqw, horizontalScale: geometry.registration.horizontalScale, frameInset: 4.2, hasFlag: false, roadLegal: false };
 
 describe("measured registration layout", () => {
+  it("uses the corrected example on empty stacked and single-line plates", () => {
+    const show = createDefaultConfiguration("hand-crafted-show-plate");
+    const roadLegal = createDefaultConfiguration("2d-road-legal");
+    expect(splitRegistration(show, false)).toEqual(["YOUR", "REG"]);
+    expect(splitRegistration(roadLegal, false)).toEqual(["YOUR", "REG"]);
+    expect(splitRegistration(show, true)).toEqual(["YOUR REG", ""]);
+  });
   it("centres visible stacked lettering within the printable height", () => {
     const layout = fitRegistrationLayout(input);
     const topMargin = layout.top - 6.1;

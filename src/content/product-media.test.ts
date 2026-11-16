@@ -6,8 +6,8 @@ describe("product media content", () => {
   it("uses the supplied road-legal gallery without a manufacturing story", () => {
     const roadLegal = products.find((product) => product.id === "2d-road-legal");
 
-    expect(roadLegal?.image).toBe("/assets/product-photos/road-legal/ab88cde7x9roadlegal1.webp");
-    expect(roadLegal?.gallery).toHaveLength(2);
+    expect(roadLegal?.image).toBe("/assets/product-photos/final/road-legal/7x9.jpg");
+    expect(roadLegal?.gallery).toHaveLength(1);
     expect("processStoryId" in (roadLegal ?? {})).toBe(false);
   });
 
@@ -26,7 +26,7 @@ describe("product media content", () => {
       "Mirror Silver finishing",
       "Reflective layer and inspection",
     ]);
-    expect(processStory.steps.every((step) => step.image.startsWith("/assets/how-we-make/"))).toBe(true);
+    expect(processStory.steps.every((step) => step.image.startsWith("/assets/product-photos/final/"))).toBe(true);
     expect(processStory.steps.every((step) => !step.image.startsWith("http"))).toBe(true);
   });
 });

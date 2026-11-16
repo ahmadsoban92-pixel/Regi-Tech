@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
-import { clampLogoPosition, fitLogoVisualSize, getDefaultLogoPosition, getLogoAspectRatio } from "@/lib/logoLayout";
+import { clampLogoPosition, fitLogoVisualSize, getDefaultLogoPosition, getLogoAspectRatio, scaleLogoVisualSize } from "@/lib/logoLayout";
 import { getPlateGeometry } from "@/lib/plateGeometry";
-import { createDefaultConfiguration } from "@/lib/productCatalog";
+import { createDefaultConfiguration, getLogoDefinition } from "@/lib/productCatalog";
 
 describe("logo layout", () => {
   it("uses the visible artwork ratio instead of the padded source canvas", () => {
@@ -31,5 +31,16 @@ describe("logo layout", () => {
     expect(position.x).toBe(50);
     expect(position.y).toBeGreaterThan(0);
     expect(position.y).toBeLessThan(15);
+  });
+
+  it.each(["Honda", "Harley-Davidson", "KTM"] as const)("reduces %s artwork and uses the smaller drag bounds", (logo) => {
+    const config = { ...createDefaultConfiguration("hand-crafted-show-plate"), logo };
+    const geometry = getPlateGeometry(config);
+    const original = fitLogoVisualSize(geometry, getLogoAspectRatio(config));
+    const reduced = scaleLogoVisualSize(original, getLogoDefinition(logo)?.scale);
+    expect(reduced.widthPercent).toBeCloseTo(original.widthPercent * 0.85);
+    expect(reduced.heightPercent).toBeCloseTo(original.heightPercent * 0.85);
+    expect(clampLogoPosition({ x: -100, y: 50 }, config, geometry, reduced).x)
+      .toBeLessThan(clampLogoPosition({ x: -100, y: 50 }, config, geometry, original).x);
   });
 });

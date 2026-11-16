@@ -57,9 +57,9 @@
       { "value": "BMW", "price": 2, "icon": "/assets/regitech/logo-brand-bmw.png" },
       { "value": "Ducati", "price": 2, "icon": "/assets/regitech/logo-brand-ducati.png" },
       { "value": "Harley-Davidson", "price": 2, "icon": "/assets/regitech/logo-brand-harley-davidson.png" },
-      { "value": "Honda", "price": 2, "icon": "/assets/regitech/logo-brand-honda.png" },
-      { "value": "Kawasaki", "price": 2, "icon": "/assets/regitech/logo-brand-kawasaki.png" },
-      { "value": "Triumph", "price": 2, "icon": "/assets/regitech/logo-brand-triumph.png" },
+      { "value": "Honda", "price": 2, "icon": "/assets/regitech/logo-brand-honda-clean.png" },
+      { "value": "Kawasaki", "price": 2, "icon": "/assets/regitech/logo-brand-kawasaki-clean.png" },
+      { "value": "Triumph", "price": 2, "icon": "/assets/regitech/logo-brand-triumph-clean.png" },
       { "value": "KTM", "price": 2, "icon": "/assets/regitech/logo-brand-ktm.png" },
       { "value": "Other Logo", "price": 2, "description": "Upload your own artwork" }
     ],
@@ -74,15 +74,10 @@
     "none": "No Slogan",
     "add": "Add a Slogan",
     "description": "Positioned near the bottom of your plate.",
-      "placementLabel": "Slogan position",
-      "placementPlate": "On plate",
-      "placementBorder": "In bottom border",
-      "placementBorderHint": "The slogan sits in a centred break through the bottom border.",
     "textLabel": "Slogan text",
     "placeholder": "Ride with passion",
     "fontLabel": "Font",
     "fonts": ["The Boss", "The Scribbler", "Rebel"],
-    "fontPending": "Licensed webfont required",
     "price": 2
   },
   "countryFlag": {

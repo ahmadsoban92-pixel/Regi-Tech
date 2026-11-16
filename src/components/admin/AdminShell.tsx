@@ -14,8 +14,8 @@ const links = [
 
 function AdminLogo() {
   return (
-    <div className="relative h-[65px] w-[200px] shrink-0">
-      <Image alt="Regi-Tech" className="object-cover" fill priority sizes="200px" src="/assets/regitech/admin-logo.png" />
+    <div className="relative h-[65px] w-[180px] shrink-0 sm:w-[200px]">
+      <Image alt="Regi-Tech" className="object-contain" fill priority sizes="(max-width: 639px) 180px, 200px" src="/assets/regitech/brand-logo-transparent.png" />
     </div>
   );
 }

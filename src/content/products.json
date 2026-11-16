@@ -5,14 +5,21 @@
     "badge": "Show plate",
     "description": "Personalise your show plate with black or mirror-silver borders, a logo and a custom slogan.",
     "price": "£17.99",
-    "image": "/assets/product-photos/handcrafted/ab99cde6x8handcrafted.jpg",
+    "image": "/assets/product-photos/final/handcrafted/6x8.jpg",
     "processStoryId": "show-plate-process",
     "gallery": [
-      { "src": "/assets/product-photos/handcrafted/ab99cde6x8handcrafted.jpg", "alt": "Hand Crafted 6×8 plate photographed front-on" },
-      { "src": "/assets/product-photos/handcrafted/ab99cde3x7handcrafted1.jpg", "alt": "Hand Crafted 3×7 plate photographed front-on" },
-      { "src": "/assets/product-photos/handcrafted/ab99cde3x7sizehandcrafted.jpg", "alt": "Hand Crafted 3×7 plate with border" },
-      { "src": "/assets/product-photos/handcrafted/ab99cde5x7handcrafted.jpg", "alt": "Hand Crafted 5×7 plate photographed front-on" },
-      { "src": "/assets/product-photos/handcrafted/ab99cde5x7handcrafted1.jpg", "alt": "Hand Crafted 5×7 plate photographed at an angle" }
+      {
+        "src": "/assets/product-photos/final/handcrafted/6x8.jpg",
+        "alt": "Hand Crafted 6×8 motorcycle plate"
+      },
+      {
+        "src": "/assets/product-photos/final/handcrafted/3x7.jpg",
+        "alt": "Hand Crafted 3×7 motorcycle plate"
+      },
+      {
+        "src": "/assets/product-photos/final/handcrafted/5x7.jpg",
+        "alt": "Hand Crafted 5×7 motorcycle plate"
+      }
     ]
   },
   {
@@ -21,10 +28,12 @@
     "badge": "Road-legal",
     "description": "A printed motorcycle plate with a fixed 7×9-inch format and optional country flag.",
     "price": "£13.99",
-    "image": "/assets/product-photos/road-legal/ab88cde7x9roadlegal1.webp",
+    "image": "/assets/product-photos/final/road-legal/7x9.jpg",
     "gallery": [
-      { "src": "/assets/product-photos/road-legal/ab88cde7x9roadlegal1.webp", "alt": "Road-legal 7×9 motorcycle plate photographed front-on" },
-      { "src": "/assets/product-photos/road-legal/ab88cde7x9roadlegal.webp", "alt": "Road-legal 7×9 motorcycle plate photographed at an angle" }
+      {
+        "src": "/assets/product-photos/final/road-legal/7x9.jpg",
+        "alt": "Road-legal 7×9 motorcycle plate"
+      }
     ]
   },
   {
@@ -33,13 +42,21 @@
     "badge": "Show plate",
     "description": "A printed show plate with optional black inner border, logo and slogan.",
     "price": "£14.99",
-    "image": "/assets/product-photos/2d-printed/2dprinted4x6showplate.jpg",
+    "image": "/assets/product-photos/final/2d-printed/4x6.jpg",
     "processStoryId": "show-plate-process",
     "gallery": [
-      { "src": "/assets/product-photos/2d-printed/2dprinted4x6showplate.jpg", "alt": "2D Printed 4×6 show plate" },
-      { "src": "/assets/product-photos/2d-printed/2dprinted3sizesshowplate.jpg", "alt": "Three sizes of 2D Printed show plates" },
-      { "src": "/assets/product-photos/2d-printed/2dprinted5x7showplate.jpg", "alt": "2D Printed 5×7 show plate" },
-      { "src": "/assets/product-photos/2d-printed/2dprinted6x8showplate.jpg", "alt": "2D Printed 6×8 show plate" }
+      {
+        "src": "/assets/product-photos/final/2d-printed/4x6.jpg",
+        "alt": "2D Printed 4×6 motorcycle plate"
+      },
+      {
+        "src": "/assets/product-photos/final/2d-printed/5x7.jpg",
+        "alt": "2D Printed 5×7 motorcycle plate"
+      },
+      {
+        "src": "/assets/product-photos/final/2d-printed/6x8.jpg",
+        "alt": "2D Printed 6×8 motorcycle plate"
+      }
     ]
   },
   {
@@ -48,14 +65,25 @@
     "badge": "Show plate",
     "description": "A distinctive 3D show-plate appearance on a smooth, flat surface made with premium 4mm high-clarity PMMA.",
     "price": "£21.99",
-    "image": "/assets/product-photos/crystal-3d/5x7regi-techcrystal3dinnerborder.jpg",
+    "image": "/assets/product-photos/final/crystal-3d/5x7.jpg",
     "processStoryId": "show-plate-process",
     "gallery": [
-      { "src": "/assets/product-photos/crystal-3d/5x7regi-techcrystal3dinnerborder.jpg", "alt": "Crystal 3D 5×7 plate front-on" },
-      { "src": "/assets/product-photos/crystal-3d/3x7regi-techcrystal3dblack-silverborder.jpg", "alt": "Crystal 3D 3×7 plate with black and silver border" },
-      { "src": "/assets/product-photos/crystal-3d/4x6regi-techcrystal3dblack-silverborder.jpg", "alt": "Crystal 3D 4×6 plate with black and silver border" },
-      { "src": "/assets/product-photos/crystal-3d/6x8regi-techcrystal3dblack-silverborder.jpg", "alt": "Crystal 3D 6×8 plate with black and silver border" },
-      { "src": "/assets/product-photos/crystal-3d/6x8regi-techcrystal3ddoubleborder.jpg", "alt": "Crystal 3D 6×8 plate with double border" }
+      {
+        "src": "/assets/product-photos/final/crystal-3d/5x7.jpg",
+        "alt": "Crystal 3D 5×7 motorcycle plate"
+      },
+      {
+        "src": "/assets/product-photos/final/crystal-3d/3x7.jpg",
+        "alt": "Crystal 3D 3×7 motorcycle plate"
+      },
+      {
+        "src": "/assets/product-photos/final/crystal-3d/4x6.jpg",
+        "alt": "Crystal 3D 4×6 motorcycle plate"
+      },
+      {
+        "src": "/assets/product-photos/final/crystal-3d/6x8.jpg",
+        "alt": "Crystal 3D 6×8 motorcycle plate"
+      }
     ]
   },
   {
@@ -64,17 +92,25 @@
     "badge": "Show configuration",
     "description": "A bold 4D-style appearance with a flat finish and personalised details.",
     "price": "£18.99",
-    "image": "/assets/product-photos/black-4d/4x6black4d.jpg",
+    "image": "/assets/product-photos/final/black-4d/4x6.jpg",
     "processStoryId": "show-plate-process",
     "gallery": [
-      { "src": "/assets/product-photos/black-4d/4x6black4d.jpg", "alt": "Black 4D 4×6 plate front-on" },
-      { "src": "/assets/product-photos/black-4d/3x7black4d.jpg", "alt": "Black 4D 3×7 plate front-on" },
-      { "src": "/assets/product-photos/black-4d/3x7black4d1.jpg", "alt": "Black 4D 3×7 plate photographed at an angle" },
-      { "src": "/assets/product-photos/black-4d/4x6black4d1.jpg", "alt": "Black 4D 4×6 plate photographed at an angle" },
-      { "src": "/assets/product-photos/black-4d/5x7black4d.jpg", "alt": "Black 4D 5×7 plate front-on" },
-      { "src": "/assets/product-photos/black-4d/5x7black4d1.jpg", "alt": "Black 4D 5×7 plate photographed at an angle" },
-      { "src": "/assets/product-photos/black-4d/6x8black4d.jpg", "alt": "Black 4D 6×8 plate front-on" },
-      { "src": "/assets/product-photos/black-4d/6x8black4d1.jpg", "alt": "Black 4D 6×8 plate photographed at an angle" }
+      {
+        "src": "/assets/product-photos/final/black-4d/4x6.jpg",
+        "alt": "Black 4D 4×6 motorcycle plate"
+      },
+      {
+        "src": "/assets/product-photos/final/black-4d/3x7.jpg",
+        "alt": "Black 4D 3×7 motorcycle plate"
+      },
+      {
+        "src": "/assets/product-photos/final/black-4d/5x7.jpg",
+        "alt": "Black 4D 5×7 motorcycle plate"
+      },
+      {
+        "src": "/assets/product-photos/final/black-4d/6x8.jpg",
+        "alt": "Black 4D 6×8 motorcycle plate"
+      }
     ]
   }
 ]

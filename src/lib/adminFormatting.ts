@@ -33,7 +33,7 @@ export function getAdminPlateDetails(config: PlateConfiguration) {
 }
 
 export function summarizeRegistrations(configurations: PlateConfiguration[]) {
-  const values = configurations.map((config) => config.registration || "YOUR REJ");
+  const values = configurations.map((config) => config.registration || "YOUR REG");
   return values.length > 1 ? `${values[0]} +${values.length - 1}` : values[0];
 }
 

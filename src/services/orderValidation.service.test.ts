@@ -42,4 +42,19 @@ describe("checkout order validation", () => {
     };
     expect(() => canonicalizeCheckoutSubmission(submission, { "tampered-line": { artwork: null, v5c: null } })).toThrow("outer border is not available");
   });
+
+  it("rejects the removed border slogan position for new orders", () => {
+    const submission: CheckoutSubmissionValues = {
+      items: [{ id: "legacy-position", config: {
+        ...createDefaultConfiguration("hand-crafted-show-plate", "AB12 CDE"),
+        innerBorder: "Black",
+        sloganMode: "custom",
+        sloganText: "Ride with passion",
+        sloganPlacement: "border",
+      }, quantity: 1 }],
+      customer,
+      orderNotes: "",
+    };
+    expect(() => canonicalizeCheckoutSubmission(submission, { "legacy-position": { artwork: null, v5c: null } })).toThrow("slogan position is no longer available");
+  });
 });

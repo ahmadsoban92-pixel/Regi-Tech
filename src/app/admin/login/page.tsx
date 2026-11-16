@@ -10,7 +10,7 @@ export default function AdminLoginPage() {
     <main className="grid min-h-dvh place-items-center bg-[#111] px-4 py-12">
       <div className="admin-page-enter w-full max-w-md md:-translate-y-24">
         <div className="flex flex-col items-center text-center">
-          <Image alt="Regi-Tech" className="w-[243px] object-contain" height={128} priority src="/assets/regitech/logo.png" style={{ height: "auto" }} width={243} />
+          <Image alt="Regi-Tech" className="w-[280px] max-w-full object-contain" height={455} priority src="/assets/regitech/brand-logo-transparent.png" style={{ height: "auto" }} width={2005} />
           <h1 className="mt-3 text-2xl font-bold text-white">{adminContent.login.title}</h1>
           <p className="mt-1 text-sm text-white/55">{adminContent.login.subtitle}</p>
         </div>

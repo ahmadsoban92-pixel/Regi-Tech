@@ -11,7 +11,7 @@ import { Breadcrumb } from "@/components/layout/Breadcrumb";
 import { PlatePreview } from "@/components/order/PlatePreview";
 import { useOrderFlow } from "@/components/order/OrderFlowProvider";
 import content from "@/content/checkout.json";
-import { CHECKOUT_EMAIL_MAX, CHECKOUT_NAME_MAX, CHECKOUT_TELEPHONE_MAX, ORDER_NOTES_MAX } from "@/lib/formLimits";
+import { CHECKOUT_EMAIL_MAX, CHECKOUT_NAME_MAX, CHECKOUT_TELEPHONE_MAX } from "@/lib/formLimits";
 import { formatPrice, getCartTotal, getOrderTotal } from "@/lib/orderPricing";
 import { createCheckoutSchema, type CheckoutFormValues } from "@/lib/orderSchemas";
 import { uploadWithSignedTus, type SignedOrderUpload } from "@/lib/orderUploadClient";
@@ -22,7 +22,7 @@ type ContactFieldName = "firstName" | "lastName" | "email" | "telephone";
 type CheckoutFormProps = { cancelledReference?: string };
 
 export function CheckoutForm({ cancelledReference }: CheckoutFormProps) {
-  const { artworkFiles, beginNewPlate, customer, editCartItem, items, orderNotes, removeCartItem, setArtworkFileForItem, setCustomer, setItemQuantity } = useOrderFlow();
+  const { artworkFiles, beginNewPlate, customer, editCartItem, items, removeCartItem, setArtworkFileForItem, setCustomer, setItemQuantity } = useOrderFlow();
   const [v5cFiles, setV5cFiles] = useState<Record<string, File>>({});
   const [fileErrors, setFileErrors] = useState<Record<string, string>>({});
   const [requestStatus, setRequestStatus] = useState<"idle" | "submitting" | "retrying">("idle");
@@ -57,7 +57,8 @@ export function CheckoutForm({ cancelledReference }: CheckoutFormProps) {
 
     setRequestStatus("submitting");
     setRequestError("");
-    setCustomer(values);
+    const customerWithoutNotes = { ...values, additionalNotes: "" };
+    setCustomer(customerWithoutNotes);
     try {
       const preparedItems = await Promise.all(items.map(async (item) => {
         const v5c = v5cFiles[item.id];
@@ -68,7 +69,7 @@ export function CheckoutForm({ cancelledReference }: CheckoutFormProps) {
         ]);
         return { ...item, config: { ...item.config, uploadedLogoPreviewUrl: "" }, v5cUploadId, artworkUploadId };
       }));
-      const submission: CheckoutSubmission = { items: preparedItems, customer: values, orderNotes };
+      const submission: CheckoutSubmission = { items: preparedItems, customer: customerWithoutNotes, orderNotes: "" };
       setUploadProgress("");
       const response = await fetch("/api/v1/orders/checkout", { method: "POST", body: JSON.stringify(submission), credentials: "include", headers: { "Content-Type": "application/json" } });
       const payload = await response.json() as ApiEnvelope<CheckoutSessionData>;
@@ -113,9 +114,8 @@ export function CheckoutForm({ cancelledReference }: CheckoutFormProps) {
             {!billingSameAsDelivery ? <AddressLookupFields prefix="billingAddress" title={content.billingTitle} /> : null}
             {items.map((item, index) => <div key={item.id}>{item.config.useType === "road-legal" ? <V5cUploadSection error={fileErrors[`v5c-${item.id}`]} file={v5cFiles[item.id] ?? null} inputId={`v5c-${item.id}`} onFileChange={(file, error) => { setV5cFiles((current) => { const next = { ...current }; if (file) next[item.id] = file; else delete next[item.id]; return next; }); setFileErrors((current) => ({ ...current, [`v5c-${item.id}`]: error ?? "" })); }} plateLabel={`Plate ${index + 1}: ${item.config.registration}`} /> : null}{item.config.logo === "Other Logo" ? <ArtworkUploadSection error={fileErrors[`artwork-${item.id}`]} file={artworkFiles[item.id] ?? null} inputId={`artwork-${item.id}`} onFileChange={(file, error) => { setArtworkFileForItem(item.id, file); setFileErrors((current) => ({ ...current, [`artwork-${item.id}`]: error ?? "" })); }} plateLabel={`Plate ${index + 1}: ${item.config.registration}`} /> : null}</div>)}
             <section className="panel mt-7 p-5"><h2 className="text-sm font-semibold">{content.delivery.title}</h2><p className="mt-2 text-sm">{content.delivery.method}</p><p className="mt-1 text-xs text-[var(--muted)]">{content.delivery.estimate}</p></section>
-            <label className="mt-6 block text-xs font-medium" htmlFor="additionalNotes">{content.fields.notes}<textarea className="field mt-2 min-h-24 resize-y" id="additionalNotes" maxLength={ORDER_NOTES_MAX} {...register("additionalNotes")} /></label>{errors.additionalNotes ? <p className="field-error mt-2">{errors.additionalNotes.message}</p> : null}
           </div>
-          <aside className="panel min-w-0 p-5 lg:sticky lg:top-5"><h2 className="text-base font-semibold">{content.summary}</h2><div className="mt-4 space-y-3">{items.map((item) => <div className="border-b border-[var(--line)] pb-3" key={item.id}><div className="flex items-center gap-3"><div className="w-16 rounded bg-[var(--surface-soft)] p-1"><PlatePreview compact config={item.config} /></div><div className="min-w-0 flex-1"><p className="truncate text-xs font-medium">{item.config.productName}</p><p className="font-mono text-xs">{item.config.registration || "YOUR REJ"}</p><p className="text-xs text-[var(--muted)]">× {item.quantity}</p></div><strong className="text-xs">{formatPrice(getOrderTotal(item.config) * item.quantity)}</strong></div><div className="mt-2 flex flex-wrap gap-2 text-xs"><Link className="rounded border border-[var(--line-strong)] px-2 py-1" href={`/design?product=${item.config.productId}`} onClick={() => editCartItem(item.id)}>Edit</Link><button className="rounded border border-[var(--line-strong)] px-2 py-1" onClick={() => setItemQuantity(item.id, item.quantity - 1)} type="button">−</button><button className="rounded border border-[var(--line-strong)] px-2 py-1" onClick={() => setItemQuantity(item.id, item.quantity + 1)} type="button">+</button><button className="rounded border border-[var(--line-strong)] px-2 py-1 text-[var(--destructive)]" onClick={() => removeCartItem(item.id)} type="button">Remove</button></div></div>)}</div><dl className="mt-4 space-y-2 text-sm"><div className="flex justify-between text-[var(--muted)]"><dt>{content.subtotal}</dt><dd>{formatPrice(total)}</dd></div><div className="flex justify-between text-[var(--muted)]"><dt>{content.deliveryLabel}</dt><dd className="rounded bg-[var(--accent)] px-1.5 text-xs font-bold text-[var(--foreground-on-light)]">{content.free}</dd></div><div className="flex justify-between border-t border-[var(--line)] pt-3 font-bold"><dt>{content.total}</dt><dd>{formatPrice(total)}</dd></div></dl><p className="mt-4 text-xs leading-5 text-[var(--muted)]">{content.paymentExplainer}</p>{uploadProgress ? <p aria-live="polite" className="mt-4 text-xs text-[var(--muted)]">{uploadProgress}</p> : null}{requestError ? <p aria-live="polite" className="field-error mt-4">{requestError}</p> : null}<button className="primary-button mt-5 w-full text-xs" disabled={requestStatus !== "idle"} type="submit">{requestStatus === "submitting" ? content.submitting : content.submit}</button></aside>
+          <aside className="panel min-w-0 p-5 lg:sticky lg:top-5"><h2 className="text-base font-semibold">{content.summary}</h2><div className="mt-4 space-y-3">{items.map((item) => <div className="border-b border-[var(--line)] pb-3" key={item.id}><div className="flex items-center gap-3"><div className="w-16 rounded bg-[var(--surface-soft)] p-1"><PlatePreview compact config={item.config} /></div><div className="min-w-0 flex-1"><p className="truncate text-xs font-medium">{item.config.productName}</p><p className="font-mono text-xs">{item.config.registration || "YOUR REG"}</p><p className="text-xs text-[var(--muted)]">× {item.quantity}</p></div><strong className="text-xs">{formatPrice(getOrderTotal(item.config) * item.quantity)}</strong></div><div className="mt-2 flex flex-wrap gap-2 text-xs"><Link className="rounded border border-[var(--line-strong)] px-2 py-1" href={`/design?product=${item.config.productId}`} onClick={() => editCartItem(item.id)}>Edit</Link><button className="rounded border border-[var(--line-strong)] px-2 py-1" onClick={() => setItemQuantity(item.id, item.quantity - 1)} type="button">−</button><button className="rounded border border-[var(--line-strong)] px-2 py-1" onClick={() => setItemQuantity(item.id, item.quantity + 1)} type="button">+</button><button className="rounded border border-[var(--line-strong)] px-2 py-1 text-[var(--destructive)]" onClick={() => removeCartItem(item.id)} type="button">Remove</button></div></div>)}</div><dl className="mt-4 space-y-2 text-sm"><div className="flex justify-between text-[var(--muted)]"><dt>{content.subtotal}</dt><dd>{formatPrice(total)}</dd></div><div className="flex justify-between text-[var(--muted)]"><dt>{content.deliveryLabel}</dt><dd className="rounded bg-[var(--accent)] px-1.5 text-xs font-bold text-[var(--foreground-on-light)]">{content.free}</dd></div><div className="flex justify-between border-t border-[var(--line)] pt-3 font-bold"><dt>{content.total}</dt><dd>{formatPrice(total)}</dd></div></dl><p className="mt-4 text-xs leading-5 text-[var(--muted)]">{content.paymentExplainer}</p>{uploadProgress ? <p aria-live="polite" className="mt-4 text-xs text-[var(--muted)]">{uploadProgress}</p> : null}{requestError ? <p aria-live="polite" className="field-error mt-4">{requestError}</p> : null}<button className="primary-button mt-5 w-full text-xs" disabled={requestStatus !== "idle"} type="submit">{requestStatus === "submitting" ? content.submitting : content.submit}</button></aside>
         </form></FormProvider>
       )}
     </div>

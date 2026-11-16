@@ -38,7 +38,7 @@ export function SiteHeader() {
       <header className="border-b border-[var(--line)] bg-[var(--background)]">
         <div className="site-container flex h-[76px] items-center justify-between">
           <Link aria-label="Regi-Tech home" href="/">
-            <Image alt="Regi-Tech" className="h-auto w-[132px] object-contain sm:w-[150px]" height={75} priority src="/assets/regitech/logo.png" width={150} />
+            <Image alt="Regi-Tech" className="h-auto w-[155px] object-contain sm:w-[180px]" height={455} priority src="/assets/regitech/brand-logo-transparent.png" width={2005} />
           </Link>
 
           <nav aria-label="Primary navigation" className="hidden items-center gap-7 lg:flex">

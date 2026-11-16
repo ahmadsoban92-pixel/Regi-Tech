@@ -40,6 +40,14 @@
 }
 
 @font-face {
+  font-family: "Rock Salt";
+  src: url("/assets/regitech/RockSalt.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
   font-family: "UKNumberPlate";
   src: url("/assets/regitech/UKNumberPlate.ttf") format("truetype");
   font-style: normal;
@@ -224,7 +232,7 @@ a {
 }
 
 .plate-slogan-font-scribbler {
-  font-family: "Chalkboard SE";
+  font-family: "Rock Salt", cursive;
 }
 
 .plate-slogan-font-rebel {

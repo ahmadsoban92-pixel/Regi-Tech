@@ -37,7 +37,6 @@ export function createConfiguratorSchema(useType: PlateUseType) {
 export const configuratorSchema = createConfiguratorSchema("show");
 
 export const reviewSchema = z.object({
-  orderNotes: z.string().max(ORDER_NOTES_MAX, `Order notes must be ${ORDER_NOTES_MAX} characters or fewer.`),
   confirmed: z.boolean().refine(Boolean, "Confirm that you have checked your order details."),
 });
 

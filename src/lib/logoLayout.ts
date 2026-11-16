@@ -23,6 +23,10 @@ export function fitLogoVisualSize(geometry: PlateGeometry, logoAspectRatio: numb
   };
 }
 
+export function scaleLogoVisualSize(size: LogoVisualSize, scale = 1): LogoVisualSize {
+  return { widthPercent: size.widthPercent * scale, heightPercent: size.heightPercent * scale };
+}
+
 export function getLogoFrameInsetCqw(config: PlateConfiguration, geometry: PlateGeometry) {
   const hasInner = config.innerBorder !== "None";
   const hasOuter = config.outerBorder !== "None";
@@ -81,7 +85,7 @@ export function clampLogoPosition(position: LogoPosition, config: PlateConfigura
 
 export function getDefaultLogoPosition(config: PlateConfiguration, uploadedAspectRatio?: number | null): LogoPosition {
   const geometry = getPlateGeometry(config);
-  const size = fitLogoVisualSize(geometry, getLogoAspectRatio(config, uploadedAspectRatio));
+  const size = scaleLogoVisualSize(fitLogoVisualSize(geometry, getLogoAspectRatio(config, uploadedAspectRatio)), getLogoDefinition(config.logo)?.scale);
   const topInsetPercent = getLogoFrameInsetCqw(config, geometry) * geometry.aspectRatio;
   return clampLogoPosition({ x: 50, y: topInsetPercent + size.heightPercent / 2 + 1.25 }, config, geometry, size);
 }

@@ -5,25 +5,11 @@ import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { PlateBorderFrame } from "@/components/order/PlateBorderFrame";
 import { PlateRegistration } from "@/components/order/PlateRegistration";
 import { RoadLegalMarkings } from "@/components/order/RoadLegalMarkings";
-import { clampLogoPosition, fitLogoVisualSize, getLogoAspectRatio } from "@/lib/logoLayout";
+import { clampLogoPosition, fitLogoVisualSize, getLogoAspectRatio, scaleLogoVisualSize } from "@/lib/logoLayout";
 import { getPlateGeometry } from "@/lib/plateGeometry";
 import { getCountryFlagDefinition, getLogoDefinition } from "@/lib/productCatalog";
+import { splitRegistration } from "@/lib/registrationLayout";
 import type { LogoPosition, PlateConfiguration } from "@/types/order";
-
-function splitRegistration(config: PlateConfiguration, singleLine: boolean): [string, string] {
-  const uppercaseRegistration = config.registration.toUpperCase();
-  if (singleLine) return [uppercaseRegistration.trim() || "YOUR REG", ""];
-  if (config.useType === "road-legal") {
-    const canonical = uppercaseRegistration.replace(/\s+/g, "");
-    return canonical ? [canonical.slice(0, 4), canonical.slice(4)] : ["YOUR", "REJ"];
-  }
-  const value = uppercaseRegistration.trim();
-  if (!value) return ["YOUR", "REJ"];
-  const parts = value.split(/\s+/);
-  if (parts.length > 1) return [parts.slice(0, -1).join(" "), parts.at(-1) ?? ""];
-  const midpoint = Math.ceil(value.length / 2);
-  return [value.slice(0, midpoint), value.slice(midpoint)];
-}
 
 function getSloganFontClass(font: PlateConfiguration["sloganFont"]) {
   if (font === "The Boss") return "plate-slogan-font-boss";
@@ -52,7 +38,7 @@ export function PlatePreview({ compact = false, config, fluid = false, onLogoPos
   const borderSlogan = hasSlogan && config.sloganPlacement === "border" && config.innerBorder !== "None";
   const hasFlag = Boolean(flagAsset);
   const interactiveLogo = hasLogo && Boolean(onLogoPositionChange) && !compact;
-  const logoSize = fitLogoVisualSize(geometry, getLogoAspectRatio(config, uploadedAspectRatio));
+  const logoSize = scaleLogoVisualSize(fitLogoVisualSize(geometry, getLogoAspectRatio(config, uploadedAspectRatio)), logoDefinition?.scale);
   const logoPosition = clampLogoPosition(config.logoPosition, config, geometry, logoSize);
   const borderCount = Number(config.innerBorder !== "None") + Number(config.outerBorder !== "None");
   const sloganFontSize = getSloganFontSize(config.sloganText, geometry.slogan.maxFontSizeCqw);

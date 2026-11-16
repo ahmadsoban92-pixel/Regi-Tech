@@ -1,4 +1,20 @@
 import type { PlateGeometry } from "@/lib/plateGeometry";
+import type { PlateConfiguration } from "@/types/order";
+
+export function splitRegistration(config: Pick<PlateConfiguration, "registration" | "useType">, singleLine: boolean): [string, string] {
+  const uppercaseRegistration = config.registration.toUpperCase();
+  if (singleLine) return [uppercaseRegistration.trim() || "YOUR REG", ""];
+  if (config.useType === "road-legal") {
+    const canonical = uppercaseRegistration.replace(/\s+/g, "");
+    return canonical ? [canonical.slice(0, 4), canonical.slice(4)] : ["YOUR", "REG"];
+  }
+  const value = uppercaseRegistration.trim();
+  if (!value) return ["YOUR", "REG"];
+  const parts = value.split(/\s+/);
+  if (parts.length > 1) return [parts.slice(0, -1).join(" "), parts.at(-1) ?? ""];
+  const midpoint = Math.ceil(value.length / 2);
+  return [value.slice(0, midpoint), value.slice(midpoint)];
+}
 
 export type InkMetrics = { width: number; ascent: number; descent: number };
 export type LogoBounds = { left: number; right: number; top: number; bottom: number };

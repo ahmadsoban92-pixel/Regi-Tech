@@ -37,7 +37,7 @@ export function SiteFooter() {
     <footer className="border-t border-[var(--line)] bg-[var(--background)]">
       <div className="site-container grid gap-12 py-14 sm:grid-cols-2 lg:grid-cols-4 lg:py-16">
         <div>
-          <Image alt="Regi-Tech" className="h-auto w-[230px] max-w-full object-contain" height={135} src="/assets/regitech/logo.png" width={270} />
+          <Image alt="Regi-Tech" className="h-auto w-[250px] max-w-full object-contain" height={455} src="/assets/regitech/brand-logo-transparent.png" width={2005} />
           <p className="mt-5 max-w-[270px] text-sm leading-6 text-[var(--muted)]">{footer.description}</p>
           <p className="mt-2 max-w-[270px] text-sm leading-6 text-[var(--muted)]">{footer.operator}</p>
         </div>
