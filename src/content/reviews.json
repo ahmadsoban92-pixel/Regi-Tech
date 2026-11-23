@@ -1,0 +1,19 @@
+{
+  "title": "Help other riders choose their plates",
+  "body": "Bought a motorcycle plate from Regi-Tech? We’d love to hear how it went. Whether you want to share what you thought of the finish, how easy it was to order, or something we could improve, your honest feedback helps other riders know what to expect and helps us improve our service.",
+  "instruction": "Scan either QR code or tap a button below to leave a review. Thanks for taking the time to share your experience.",
+  "platforms": [
+    {
+      "name": "Google",
+      "image": "/assets/reviews/google-review-qr.png",
+      "href": "https://maps.app.goo.gl/1hRjX9GafaRLnxEJ7?g_st=ic",
+      "button": "Leave a Google review"
+    },
+    {
+      "name": "Trustpilot",
+      "image": "/assets/reviews/trustpilot-review-qr.png",
+      "href": "https://uk.trustpilot.com/evaluate/regitech.co.uk",
+      "button": "Leave a Trustpilot review"
+    }
+  ]
+}

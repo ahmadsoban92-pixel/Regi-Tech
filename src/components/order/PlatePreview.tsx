@@ -1,14 +1,14 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useRef, useState, type CSSProperties } from "react";
+import { useCallback, useEffect, useRef, useState, type CSSProperties } from "react";
 import { PlateBorderFrame } from "@/components/order/PlateBorderFrame";
 import { PlateRegistration } from "@/components/order/PlateRegistration";
 import { RoadLegalMarkings } from "@/components/order/RoadLegalMarkings";
 import { clampLogoPosition, fitLogoVisualSize, getLogoAspectRatio, scaleLogoVisualSize } from "@/lib/logoLayout";
 import { getPlateGeometry } from "@/lib/plateGeometry";
 import { getCountryFlagDefinition, getLogoDefinition } from "@/lib/productCatalog";
-import { splitRegistration } from "@/lib/registrationLayout";
+import { splitRegistration, type FlagPlacement } from "@/lib/registrationLayout";
 import type { LogoPosition, PlateConfiguration } from "@/types/order";
 
 function getSloganFontClass(font: PlateConfiguration["sloganFont"]) {
@@ -26,6 +26,7 @@ export function PlatePreview({ compact = false, config, fluid = false, onLogoPos
   const sloganRef = useRef<HTMLDivElement>(null);
   const dragOffsetRef = useRef<LogoPosition>({ x: 0, y: 0 });
   const [uploadedAspectRatio, setUploadedAspectRatio] = useState<number | null>(null);
+  const [measuredFlag, setMeasuredFlag] = useState<{ key: string; placement: FlagPlacement } | null>(null);
   const geometry = getPlateGeometry(config);
   const singleLine = geometry.registration.singleLine;
   const [lineOne, lineTwo] = splitRegistration(config, singleLine);
@@ -43,6 +44,16 @@ export function PlatePreview({ compact = false, config, fluid = false, onLogoPos
   const borderCount = Number(config.innerBorder !== "None") + Number(config.outerBorder !== "None");
   const sloganFontSize = getSloganFontSize(config.sloganText, geometry.slogan.maxFontSizeCqw);
   const frameInset = borderCount === 2 ? geometry.doubleBandCqw : config.innerBorder !== "None" ? geometry.innerInsetCqw + geometry.innerBandCqw : config.outerBorder !== "None" ? geometry.outerBandCqw : 0;
+  const flagKey = `${config.countryFlag}:${config.size}:${frameInset}`;
+  const flagPlacement = measuredFlag?.key === flagKey ? measuredFlag.placement : flagDefinition.printableRegion;
+  const onFlagPlacementChange = useCallback((placement: FlagPlacement) => {
+    setMeasuredFlag((previous) => previous?.key === flagKey &&
+      Math.abs(previous.placement.left - placement.left) < 0.001 &&
+      Math.abs(previous.placement.top - placement.top) < 0.001 &&
+      Math.abs(previous.placement.width - placement.width) < 0.001 &&
+      Math.abs(previous.placement.height - placement.height) < 0.001
+      ? previous : { key: flagKey, placement });
+  }, [flagKey]);
   const logoBounds = hasLogo ? {
     left: logoPosition.x - logoSize.widthPercent / 2,
     right: logoPosition.x + logoSize.widthPercent / 2,
@@ -131,10 +142,10 @@ export function PlatePreview({ compact = false, config, fluid = false, onLogoPos
           className="plate-flag absolute z-10"
           data-orientation={flagDefinition.orientation}
           style={{
-            left: `${flagDefinition.printableRegion.left}%`,
-            top: `${flagDefinition.printableRegion.top}%`,
-            width: `${flagDefinition.printableRegion.width}%`,
-            height: `${flagDefinition.printableRegion.height}%`,
+            left: `${flagPlacement.left}%`,
+            top: `${flagPlacement.top}%`,
+            width: `${flagPlacement.width}%`,
+            height: `${flagPlacement.height}%`,
           }}
         >
           <Image
@@ -147,7 +158,7 @@ export function PlatePreview({ compact = false, config, fluid = false, onLogoPos
         </div>
       ) : null}
 
-      <PlateRegistration fallbackFontSizeCqw={geometry.registration.fallbackFontSizeCqw} frameInset={frameInset} geometry={geometry} hasFlag={hasFlag} horizontalScale={geometry.registration.horizontalScale} lineOne={lineOne} lineTwo={lineTwo} logoBounds={logoBounds} maxFontSizeCqw={geometry.registration.maxFontSizeCqw} roadLegal={config.useType === "road-legal"} sloganRef={sloganRef} sloganText={borderSlogan ? "" : hasSlogan ? config.sloganText : ""} />
+      <PlateRegistration fallbackFontSizeCqw={geometry.registration.fallbackFontSizeCqw} flagRegion={hasFlag ? flagDefinition.printableRegion : undefined} frameInset={frameInset} geometry={geometry} hasFlag={hasFlag} horizontalScale={geometry.registration.horizontalScale} lineOne={lineOne} lineTwo={lineTwo} logoBounds={logoBounds} maxFontSizeCqw={geometry.registration.maxFontSizeCqw} onFlagPlacementChange={hasFlag ? onFlagPlacementChange : undefined} roadLegal={config.useType === "road-legal"} sloganRef={sloganRef} sloganText={borderSlogan ? "" : hasSlogan ? config.sloganText : ""} />
 
       {hasSlogan && !borderSlogan ? <div className={`plate-slogan plate-slogan-border-${Math.min(borderCount, 2)} ${getSloganFontClass(config.sloganFont)} absolute z-10 text-center text-[var(--plate-ink)]`} ref={sloganRef} style={{ "--plate-slogan-size": `${sloganFontSize}cqw` } as CSSProperties}>{config.sloganText}</div> : null}
       {borderSlogan ? <div className={`plate-slogan-border-gap ${getSloganFontClass(config.sloganFont)}`} style={{ "--plate-slogan-size": `${sloganFontSize}cqw`, "--plate-gap-height": `${frameInset}cqw` } as CSSProperties}>{config.sloganText}</div> : null}

@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { createDefaultConfiguration } from "@/lib/productCatalog";
 import { getPlateGeometry } from "@/lib/plateGeometry";
-import { fitRegistrationLayout, splitRegistration } from "@/lib/registrationLayout";
+import { fitFlagPlacement, fitRegistrationLayout, splitRegistration } from "@/lib/registrationLayout";
 
 const geometry = getPlateGeometry({ ...createDefaultConfiguration("hand-crafted-show-plate"), size: "6×8″" });
 const first = { width: 220, ascent: 70, descent: 0 };
@@ -41,5 +41,27 @@ describe("measured registration layout", () => {
     expect(withSlogan.top).toBeLessThan(normal.top);
     expect(withSlogan.bottom).toBeLessThan(70);
     expect(withSlogan.fontSize).toBeCloseTo(normal.fontSize, 5);
+  });
+
+  it("keeps both road-legal rows centred and does not shrink them just because a flag is present", () => {
+    const legalGeometry = getPlateGeometry(createDefaultConfiguration("2d-road-legal"));
+    const legalInput = { ...input, geometry: legalGeometry, maxFontSize: legalGeometry.registration.maxFontSizeCqw, horizontalScale: legalGeometry.registration.horizontalScale, frameInset: 2.7, roadLegal: true };
+    const plain = fitRegistrationLayout({ ...legalInput, hasFlag: false });
+    const flagged = fitRegistrationLayout({ ...legalInput, hasFlag: true });
+    expect(flagged.firstX).toBe(50);
+    expect(flagged.secondX).toBe(50);
+    expect(flagged.fontSize).toBeCloseTo(plain.fontSize, 5);
+  });
+
+  it("centres a flag in the gutter beside the measured lower row", () => {
+    const legalGeometry = getPlateGeometry(createDefaultConfiguration("2d-road-legal"));
+    const layout = fitRegistrationLayout({ ...input, geometry: legalGeometry, maxFontSize: legalGeometry.registration.maxFontSizeCqw, horizontalScale: legalGeometry.registration.horizontalScale, frameInset: 2.7, hasFlag: true, roadLegal: true });
+    const flag = fitFlagPlacement({ geometry: legalGeometry, layout, second, frameInset: 2.7, maxWidthPercent: 11, maxHeightPercent: 27 });
+    const inkLeft = layout.secondX - second.width * layout.fontSize / 100 * layout.horizontalScale / 2;
+    const gutterLeft = 2.7 + 1.25;
+    expect(flag.left + flag.width / 2).toBeCloseTo((gutterLeft + inkLeft - 1.25) / 2, 5);
+    expect(flag.left + flag.width).toBeLessThan(inkLeft);
+    const rowMiddle = layout.secondBaseline + (second.descent - second.ascent) * layout.fontSize / 200;
+    expect((flag.top + flag.height / 2) * (100 / legalGeometry.aspectRatio) / 100).toBeCloseTo(rowMiddle, 5);
   });
 });

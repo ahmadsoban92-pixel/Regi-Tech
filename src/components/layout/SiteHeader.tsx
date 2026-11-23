@@ -16,6 +16,8 @@ function WhatsAppHeaderLink({ className = "" }: { className?: string }) {
       aria-label="Chat with Regi-Tech on WhatsApp"
       className={`whatsapp-header-link grid size-11 place-items-center rounded-md transition-colors hover:bg-[var(--surface)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)] ${className}`}
       href={shared.whatsappHref}
+      rel="noopener noreferrer"
+      target="_blank"
     >
       <span aria-hidden className="size-[22px] bg-current [mask:url('/assets/regitech/whatsapp-mark.svg')_center/contain_no-repeat]" />
     </a>

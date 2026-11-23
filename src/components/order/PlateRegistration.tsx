@@ -1,7 +1,7 @@
 "use client";
 
 import { useLayoutEffect, useRef, useState, type CSSProperties, type RefObject } from "react";
-import { fitRegistrationLayout, type InkMetrics, type LogoBounds } from "@/lib/registrationLayout";
+import { fitFlagPlacement, fitRegistrationLayout, type FlagPlacement, type InkMetrics, type LogoBounds } from "@/lib/registrationLayout";
 import type { PlateGeometry } from "@/lib/plateGeometry";
 
 type PlateRegistrationProps = {
@@ -10,6 +10,8 @@ type PlateRegistrationProps = {
   geometry: PlateGeometry;
   frameInset: number;
   hasFlag: boolean;
+  flagRegion?: { width: number; height: number };
+  onFlagPlacementChange?: (placement: FlagPlacement) => void;
   roadLegal: boolean;
   logoBounds?: LogoBounds;
   sloganRef: RefObject<HTMLDivElement | null>;
@@ -24,7 +26,7 @@ function getInkMetrics(context: CanvasRenderingContext2D, value: string): InkMet
   return { width: metrics.width, ascent: metrics.actualBoundingBoxAscent || 70, descent: metrics.actualBoundingBoxDescent || 0 };
 }
 
-export function PlateRegistration({ lineOne, lineTwo, geometry, frameInset, hasFlag, roadLegal, logoBounds, sloganRef, sloganText, horizontalScale, maxFontSizeCqw, fallbackFontSizeCqw }: PlateRegistrationProps) {
+export function PlateRegistration({ lineOne, lineTwo, geometry, frameInset, hasFlag, flagRegion, onFlagPlacementChange, roadLegal, logoBounds, sloganRef, sloganText, horizontalScale, maxFontSizeCqw, fallbackFontSizeCqw }: PlateRegistrationProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [ready, setReady] = useState(false);
@@ -48,10 +50,12 @@ export function PlateRegistration({ lineOne, lineTwo, geometry, frameInset, hasF
         context.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
         context.font = "100px UKNumberPlate";
         const sloganBounds = sloganRef.current?.getBoundingClientRect();
+        const firstMetrics = getInkMetrics(context, lineOne);
+        const secondMetrics = getInkMetrics(context, singleLine ? "" : lineTwo);
         const layout = fitRegistrationLayout({
           geometry,
-          first: getInkMetrics(context, lineOne),
-          second: getInkMetrics(context, singleLine ? "" : lineTwo),
+          first: firstMetrics,
+          second: secondMetrics,
           maxFontSize: maxFontSizeCqw,
           horizontalScale,
           frameInset,
@@ -60,6 +64,9 @@ export function PlateRegistration({ lineOne, lineTwo, geometry, frameInset, hasF
           logoBounds,
           sloganTop: sloganBounds ? (sloganBounds.top - bounds.top) / bounds.width * 100 : undefined,
         });
+        if (flagRegion && onFlagPlacementChange && !singleLine) {
+          onFlagPlacementChange(fitFlagPlacement({ geometry, layout, second: secondMetrics, frameInset, maxWidthPercent: flagRegion.width, maxHeightPercent: flagRegion.height }));
+        }
         const unit = bounds.width / 100;
         context.clearRect(0, 0, bounds.width, bounds.height);
         context.fillStyle = getComputedStyle(container).color;
@@ -85,7 +92,7 @@ export function PlateRegistration({ lineOne, lineTwo, geometry, frameInset, hasF
     document.fonts?.ready.then(() => { if (active) measure(); }).catch(() => undefined);
     measure();
     return () => { active = false; cancelAnimationFrame(frame); resizeObserver.disconnect(); };
-  }, [geometry, frameInset, hasFlag, roadLegal, logoBounds?.left, logoBounds?.right, logoBounds?.top, logoBounds?.bottom, sloganRef, sloganText, lineOne, lineTwo, singleLine, horizontalScale, maxFontSizeCqw]);
+  }, [geometry, frameInset, hasFlag, flagRegion?.width, flagRegion?.height, onFlagPlacementChange, roadLegal, logoBounds?.left, logoBounds?.right, logoBounds?.top, logoBounds?.bottom, sloganRef, sloganText, lineOne, lineTwo, singleLine, horizontalScale, maxFontSizeCqw]);
 
   const fallbackStyle = {
     "--plate-registration-size": `${fallbackFontSizeCqw}cqw`,

@@ -9,6 +9,7 @@ const hrefs: Record<string, string> = {
   "Show vs Road-Legal": "/information/road-legal-vs-show",
   FAQs: "/faqs",
   Contact: "/contact",
+  Reviews: "/reviews",
   "Delivery Information": "/information/delivery",
   "Terms & Conditions": "/information/terms",
   "Cancellations & Refunds": "/information/cancellations-and-refunds",
@@ -50,7 +51,7 @@ export function SiteFooter() {
           <h2 className="mb-4 text-sm font-semibold text-[var(--foreground)]">Contact</h2>
           <div className="space-y-3 text-sm text-[var(--muted)]">
             <a className="flex items-center gap-2 hover:text-[var(--foreground)]" href={`mailto:${footer.email}`}><Mail aria-hidden size={16} />{footer.email}</a>
-            <a aria-label="Chat with Regi-Tech on WhatsApp" className="primary-button mt-5 w-fit gap-2 px-4 text-xs" href={shared.whatsappHref}><MessageCircle aria-hidden size={16} />{shared.whatsapp}</a>
+            <a aria-label="Chat with Regi-Tech on WhatsApp" className="primary-button mt-5 w-fit gap-2 px-4 text-xs" href={shared.whatsappHref} rel="noopener noreferrer" target="_blank"><MessageCircle aria-hidden size={16} />{shared.whatsapp}</a>
           </div>
         </div>
       </div>

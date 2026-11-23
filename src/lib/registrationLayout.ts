@@ -19,6 +19,7 @@ export function splitRegistration(config: Pick<PlateConfiguration, "registration
 export type InkMetrics = { width: number; ascent: number; descent: number };
 export type LogoBounds = { left: number; right: number; top: number; bottom: number };
 export type RegistrationLayout = { fontSize: number; horizontalScale: number; firstBaseline: number; secondBaseline: number; firstX: number; secondX: number; top: number; bottom: number };
+export type FlagPlacement = { left: number; top: number; width: number; height: number };
 
 type LayoutInput = {
   geometry: PlateGeometry;
@@ -33,14 +34,14 @@ type LayoutInput = {
   sloganTop?: number;
 };
 
-export function fitRegistrationLayout({ geometry, first, second, maxFontSize, horizontalScale, frameInset, hasFlag, roadLegal, logoBounds, sloganTop }: LayoutInput): RegistrationLayout {
+export function fitRegistrationLayout({ geometry, first, second, maxFontSize, horizontalScale, frameInset, roadLegal, logoBounds, sloganTop }: LayoutInput): RegistrationLayout {
   const height = 100 / geometry.aspectRatio;
   const singleLine = geometry.registration.singleLine;
   const firstX = 50;
-  const secondX = hasFlag ? 57.25 : 50;
+  const secondX = 50;
   const edgeInset = Math.max(geometry.registration.horizontalInsetPercent, frameInset + 1.25);
   const firstWidth = 100 - edgeInset * 2;
-  const secondWidth = hasFlag ? 76.5 : firstWidth;
+  const secondWidth = firstWidth;
   const widthFit = Math.min(
     maxFontSize,
     first.width > 0 ? firstWidth * 100 / (first.width * horizontalScale) : maxFontSize,
@@ -90,5 +91,31 @@ export function fitRegistrationLayout({ geometry, first, second, maxFontSize, ho
     secondX,
     top: firstBaseline + group.top,
     bottom: firstBaseline + group.bottom,
+  };
+}
+
+export function fitFlagPlacement({ geometry, layout, second, frameInset, maxWidthPercent, maxHeightPercent }: {
+  geometry: PlateGeometry;
+  layout: RegistrationLayout;
+  second: InkMetrics;
+  frameInset: number;
+  maxWidthPercent: number;
+  maxHeightPercent: number;
+}): FlagPlacement {
+  const plateHeight = 100 / geometry.aspectRatio;
+  const inkLeft = layout.secondX - second.width * layout.fontSize / 100 * layout.horizontalScale / 2;
+  const gutterLeft = frameInset + 1.25;
+  const gutterRight = Math.max(gutterLeft, inkLeft - 1.25);
+  const availableWidth = gutterRight - gutterLeft;
+  const maxHeight = maxHeightPercent / 100 * plateHeight;
+  const scale = Math.min(1, availableWidth / maxWidthPercent, (plateHeight - 2 * gutterLeft) / maxHeight);
+  const width = maxWidthPercent * Math.max(0, scale);
+  const heightCqw = maxHeight * Math.max(0, scale);
+  const rowMiddle = layout.secondBaseline + (second.descent - second.ascent) * layout.fontSize / 200;
+  return {
+    left: (gutterLeft + gutterRight - width) / 2,
+    top: (rowMiddle - heightCqw / 2) / plateHeight * 100,
+    width,
+    height: heightCqw / plateHeight * 100,
   };
 }

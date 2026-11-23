@@ -11,11 +11,12 @@ describe("product media content", () => {
     expect("processStoryId" in (roadLegal ?? {})).toBe(false);
   });
 
-  it("offers the shared manufacturing story on every show-plate product", () => {
-    const showProducts = products.filter((product) => product.id !== "2d-road-legal");
+  it("omits the manufacturing button from both 2D printed cards", () => {
+    const showProducts = products.filter((product) => product.id !== "2d-road-legal" && product.id !== "2d-show-plate");
 
-    expect(showProducts).toHaveLength(4);
+    expect(showProducts).toHaveLength(3);
     expect(showProducts.every((product) => product.processStoryId === processStory.id)).toBe(true);
+    expect("processStoryId" in (products.find((product) => product.id === "2d-show-plate") ?? {})).toBe(false);
   });
 
   it("contains five local manufacturing steps in the supplied order", () => {

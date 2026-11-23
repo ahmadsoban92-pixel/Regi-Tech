@@ -210,11 +210,6 @@ a {
   left: 5.5%;
 }
 
-.plate-registration-has-flag .plate-registration-line-second {
-  right: 4.5%;
-  left: 19%;
-}
-
 .plate-slogan {
   right: 12%;
   bottom: var(--plate-slogan-bottom, 7%);
