@@ -5,6 +5,7 @@ import { HomeFaqPreview } from "@/components/home/HomeFaqPreview";
 import { HomeHero } from "@/components/home/HomeHero";
 import { HomeJourneySection } from "@/components/home/HomeJourneySection";
 import { HomeProducts } from "@/components/home/HomeProducts";
+import { HomeReviewsSection } from "@/components/home/HomeReviewsSection";
 import { PersonalStorySection } from "@/components/home/PersonalStorySection";
 import { PageShell } from "@/components/layout/PageShell";
 import { Reveal } from "@/components/ui/Reveal";
@@ -19,6 +20,7 @@ export default function HomePage() {
       <Reveal><HomeJourneySection /></Reveal>
       <Reveal><HomeDetailsSection /></Reveal>
       <Reveal><HomeFaqPreview /></Reveal>
+      <Reveal><HomeReviewsSection /></Reveal>
       <Reveal><HomeClosingSection /></Reveal>
     </PageShell>
   );

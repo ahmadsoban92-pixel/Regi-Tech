@@ -3,6 +3,7 @@
   "nav": [
     { "label": "Our Plates", "href": "/our-plates" },
     { "label": "How It Works", "href": "/how-it-works" },
+    { "label": "Reviews", "href": "/reviews" },
     { "label": "FAQs", "href": "/faqs" },
     { "label": "Contact", "href": "/contact" }
   ],
