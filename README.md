@@ -60,3 +60,11 @@ The Boss uses Anita Semi-square by Gustavo Paz L., redistributed unmodified unde
 ## Current integration boundary
 
 The application contains the server-side Supabase order flow, private document upload, hosted Stripe Checkout, webhook handling, and dynamic confirmation. Live provider verification requires project credentials in `.env.local`; no credentials or customer files are stored in the repository.
+
+## Royal Mail Click & Drop
+
+The Admin order page can prepare one Click & Drop shipment after an order is paid, verified, and moved to **In production**. Staff enter the packed weight and dimensions. The app selects the account's Tracked 48 LBT service for parcels up to 750 g and strictly under 300 × 220 × 20 mm; larger supported parcels use standard Tracked 48. The service codes are `TRS48` and `TPS48` with register code `01`. The integration's selected trading name supplies the return address.
+
+Before enabling the controls, apply `supabase/migrations/20261123000449_royal_mail_shipments.sql` and `supabase/migrations/20261123000557_royal_mail_booked_by_index.sql` after all earlier migrations. Both are already applied to the empty client-owned Supabase project. Set `ROYAL_MAIL_CLICK_DROP_API_KEY` only in the private server environment. Never put the key in a `NEXT_PUBLIC_` variable or commit it. The key is visible in Click & Drop under **Settings → Integrations → Click & Drop API**. A missing key disables label booking but leaves manual carrier and tracking entry available.
+
+The operator flow is: confirm the final parcel measurements, create the label once, download and print the PDF, hand the parcel to Royal Mail, then mark it handed over in Admin. A timed-out booking stays reserved to prevent a duplicate label. **Recover booking** checks Click & Drop by the order reference and records an existing label; if none appears, reconcile it manually before another booking attempt. Label downloads require an active Admin session. This integration does not manifest orders or send customer dispatch emails; those remain separate operational steps. Do not use live booking as a connectivity test because it can create a real label.

@@ -1,15 +1,17 @@
 import adminContent from "@/content/admin.json";
 import { AdminOwnerActions } from "@/components/admin/AdminOwnerActions";
+import { AdminRoyalMailShipment } from "@/components/admin/AdminRoyalMailShipment";
 import { AdminStatusBadge } from "@/components/admin/AdminStatusBadge";
 import { PlatePreview } from "@/components/order/PlatePreview";
 import { formatAdminAddress, formatAdminDate, formatAdminMoney, getAdminPlateDetails } from "@/lib/adminFormatting";
 import type { AdminOrder } from "@/types/admin";
+import type { RoyalMailShipment } from "@/lib/royalMailWorkflow";
 
 function DetailRow({ label, value }: { label: string; value: React.ReactNode }) {
   return <div className="flex justify-between gap-4"><dt className="text-[#2b2d31]/50">{label}</dt><dd className="text-right">{value}</dd></div>;
 }
 
-export function AdminOrderDetail({ order }: { order: AdminOrder }) {
+export function AdminOrderDetail({ order, shipment, royalMailConfigured }: { order: AdminOrder; shipment: RoyalMailShipment | null; royalMailConfigured: boolean }) {
   const totalQuantity = order.items.reduce((total, item) => total + item.quantity, 0);
   return (
     <div className="space-y-4">
@@ -69,7 +71,8 @@ export function AdminOrderDetail({ order }: { order: AdminOrder }) {
         </div>
 
         <aside className="space-y-4 xl:sticky xl:top-5">
-          <AdminOwnerActions initialCarrier={order.carrier} initialFulfilment={order.fulfilmentStatus} initialNotes={order.privateNotes} initialTracking={order.trackingReference} initialVerification={order.verificationStatus} reference={order.reference} />
+          <AdminRoyalMailShipment reference={order.reference} shipment={shipment} configured={royalMailConfigured} eligible={order.paymentStatus === "paid" && ["approved", "not_required"].includes(order.verificationStatus) && order.fulfilmentStatus === "in_production" && !order.trackingReference} plateCount={totalQuantity} />
+          <AdminOwnerActions initialCarrier={order.carrier} initialFulfilment={order.fulfilmentStatus} initialNotes={order.privateNotes} initialTracking={order.trackingReference} initialVerification={order.verificationStatus} reference={order.reference} shippingManaged={Boolean(shipment)} />
           <section className="admin-card rounded-lg border border-[#e5e7eb] bg-white p-5"><h2 className="font-semibold">{adminContent.detail.activity}</h2><ol className="mt-4 space-y-4">{order.timeline.map((event) => <li className="admin-timeline-row relative pl-5 text-xs" key={event.id}><span className="absolute left-0 top-1 size-2 rounded-full bg-[var(--accent)]" /><p>{event.title}</p><p className="mt-1 text-[0.6875rem] text-[#2b2d31]/45">{event.actor} · {formatAdminDate(event.createdAt, true)}</p></li>)}</ol></section>
         </aside>
       </div>

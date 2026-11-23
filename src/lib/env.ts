@@ -65,6 +65,11 @@ export function getStripeWebhookEnv() {
   });
 }
 
+export function getRoyalMailServerEnv() {
+  const values = { apiKey: process.env.ROYAL_MAIL_CLICK_DROP_API_KEY?.trim() ?? "" };
+  return requireServerValues(values, { apiKey: "ROYAL_MAIL_CLICK_DROP_API_KEY" });
+}
+
 export function getRateLimitEnv() {
   const values = { rateLimitHmacKey: process.env.RATE_LIMIT_HMAC_KEY?.trim() ?? "" };
   return requireServerValues(values, { rateLimitHmacKey: "RATE_LIMIT_HMAC_KEY" });

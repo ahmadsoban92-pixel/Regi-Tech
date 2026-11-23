@@ -520,6 +520,66 @@ export type Database = {
           },
         ]
       }
+      royal_mail_shipments: {
+        Row: {
+          order_id: string
+          reservation_token: string
+          status: string
+          service_code: string
+          weight_grams: number
+          length_mm: number
+          width_mm: number
+          depth_mm: number
+          external_order_id: number | null
+          tracking_number: string
+          booked_by: string | null
+          booked_at: string | null
+          dispatched_at: string | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          order_id: string
+          reservation_token?: string
+          status?: string
+          service_code: string
+          weight_grams: number
+          length_mm: number
+          width_mm: number
+          depth_mm: number
+          external_order_id?: number | null
+          tracking_number?: string
+          booked_by?: string | null
+          booked_at?: string | null
+          dispatched_at?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          order_id?: string
+          reservation_token?: string
+          status?: string
+          service_code?: string
+          weight_grams?: number
+          length_mm?: number
+          width_mm?: number
+          depth_mm?: number
+          external_order_id?: number | null
+          tracking_number?: string
+          booked_by?: string | null
+          booked_at?: string | null
+          dispatched_at?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: [{
+          foreignKeyName: "royal_mail_shipments_order_id_fkey"
+          columns: ["order_id"]
+          isOneToOne: true
+          referencedRelation: "orders"
+          referencedColumns: ["id"]
+        }]
+      }
       stripe_events: {
         Row: {
           event_id: string
@@ -546,6 +606,18 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      admin_reserve_royal_mail_shipment: {
+        Args: { p_order_id: string; p_service_code: string; p_weight_grams: number; p_length_mm: number; p_width_mm: number; p_depth_mm: number; p_actor_id: string }
+        Returns: Json
+      }
+      admin_confirm_royal_mail_shipment: {
+        Args: { p_order_id: string; p_reservation_token: string; p_external_order_id: number; p_tracking_number: string; p_actor_id: string; p_actor_name: string }
+        Returns: boolean
+      }
+      admin_finish_royal_mail_dispatch: {
+        Args: { p_order_id: string; p_actor_id: string; p_actor_name: string }
+        Returns: boolean
+      }
       admin_change_user: {
         Args: {
           p_actor_id: string

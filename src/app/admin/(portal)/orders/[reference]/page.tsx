@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import adminContent from "@/content/admin.json";
 import { AdminOrderDetail } from "@/components/admin/AdminOrderDetail";
 import { adminRepository } from "@/services/admin.service";
+import { getRoyalMailShipment } from "@/services/royalMailShipment.service";
 
 type AdminOrderPageProps = { params: Promise<{ reference: string }> };
 
@@ -17,10 +18,11 @@ export default async function AdminOrderPage({ params }: AdminOrderPageProps) {
   const { reference } = await params;
   const order = await adminRepository.getOrder(reference);
   if (!order) notFound();
+  const shipment = await getRoyalMailShipment(order.id);
   return (
     <div className="admin-page-enter mx-auto w-full max-w-[1280px] p-4 md:p-6">
       <nav aria-label="Breadcrumb" className="mb-5 flex items-center gap-2 text-xs text-[#2b2d31]/55"><Link className="admin-text-link" href="/admin/orders">{adminContent.navigation.orders}</Link><ChevronRight aria-hidden size={13} /><span className="font-['Source_Code_Pro'] text-[#111]">{order.reference}</span></nav>
-      <AdminOrderDetail order={order} />
+      <AdminOrderDetail order={order} shipment={shipment} royalMailConfigured={Boolean(process.env.ROYAL_MAIL_CLICK_DROP_API_KEY?.trim())} />
     </div>
   );
 }
