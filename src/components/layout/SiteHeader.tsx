@@ -43,7 +43,7 @@ export function SiteHeader() {
             <Image alt="Regi-Tech" className="h-auto w-[155px] object-contain sm:w-[180px]" height={455} priority src="/assets/regitech/brand-logo-transparent.png" width={2005} />
           </Link>
 
-          <nav aria-label="Primary navigation" className="hidden items-center gap-7 xl:flex">
+          <nav aria-label="Primary navigation" className="hidden items-center gap-7 min-[1200px]:flex">
             {nav.map((item) => {
               const active = pathname === item.href;
               return (
@@ -59,7 +59,7 @@ export function SiteHeader() {
             })}
           </nav>
 
-          <div className="hidden items-center gap-3 xl:flex">
+          <div className="hidden items-center gap-3 min-[1200px]:flex">
             <WhatsAppHeaderLink />
             <button aria-label={`Open cart, ${totalQuantity} plates`} className="relative grid size-11 place-items-center rounded-md text-[var(--foreground)] hover:bg-[var(--surface)]" onClick={() => setCartOpen(true)} type="button">
               <ShoppingBag aria-hidden size={20} strokeWidth={1.6} />
@@ -72,7 +72,7 @@ export function SiteHeader() {
             </Link>
           </div>
 
-          <div className="flex items-center gap-1 xl:hidden">
+          <div className="flex items-center gap-1 min-[1200px]:hidden">
             <WhatsAppHeaderLink />
             <button
               aria-expanded={open}
@@ -91,7 +91,7 @@ export function SiteHeader() {
           <m.nav
             animate={{ height: "auto", opacity: 1 }}
             aria-label="Mobile navigation"
-            className="site-container flex flex-col gap-1 overflow-hidden border-t border-[var(--line)] py-4 xl:hidden"
+            className="site-container flex flex-col gap-1 overflow-hidden border-t border-[var(--line)] py-4 min-[1200px]:hidden"
             exit={{ height: reduceMotion ? "auto" : 0, opacity: reduceMotion ? 1 : 0 }}
             initial={reduceMotion ? false : { height: 0, opacity: 0 }}
             transition={{ duration: reduceMotion ? 0 : 0.22, ease: [0.22, 1, 0.36, 1] }}

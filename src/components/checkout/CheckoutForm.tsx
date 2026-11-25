@@ -22,7 +22,7 @@ type ContactFieldName = "firstName" | "lastName" | "email" | "telephone";
 type CheckoutFormProps = { cancelledReference?: string };
 
 export function CheckoutForm({ cancelledReference }: CheckoutFormProps) {
-  const { artworkFiles, beginNewPlate, customer, editCartItem, items, removeCartItem, setArtworkFileForItem, setCustomer, setItemQuantity } = useOrderFlow();
+  const { artworkFiles, beginNewPlate, customer, editCartItem, items, rememberCheckoutCart, removeCartItem, setArtworkFileForItem, setCustomer, setItemQuantity } = useOrderFlow();
   const [v5cFiles, setV5cFiles] = useState<Record<string, File>>({});
   const [fileErrors, setFileErrors] = useState<Record<string, string>>({});
   const [requestStatus, setRequestStatus] = useState<"idle" | "submitting" | "retrying">("idle");
@@ -74,6 +74,7 @@ export function CheckoutForm({ cancelledReference }: CheckoutFormProps) {
       const response = await fetch("/api/v1/orders/checkout", { method: "POST", body: JSON.stringify(submission), credentials: "include", headers: { "Content-Type": "application/json" } });
       const payload = await response.json() as ApiEnvelope<CheckoutSessionData>;
       if (!response.ok || !payload.data?.checkoutUrl) { setRequestError(payload.message || content.errors.unavailable); return; }
+      rememberCheckoutCart(payload.data.reference, items);
       window.location.assign(payload.data.checkoutUrl);
     } catch (error) {
       setRequestError(error instanceof Error ? error.message : content.errors.unavailable);

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useEffect } from "react";
 import { CheckCircle2 } from "lucide-react";
 import { OrderCard } from "@/components/order/OrderCard";
 import { useOrderFlow } from "@/components/order/OrderFlowProvider";
@@ -8,7 +9,10 @@ import content from "@/content/order-confirmation.json";
 import type { OrderConfirmationData } from "@/types/orderApi";
 
 export function OrderConfirmation({ order }: { order: OrderConfirmationData | null }) {
-  const { resetOrder } = useOrderFlow();
+  const { completePaidCheckout, resetOrder } = useOrderFlow();
+  useEffect(() => {
+    if (order?.paymentStatus === "paid") completePaidCheckout(order.reference);
+  }, [completePaidCheckout, order?.paymentStatus, order?.reference]);
   if (!order) {
     return (
       <div className="site-container py-14 sm:py-20">

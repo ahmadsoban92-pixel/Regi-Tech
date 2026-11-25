@@ -2,6 +2,7 @@
 
 import { createContext, useCallback, useContext, useMemo, useState, useSyncExternalStore } from "react";
 import { clearOrderDraft, getOrderDraftServerSnapshot, getOrderDraftSnapshot, subscribeToOrderDraft, updateOrderDraft } from "@/lib/orderDraftStore";
+import { matchingCheckoutItemIds } from "@/lib/checkoutCart";
 import { createDefaultConfiguration } from "@/lib/productCatalog";
 import { getCartQuantity } from "@/lib/orderPricing";
 import type { CartItem, CustomerDetails, PlateConfiguration } from "@/types/order";
@@ -11,6 +12,7 @@ const defaultCustomer: CustomerDetails = {
   firstName: "", lastName: "", email: "", telephone: "", deliveryAddress: emptyAddress,
   billingSameAsDelivery: true, billingAddress: emptyAddress, additionalNotes: "",
 };
+const CHECKOUT_CART_KEY = "regitech-pending-checkout-cart";
 
 type OrderFlowContextValue = {
   config: PlateConfiguration;
@@ -35,6 +37,8 @@ type OrderFlowContextValue = {
   removeCartItem: (itemId: string) => void;
   setItemQuantity: (itemId: string, quantity: number) => void;
   beginNewPlate: (productId?: string) => void;
+  rememberCheckoutCart: (reference: string, items: CartItem[]) => void;
+  completePaidCheckout: (reference: string) => void;
   resetOrder: () => void;
 };
 
@@ -152,7 +156,45 @@ export function OrderFlowProvider({ children }: { children: React.ReactNode }) {
     });
   }, []);
 
+  const rememberCheckoutCart = useCallback((reference: string, items: CartItem[]) => {
+    try {
+      window.sessionStorage.setItem(CHECKOUT_CART_KEY, JSON.stringify({ reference, items }));
+    } catch {
+      // Storage may be disabled; checkout must still proceed.
+    }
+  }, []);
+
+  const completePaidCheckout = useCallback((reference: string) => {
+    let saved: string | null;
+    try {
+      saved = window.sessionStorage.getItem(CHECKOUT_CART_KEY);
+    } catch {
+      return;
+    }
+    if (!saved) return;
+    let checkout: { reference: string; items: CartItem[] };
+    try {
+      checkout = JSON.parse(saved);
+    } catch {
+      window.sessionStorage.removeItem(CHECKOUT_CART_KEY);
+      return;
+    }
+    if (!checkout || checkout.reference !== reference || !Array.isArray(checkout.items)) return;
+    window.sessionStorage.removeItem(CHECKOUT_CART_KEY);
+    const completedIds = matchingCheckoutItemIds(getOrderDraftSnapshot().items, checkout.items);
+    if (!completedIds.length) return;
+    const ids = new Set(completedIds);
+    updateOrderDraft((current) => ({
+      ...current,
+      items: current.items.filter((item) => !ids.has(item.id)),
+      editingItemId: current.editingItemId && ids.has(current.editingItemId) ? null : current.editingItemId,
+    }));
+    setArtworkFiles((current) => Object.fromEntries(Object.entries(current).filter(([itemId]) => !ids.has(itemId))));
+    setCartOpen(false);
+  }, []);
+
   const resetOrder = useCallback(() => {
+    try { window.sessionStorage.removeItem(CHECKOUT_CART_KEY); } catch { /* Storage may be disabled. */ }
     clearOrderDraft();
     setCustomer(defaultCustomer);
     setUploadedLogoFile(null);
@@ -164,8 +206,8 @@ export function OrderFlowProvider({ children }: { children: React.ReactNode }) {
     totalQuantity: getCartQuantity(draft.items), orderNotes: draft.orderNotes, setOrderNotes,
     customer, setCustomer, cartOpen, setCartOpen, uploadedLogoFile, setUploadedLogoFile,
     artworkFiles, setArtworkFileForItem, selectProduct, addOrUpdateCartItem, editCartItem,
-    removeCartItem, setItemQuantity, beginNewPlate, resetOrder,
-  }), [addOrUpdateCartItem, artworkFiles, beginNewPlate, cartOpen, customer, draft, editCartItem, editorRevision, removeCartItem, resetOrder, selectProduct, setArtworkFileForItem, setConfig, setItemQuantity, setOrderNotes, uploadedLogoFile]);
+    removeCartItem, setItemQuantity, beginNewPlate, rememberCheckoutCart, completePaidCheckout, resetOrder,
+  }), [addOrUpdateCartItem, artworkFiles, beginNewPlate, cartOpen, completePaidCheckout, customer, draft, editCartItem, editorRevision, rememberCheckoutCart, removeCartItem, resetOrder, selectProduct, setArtworkFileForItem, setConfig, setItemQuantity, setOrderNotes, uploadedLogoFile]);
 
   return <OrderFlowContext.Provider value={value}>{children}</OrderFlowContext.Provider>;
 }
