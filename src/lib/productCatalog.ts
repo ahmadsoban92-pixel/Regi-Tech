@@ -130,7 +130,7 @@ export const LOGO_DEFINITIONS: Partial<Record<LogoOption, LogoDefinition>> = {
   "Harley-Davidson": { assetPath: "/assets/regitech/logo-brand-harley-davidson.png", scale: 0.85, sourceWidth: 140, sourceHeight: 110, contentBounds: { x: 14, y: 15, width: 102, height: 79 } },
   Honda: { assetPath: "/assets/regitech/logo-brand-honda-clean.png", scale: 0.85, sourceWidth: 135, sourceHeight: 112, contentBounds: { x: 15, y: 8, width: 100, height: 80 } },
   Kawasaki: { assetPath: "/assets/regitech/logo-brand-kawasaki-clean.png", sourceWidth: 800, sourceHeight: 110, contentBounds: { x: 4, y: 4, width: 792, height: 102 } },
-  KTM: { assetPath: "/assets/regitech/logo-brand-ktm.png", scale: 0.85, sourceWidth: 185, sourceHeight: 92, contentBounds: { x: 17, y: 18, width: 153, height: 61 } },
+  KTM: { assetPath: "/assets/regitech/logo-brand-ktm.png", scale: 0.6, sourceWidth: 185, sourceHeight: 92, contentBounds: { x: 17, y: 18, width: 153, height: 61 } },
   Triumph: { assetPath: "/assets/regitech/logo-brand-triumph-clean.png", sourceWidth: 180, sourceHeight: 74, contentBounds: { x: 13, y: 23, width: 148, height: 41 } },
 };
 

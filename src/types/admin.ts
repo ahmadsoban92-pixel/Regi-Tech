@@ -68,14 +68,16 @@ export type AdminOrder = {
 
 export type AdminOrderFilters = {
   query: string;
+  registration: string;
   from: string;
   to: string;
   payment: PaymentStatus | "all";
   fulfilment: AdminFulfilmentStatus | "all";
+  verification: VerificationStatus | "all";
   page: number;
 };
 
-export type AdminOrderList = { orders: AdminOrder[]; total: number; page: number; pageSize: number; totalPages: number };
+export type AdminOrderList = { orders: AdminOrder[]; total: number; page: number; pageSize: number; totalPages: number; migrationRequired?: boolean };
 
 export type AdminActor = { userId: string; displayName: string };
 export type AdminFulfilmentDetails = { carrier?: string; trackingReference?: string; cancellationReason?: string };

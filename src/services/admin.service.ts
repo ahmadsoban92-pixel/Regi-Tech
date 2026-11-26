@@ -164,8 +164,8 @@ export const adminRepository: AdminOrderRepository = {
     const supabase = getSupabaseAdmin();
     const [total, fulfilment, verification, paid, latest] = await Promise.all([
       supabase.from("orders").select("id", { count: "exact", head: true }),
-      supabase.from("orders").select("id", { count: "exact", head: true }).in("fulfilment_status", ["new", "in_production"]),
-      supabase.from("orders").select("id", { count: "exact", head: true }).eq("verification_status", "pending"),
+      supabase.from("orders").select("id", { count: "exact", head: true }).eq("payment_status", "paid").in("fulfilment_status", ["new", "in_production"]),
+      supabase.from("orders").select("id", { count: "exact", head: true }).eq("payment_status", "paid").eq("verification_status", "pending"),
       supabase.from("orders").select("total_pence").eq("payment_status", "paid"),
       supabase.from("orders").select(ORDER_SELECT).order("created_at", { ascending: false }).limit(5),
     ]);
@@ -184,18 +184,38 @@ export const adminRepository: AdminOrderRepository = {
     const requestedPage = Math.max(1, filters.page);
     const args = {
       p_query: filters.query.trim(),
+      p_registration: filters.registration.trim(),
       p_from: filters.from ? `${filters.from}T00:00:00.000Z` : undefined,
       p_to: filters.to ? `${filters.to}T23:59:59.999Z` : undefined,
       p_payment_status: filters.payment === "all" ? undefined : filters.payment,
       p_fulfilment_status: filters.fulfilment === "all" ? undefined : filters.fulfilment,
+      p_verification_status: filters.verification === "all" ? undefined : filters.verification,
       p_page: requestedPage,
       p_page_size: pageSize,
     };
+    const legacyArgs = {
+      p_query: args.p_query,
+      p_from: args.p_from,
+      p_to: args.p_to,
+      p_payment_status: args.p_payment_status,
+      p_fulfilment_status: args.p_fulfilment_status,
+      p_page: args.p_page,
+      p_page_size: args.p_page_size,
+    };
     let page = requestedPage;
-    let { data, error } = await getSupabaseAdmin().rpc("admin_list_orders", args);
+    const supabase = getSupabaseAdmin();
+    let queryArgs: typeof args | typeof legacyArgs = args;
+    let { data, error } = await supabase.rpc("admin_list_orders", args);
+    if (error?.code === "PGRST202") {
+      if (filters.registration.trim() || filters.verification !== "all") {
+        return { orders: [], total: 0, page: 1, pageSize, totalPages: 1, migrationRequired: true };
+      }
+      queryArgs = legacyArgs;
+      ({ data, error } = await supabase.rpc("admin_list_orders", legacyArgs));
+    }
     if (error) throw new Error("Unable to load orders.");
     if (!data?.length && requestedPage > 1) {
-      const fallback = await getSupabaseAdmin().rpc("admin_list_orders", { ...args, p_page: 1 });
+      const fallback = await supabase.rpc("admin_list_orders", { ...queryArgs, p_page: 1 });
       data = fallback.data;
       error = fallback.error;
       page = 1;
@@ -204,7 +224,7 @@ export const adminRepository: AdminOrderRepository = {
     const total = Number(data?.[0]?.total_count ?? 0);
     const totalPages = Math.max(1, Math.ceil(total / pageSize));
     page = data?.length ? Math.min(page, totalPages) : 1;
-    return { orders: await mapOrders((data ?? []) as OrderRow[]), total, page, pageSize, totalPages };
+    return { orders: await mapOrders((data ?? []) as OrderRow[]), total, page, pageSize, totalPages, migrationRequired: false };
   },
 
   async getOrder(reference: string) {

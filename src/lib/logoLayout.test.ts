@@ -33,7 +33,7 @@ describe("logo layout", () => {
     expect(position.y).toBeLessThan(15);
   });
 
-  it.each(["Honda", "Harley-Davidson", "KTM"] as const)("reduces %s artwork and uses the smaller drag bounds", (logo) => {
+  it.each(["Honda", "Harley-Davidson"] as const)("reduces %s artwork and uses the smaller drag bounds", (logo) => {
     const config = { ...createDefaultConfiguration("hand-crafted-show-plate"), logo };
     const geometry = getPlateGeometry(config);
     const original = fitLogoVisualSize(geometry, getLogoAspectRatio(config));
@@ -42,5 +42,15 @@ describe("logo layout", () => {
     expect(reduced.heightPercent).toBeCloseTo(original.heightPercent * 0.85);
     expect(clampLogoPosition({ x: -100, y: 50 }, config, geometry, reduced).x)
       .toBeLessThan(clampLogoPosition({ x: -100, y: 50 }, config, geometry, original).x);
+  });
+
+  it.each(["black-4d", "crystal-3d", "2d-show-plate"] as const)("keeps KTM clear of the registration on %s", (productId) => {
+    const config = { ...createDefaultConfiguration(productId, "AS32NNN"), logo: "KTM" as const, size: "4×6″" as const };
+    const geometry = getPlateGeometry(config);
+    const fullSize = fitLogoVisualSize(geometry, getLogoAspectRatio(config));
+    const logoSize = scaleLogoVisualSize(fullSize, getLogoDefinition("KTM")?.scale);
+
+    expect(logoSize.widthPercent).toBeLessThanOrEqual(12);
+    expect(logoSize.heightPercent).toBeLessThanOrEqual(8);
   });
 });

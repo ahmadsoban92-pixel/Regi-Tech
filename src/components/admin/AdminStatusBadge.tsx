@@ -1,3 +1,4 @@
+import adminContent from "@/content/admin.json";
 import { getAdminStatusLabel } from "@/lib/adminFormatting";
 import type { PaymentStatus, VerificationStatus } from "@/types/orderApi";
 import type { AdminFulfilmentStatus } from "@/types/admin";
@@ -20,5 +21,5 @@ const styles: Record<AdminStatus, string> = {
 };
 
 export function AdminStatusBadge({ status }: { status: AdminStatus }) {
-  return <span className={`admin-status-badge inline-flex min-h-5 items-center rounded-full px-2 py-0.5 text-[0.6875rem] font-medium leading-4 ${styles[status]}`}>{getAdminStatusLabel(status)}</span>;
+  return <span className={`admin-status-badge inline-flex min-h-5 items-center rounded-full px-2 py-0.5 text-[0.6875rem] font-medium leading-4 ${styles[status]}`} title={status === "new" ? adminContent.dashboard.newHelp : undefined}>{getAdminStatusLabel(status)}</span>;
 }
