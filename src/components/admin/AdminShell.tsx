@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ClipboardList, LayoutDashboard, LogOut, Menu, Users, X } from "lucide-react";
+import { ClipboardList, LayoutDashboard, LogOut, MailCheck, Menu, Users, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import adminContent from "@/content/admin.json";
 
@@ -22,7 +22,11 @@ function AdminLogo() {
 
 function AdminNavigation({ adminEmail, role, onNavigate }: { adminEmail: string; role: "owner" | "admin"; onNavigate?: () => void }) {
   const pathname = usePathname();
-  const visibleLinks = role === "owner" ? [...links, { href: "/admin/users", label: adminContent.navigation.users, icon: Users }] : links;
+  const visibleLinks = role === "owner" ? [
+    ...links,
+    { href: "/admin/emails", label: adminContent.navigation.emails, icon: MailCheck },
+    { href: "/admin/users", label: adminContent.navigation.users, icon: Users },
+  ] : links;
   return (
     <>
       <nav aria-label="Admin" className="flex-1 p-3">

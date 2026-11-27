@@ -4,6 +4,7 @@
   "navigation": {
     "dashboard": "Dashboard",
     "orders": "Orders",
+    "emails": "Email Delivery",
     "users": "Admin Users",
     "logout": "Logout",
     "openMenu": "Open admin navigation",
@@ -57,6 +58,19 @@
     "reset": "Reset filters",
     "apply": "Apply filters",
     "empty": "No orders match these filters."
+  },
+  "emails": {
+    "title": "Email Delivery",
+    "intro": "Monitor order, dispatch and Contact emails. Failed messages can be queued for another attempt.",
+    "status": "Status",
+    "kind": "Email type",
+    "all": "All",
+    "apply": "Apply filters",
+    "recent": "Recent delivery activity",
+    "total": "emails",
+    "empty": "No email deliveries match these filters.",
+    "retry": "Retry",
+    "retrying": "Queuing…"
   },
   "users": {
     "title": "Admin Users",

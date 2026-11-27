@@ -8,7 +8,8 @@ vi.mock("@/lib/env", () => ({
   ServerConfigurationError: class ServerConfigurationError extends Error {},
 }));
 
-import { dynamic, POST, runtime, verifyWorkerAuthorization } from "./route";
+import { verifyWorkerAuthorization } from "@/lib/emailWorkerAuthorization";
+import { dynamic, POST, runtime } from "./route";
 
 describe("internal email outbox route", () => {
   beforeEach(() => {
