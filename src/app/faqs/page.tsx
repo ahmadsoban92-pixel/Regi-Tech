@@ -21,7 +21,7 @@ export default function FaqsPage() {
             <h2 className="text-xl font-semibold">{content.supportTitle}</h2><p className="mt-2 text-sm text-[var(--label)]">{content.supportBody}</p>
             <div className="mt-5 flex flex-col justify-center gap-3 sm:flex-row">
               <a className="primary-button gap-2" href={shared.whatsappHref} rel="noopener noreferrer" target="_blank"><MessageCircle aria-hidden size={18} />{content.whatsapp}</a>
-              <a className="secondary-button gap-2" href="mailto:info@lpworkshop.co.uk"><Mail aria-hidden size={18} />{content.email}</a>
+              <a className="secondary-button gap-2" href={`mailto:${shared.footer.email}`}><Mail aria-hidden size={18} />{content.email}</a>
             </div>
           </div>
         </div>

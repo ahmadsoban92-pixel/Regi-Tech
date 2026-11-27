@@ -16,7 +16,7 @@
   },
   "cancellations-and-refunds": {
     "title": "Cancellations & Refunds",
-    "intro": ["If you need to cancel an order, contact info@lpworkshop.co.uk as soon as possible."],
+    "intro": ["If you need to cancel an order, contact info@regitech.co.uk as soon as possible."],
     "sections": [
       { "heading": "Before production", "paragraphs": ["If you request cancellation before production starts, we will make reasonable efforts to cancel and refund the order where applicable. Once production has started, cancellation may no longer be possible."] },
       { "heading": "Personalised and made-to-order plates", "paragraphs": ["Plates are generally made to your requested registration, design, wording and specifications. Personalised or made-to-order goods may be exempt from the usual change-of-mind cancellation right, subject to your statutory consumer rights."] },
@@ -31,7 +31,7 @@
     "sections": [
       { "heading": "What is covered", "paragraphs": ["Manufacturing defects, material defects and defects arising from our manufacturing process are covered."] },
       { "heading": "What is not normally covered", "paragraphs": ["Accidental or impact damage, incorrect fitting, modification, misuse, neglect, normal wear and tear, scratches or cosmetic damage after delivery, and damage from external factors are not normally covered."] },
-      { "heading": "Making a claim", "paragraphs": ["Email info@lpworkshop.co.uk with your order number and clear photographs of the issue. We will assess the claim and, where appropriate, repair or replace the product. This warranty is in addition to your statutory consumer rights."] }
+      { "heading": "Making a claim", "paragraphs": ["Email info@regitech.co.uk with your order number and clear photographs of the issue. We will assess the claim and, where appropriate, repair or replace the product. This warranty is in addition to your statutory consumer rights."] }
     ]
   },
   "privacy": {
@@ -44,7 +44,7 @@
       { "heading": "V5C documents", "paragraphs": ["When a V5C is supplied for a road-legal order, we use it for registration verification, order processing, record keeping and compliance. We do not use V5C information for unrelated marketing."] },
       { "heading": "Sharing", "paragraphs": ["We may share relevant information with payment providers, delivery companies, website and IT providers, professional advisers, and authorities when legally required. We do not sell personal information."] },
       { "heading": "Retention", "paragraphs": ["We retain information for as long as reasonably needed for its purpose, including legal, accounting, regulatory and customer-service requirements. Some number-plate supplier records may need to be retained for a specific period under applicable regulations."] },
-      { "heading": "Your rights", "paragraphs": ["Depending on the circumstances, you may ask to access or correct your information, request deletion where applicable, object to some processing, or request a restriction. Email info@lpworkshop.co.uk for privacy requests. You may also raise a concern with the Information Commissioner's Office (ICO)."] }
+      { "heading": "Your rights", "paragraphs": ["Depending on the circumstances, you may ask to access or correct your information, request deletion where applicable, object to some processing, or request a restriction. Email info@regitech.co.uk for privacy requests. You may also raise a concern with the Information Commissioner's Office (ICO)."] }
     ]
   },
   "delivery": {
