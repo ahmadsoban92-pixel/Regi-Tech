@@ -137,6 +137,51 @@ export type Database = {
         }
         Relationships: []
       }
+      email_outbox: {
+        Row: {
+          attempt_count: number
+          created_at: string
+          deduplication_key: string
+          entity_id: string
+          id: string
+          kind: string
+          last_error: string
+          next_attempt_at: string
+          processing_started_at: string | null
+          sent_at: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          attempt_count?: number
+          created_at?: string
+          deduplication_key: string
+          entity_id: string
+          id?: string
+          kind: string
+          last_error?: string
+          next_attempt_at?: string
+          processing_started_at?: string | null
+          sent_at?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          attempt_count?: number
+          created_at?: string
+          deduplication_key?: string
+          entity_id?: string
+          id?: string
+          kind?: string
+          last_error?: string
+          next_attempt_at?: string
+          processing_started_at?: string | null
+          sent_at?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       order_events: {
         Row: {
           actor_id: string | null
@@ -738,6 +783,23 @@ export type Database = {
           retry_after_seconds: number
         }[]
       }
+      claim_email_outbox: {
+        Args: { p_limit?: number }
+        Returns: {
+          attempt_count: number
+          created_at: string
+          deduplication_key: string
+          entity_id: string
+          id: string
+          kind: string
+          last_error: string
+          next_attempt_at: string
+          processing_started_at: string | null
+          sent_at: string | null
+          status: string
+          updated_at: string
+        }[]
+      }
       claim_pending_order_upload: {
         Args: {
           p_order_id: string
@@ -747,6 +809,14 @@ export type Database = {
         }
         Returns: boolean
       }
+      complete_email_outbox: {
+        Args: { p_id: string }
+        Returns: boolean
+      }
+      fail_email_outbox: {
+        Args: { p_error: string; p_id: string; p_permanent?: boolean }
+        Returns: boolean
+      }
       register_payment_attempt: {
         Args: {
           p_amount_pence: number
@@ -754,6 +824,10 @@ export type Database = {
           p_session_id: string
         }
         Returns: undefined
+      }
+      retry_email_outbox: {
+        Args: { p_id: string }
+        Returns: boolean
       }
     }
     Enums: {
