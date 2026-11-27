@@ -38,6 +38,9 @@ importers:
       next:
         specifier: 16.4.6
         version: 16.4.6(@types/node@26.6.5)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
+      nodemailer:
+        specifier: 10.6.1
+        version: 10.6.1
       react:
         specifier: latest
         version: 19.3.1
@@ -47,6 +50,9 @@ importers:
       react-hook-form:
         specifier: latest
         version: 7.90.0(@types/react@19.3.0)(react@19.3.1)
+      server-only:
+        specifier: 0.0.1
+        version: 0.0.1
       stripe:
         specifier: 23.0.0
         version: 23.0.0(@types/node@26.6.5)
@@ -63,6 +69,9 @@ importers:
       '@types/node':
         specifier: latest
         version: 26.6.5
+      '@types/nodemailer':
+        specifier: 8.0.2
+        version: 8.0.2
       '@types/react':
         specifier: latest
         version: 19.3.0
@@ -669,6 +678,9 @@ packages:
   '@types/node@26.6.5':
     resolution: {integrity: sha512-uMzsv9stDdofIZBx4UGh4Z9ZgXnGC9seRDscilBcTHAeOFk67MZg/k9bWVfO+bk4qZmG+l52hRnLwUiH2LnJTg==}
 
+  '@types/nodemailer@8.0.2':
+    resolution: {integrity: sha512-c7M5ox8p0nEOfbJ2E9Qcmt8/QCu/VzsiAhzBiZbvky2PhKZDHpKB3sQHBM5MEZNkCfBOaS6S9//AGPRTNB7IaA==}
+
   '@types/react-dom@19.3.0':
     resolution: {integrity: sha512-ZI7bU42mZXXKHn/qNLEw2IrbiINU7X5+vfgdixBHkCNpYWXjKgfQ/P+uyGb5CjOLB9UcnTeg3rylQtV2hym44Q==}
     peerDependencies:
@@ -1137,6 +1149,10 @@ packages:
       sass:
         optional: true
 
+  nodemailer@10.6.1:
+    resolution: {integrity: sha512-d7kfFfS/tR4Aca+SBvRaQ+MXKNv7d2JiRe5TxaRcFT/kYMh4GGPnW9aKksTIEvyEbA7d/7HYWE4YPDEHxzJj/g==}
+    engines: {node: '>=20.0.0'}
+
   obug@3.0.0:
     resolution: {integrity: sha512-5vvB5+W7ePv+p3uqxi+RcW1XAzLW0/hxt3/4X4Lc4qHudzOhmBiBwOY6DRob4WnanAEGvNcLjF+KNOufrUoEQw==}
     engines: {node: '>=12.20.0'}
@@ -1200,6 +1216,9 @@ packages:
     resolution: {integrity: sha512-Y7/KDsb8LjooZpwaqGyulO6DQlksgCncchHGk+sZIY4SBvUocMBEFH5Ur1fI4dV+Jvl0w6cjvucaIi40puRioA==}
     engines: {node: '>=10'}
     hasBin: true
+
+  server-only@0.0.1:
+    resolution: {integrity: sha512-qepMx2JxAa5jjfzxG79yPPq+8BuFToHd1hm7kI+Z4zAq1ftQiP7HcxMhDDItrbtwVeLg/cY2JnKnrcFkmiswNA==}
 
   sharp@0.35.5:
     resolution: {integrity: sha512-Ywn4OnzGukp7CDMrp08RQ50YKmuwG47brZgIVPTvBaaAfQlRlygrRqSrxdCiL9M+LlzLBiJ68IR1QqvzHyjC7g==}
@@ -1721,6 +1740,10 @@ snapshots:
     dependencies:
       undici-types: 8.9.0
 
+  '@types/nodemailer@8.0.2':
+    dependencies:
+      '@types/node': 26.6.5
+
   '@types/react-dom@19.3.0(@types/react@19.3.0)':
     dependencies:
       '@types/react': 19.3.0
@@ -2043,6 +2066,8 @@ snapshots:
       - '@types/node'
       - babel-plugin-macros
 
+  nodemailer@10.6.1: {}
+
   obug@3.0.0: {}
 
   picocolors@1.1.1: {}
@@ -2111,6 +2136,8 @@ snapshots:
 
   semver@7.8.5:
     optional: true
+
+  server-only@0.0.1: {}
 
   sharp@0.35.5(@types/node@26.6.5):
     dependencies:
