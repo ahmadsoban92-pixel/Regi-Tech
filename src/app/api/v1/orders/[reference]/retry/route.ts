@@ -10,7 +10,7 @@ import { OrderValidationError } from "@/services/orderValidation.service";
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
 
-export async function POST(request: NextRequest, context: RouteContext<"/api/v1/orders/[reference]/retry">) {
+export async function POST(request: NextRequest, context: { params: Promise<{ reference: string }> }) {
   const { reference } = await context.params;
   const accessToken = readOrderAccess(request.cookies.get(ORDER_ACCESS_COOKIE)?.value, reference);
   if (!accessToken) return sendError("The checkout session is no longer available.", 401);
