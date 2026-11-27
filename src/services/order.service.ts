@@ -4,6 +4,7 @@ import type Stripe from "stripe";
 import { getStripeServerEnv } from "@/lib/env";
 import { createOrderAccess, verifyOrderAccessToken } from "@/lib/orderAccess";
 import { getStripeClient } from "@/lib/stripeClient";
+import { getPaidSessionAmounts } from "@/lib/stripeDiscount";
 import { getSupabaseAdmin } from "@/lib/supabaseAdmin";
 import type { CheckoutSubmissionValues } from "@/lib/orderSchemas";
 import type { OrderConfirmationData, PaymentStatus, VerificationStatus } from "@/types/orderApi";
@@ -29,6 +30,7 @@ type StoredOrder = {
   customer: { email: string };
   subtotal_pence: number;
   delivery_pence: number;
+  discount_pence: number;
   total_pence: number;
   currency: "gbp";
   order_notes: string;
@@ -58,6 +60,7 @@ async function createStripeCheckoutSession(order: StoredOrder, attemptNumber: nu
   const session = await stripe.checkout.sessions.create({
     integration_identifier: integrationIdentifier(),
     mode: "payment",
+    allow_promotion_codes: true,
     customer_email: order.customer.email,
     client_reference_id: order.id,
     metadata: { orderId: order.id, orderReference: order.reference },
@@ -125,7 +128,7 @@ export async function createCheckoutOrder(submission: CheckoutSubmissionValues, 
     configuration: firstItem.config,
     price_breakdown: firstItem.priceBreakdown.map((line) => ({ label: line.label, amountPence: Math.round(line.amount * 100) })),
     quantity: totalQuantity, subtotal_pence: canonical.subtotalPence, delivery_pence: canonical.deliveryPence,
-    total_pence: canonical.totalPence, currency: "gbp" as const,
+    discount_pence: 0, total_pence: canonical.totalPence, currency: "gbp" as const,
     special_instructions: "", order_notes: canonical.orderNotes, additional_notes: canonical.customer.additionalNotes,
     checkout_access_token_hash: access.tokenHash,
   };
@@ -161,7 +164,7 @@ export async function createCheckoutOrder(submission: CheckoutSubmissionValues, 
 
 async function loadStoredOrder(reference: string): Promise<StoredOrder> {
   const supabase = getSupabaseAdmin();
-  const { data, error } = await supabase.from("orders").select("id,reference,payment_status,verification_status,customer,subtotal_pence,delivery_pence,total_pence,currency,order_notes,checkout_access_token_hash,stripe_checkout_session_id,created_at").eq("reference", reference).maybeSingle();
+  const { data, error } = await supabase.from("orders").select("id,reference,payment_status,verification_status,customer,subtotal_pence,delivery_pence,discount_pence,total_pence,currency,order_notes,checkout_access_token_hash,stripe_checkout_session_id,created_at").eq("reference", reference).maybeSingle();
   if (error || !data) throw new OrderValidationError("The order could not be found.");
   const { data: items, error: itemsError } = await supabase.from("order_items").select("id,position,configuration,price_breakdown,quantity,unit_total_pence,line_total_pence").eq("order_id", data.id).order("position", { ascending: true });
   if (itemsError || !items?.length) throw new OrderValidationError("The order items could not be found.");
@@ -188,14 +191,14 @@ export async function getOrderConfirmationBySessionId(sessionId: string, accessT
   const supabase = getSupabaseAdmin();
   const { data: attempt, error: attemptError } = await supabase.from("payment_attempts").select("order_id").eq("stripe_checkout_session_id", sessionId).maybeSingle();
   if (attemptError || !attempt) return null;
-  const { data, error } = await supabase.from("orders").select("reference,payment_status,verification_status,order_notes,subtotal_pence,delivery_pence,total_pence,currency,checkout_access_token_hash,created_at").eq("id", attempt.order_id).maybeSingle();
+  const { data, error } = await supabase.from("orders").select("reference,payment_status,verification_status,order_notes,subtotal_pence,delivery_pence,discount_pence,total_pence,currency,checkout_access_token_hash,created_at").eq("id", attempt.order_id).maybeSingle();
   if (error || !data || !verifyOrderAccessToken(accessToken, data.checkout_access_token_hash)) return null;
   const { data: items, error: itemsError } = await supabase.from("order_items").select("id,position,configuration,price_breakdown,quantity,unit_total_pence,line_total_pence").eq("order_id", attempt.order_id).order("position", { ascending: true });
   if (itemsError || !items) return null;
   return {
     reference: data.reference, paymentStatus: data.payment_status as PaymentStatus, verificationStatus: data.verification_status as VerificationStatus,
     items: (items as StoredOrderItem[]).map((item) => ({ id: item.id, position: item.position, config: item.configuration, quantity: item.quantity, priceBreakdown: item.price_breakdown.map((line) => ({ label: line.label, amount: line.amountPence / 100 })), unitTotalPence: item.unit_total_pence, lineTotalPence: item.line_total_pence })),
-    orderNotes: data.order_notes, subtotalPence: data.subtotal_pence, deliveryPence: data.delivery_pence,
+    orderNotes: data.order_notes, subtotalPence: data.subtotal_pence, deliveryPence: data.delivery_pence, discountPence: data.discount_pence,
     totalPence: data.total_pence, currency: data.currency as "gbp", createdAt: data.created_at,
   };
 }
@@ -209,7 +212,8 @@ export async function applyStripeCheckoutEvent(event: Stripe.Event) {
   if (event.type === "checkout.session.async_payment_failed") { paymentStatus = "payment_failed"; attemptStatus = "failed"; }
   else if (event.type === "checkout.session.expired") { paymentStatus = "expired"; attemptStatus = "expired"; }
   else if (event.type === "checkout.session.async_payment_succeeded" || session.payment_status === "paid") { paymentStatus = "paid"; attemptStatus = "complete"; }
-  const { data, error } = await getSupabaseAdmin().rpc("apply_stripe_event", { p_event_id: event.id, p_event_type: event.type, p_session_id: session.id, p_payment_status: paymentStatus, p_attempt_status: attemptStatus, p_payment_intent_id: stripePaymentIntentId(session) as string, p_paid_at: (paymentStatus === "paid" ? new Date().toISOString() : null) as string });
+  const amounts = paymentStatus === "paid" ? getPaidSessionAmounts(session) : null;
+  const { data, error } = await getSupabaseAdmin().rpc("apply_stripe_event", { p_event_id: event.id, p_event_type: event.type, p_session_id: session.id, p_payment_status: paymentStatus, p_attempt_status: attemptStatus, p_payment_intent_id: stripePaymentIntentId(session) as string, p_paid_at: (paymentStatus === "paid" ? new Date().toISOString() : null) as string, p_amount_subtotal: paymentStatus === "paid" ? session.amount_subtotal : null, p_amount_total: amounts?.totalPence ?? null, p_amount_discount: amounts?.discountPence ?? null });
   if (error) throw new Error("Unable to apply the Stripe event.");
   return { processed: Boolean(data), ignored: false };
 }

@@ -24,6 +24,7 @@ export function AdminOrderDetail({ order, shipment, royalMailConfigured }: { ord
           <div><dt className="text-[#2b2d31]/45">{adminContent.detail.items}</dt><dd className="mt-1 font-semibold">{totalQuantity}</dd></div>
           <div><dt className="text-[#2b2d31]/45">{adminContent.detail.subtotal}</dt><dd className="mt-1 font-semibold">{formatAdminMoney(order.subtotalPence)}</dd></div>
           <div><dt className="text-[#2b2d31]/45">{adminContent.detail.delivery}</dt><dd className="mt-1 font-semibold">{order.deliveryPence ? formatAdminMoney(order.deliveryPence) : adminContent.detail.free}</dd></div>
+          {order.discountPence > 0 ? <div><dt className="text-[#2b2d31]/45">Promotion discount</dt><dd className="mt-1 font-semibold">-{formatAdminMoney(order.discountPence)}</dd></div> : null}
           <div><dt className="text-[#2b2d31]/45">{adminContent.detail.total}</dt><dd className="mt-1 font-bold">{formatAdminMoney(order.totalPence)}</dd></div>
         </dl>
       </section>

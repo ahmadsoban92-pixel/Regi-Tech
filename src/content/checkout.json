@@ -66,7 +66,7 @@
     "unavailable": "Secure checkout is temporarily unavailable. Your card has not been charged."
   },
   "summary": "Order summary",
-  "paymentExplainer": "After you submit your contact and address details, you’ll enter card or payment details securely on Stripe.",
+  "paymentExplainer": "After you submit your details, you can enter a promotion code on Stripe’s secure payment page. Percentage and fixed-amount codes are supported; your final total will update there before payment.",
   "subtotal": "Subtotal",
   "deliveryLabel": "Delivery",
   "free": "FREE",

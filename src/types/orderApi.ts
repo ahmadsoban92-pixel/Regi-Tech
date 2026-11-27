@@ -30,6 +30,7 @@ export type OrderConfirmationData = {
   orderNotes: string;
   subtotalPence: number;
   deliveryPence: number;
+  discountPence: number;
   totalPence: number;
   currency: "gbp";
   createdAt: string;

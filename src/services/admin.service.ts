@@ -17,6 +17,7 @@ type OrderRow = {
   billing_address: unknown;
   subtotal_pence: number;
   delivery_pence: number;
+  discount_pence?: number;
   total_pence: number;
   currency: string;
   order_notes: string;
@@ -24,7 +25,7 @@ type OrderRow = {
   tracking_reference: string;
 };
 
-const ORDER_SELECT = "id,reference,created_at,payment_status,verification_status,fulfilment_status,customer,delivery_address,billing_address,subtotal_pence,delivery_pence,total_pence,currency,order_notes,carrier,tracking_reference";
+const ORDER_SELECT = "id,reference,created_at,payment_status,verification_status,fulfilment_status,customer,delivery_address,billing_address,subtotal_pence,delivery_pence,discount_pence,total_pence,currency,order_notes,carrier,tracking_reference";
 
 function address(value: unknown): AddressDetails {
   const item = value as Partial<AddressDetails> | null;
@@ -136,6 +137,7 @@ async function mapOrders(rows: OrderRow[], detailed = false): Promise<AdminOrder
     items: items.get(row.id) ?? [],
     subtotalPence: row.subtotal_pence,
     deliveryPence: row.delivery_pence,
+    discountPence: row.discount_pence ?? Math.max(0, row.subtotal_pence + row.delivery_pence - row.total_pence),
     totalPence: row.total_pence,
     currency: "gbp",
     orderNotes: row.order_notes,

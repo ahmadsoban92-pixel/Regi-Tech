@@ -377,6 +377,7 @@ export type Database = {
           customer: Json
           delivery_address: Json
           delivery_pence: number
+          discount_pence: number
           dispatched_at: string | null
           fulfilment_status: string
           id: string
@@ -409,6 +410,7 @@ export type Database = {
           customer: Json
           delivery_address: Json
           delivery_pence?: number
+          discount_pence?: number
           dispatched_at?: string | null
           fulfilment_status?: string
           id: string
@@ -441,6 +443,7 @@ export type Database = {
           customer?: Json
           delivery_address?: Json
           delivery_pence?: number
+          discount_pence?: number
           dispatched_at?: string | null
           fulfilment_status?: string
           id?: string
@@ -764,6 +767,9 @@ export type Database = {
           p_attempt_status: string
           p_event_id: string
           p_event_type: string
+          p_amount_subtotal: number | null
+          p_amount_total: number | null
+          p_amount_discount: number | null
           p_paid_at: string
           p_payment_intent_id: string
           p_payment_status: string

@@ -56,6 +56,7 @@ export type AdminOrder = {
   items: AdminOrderItem[];
   subtotalPence: number;
   deliveryPence: number;
+  discountPence: number;
   totalPence: number;
   currency: "gbp";
   orderNotes: string;
