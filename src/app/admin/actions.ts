@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
+import { scheduleEmailOutboxProcessing } from "@/lib/emailScheduling";
 import { adminRepository } from "@/services/admin.service";
 import { requireAdmin } from "@/services/adminAuth.service";
 import { bookRoyalMailShipment, dispatchRoyalMailShipment, getRoyalMailShipment, recoverRoyalMailShipment } from "@/services/royalMailShipment.service";
@@ -52,6 +53,7 @@ export async function saveOrderControls(_state: AdminActionState, formData: Form
         carrier: parsed.data.carrier,
         trackingReference: parsed.data.tracking,
       });
+      if (parsed.data.fulfilment === "dispatched") scheduleEmailOutboxProcessing();
     }
     refreshOrder(parsed.data.reference);
     return { success: true, message: "Order controls saved." };
@@ -128,6 +130,7 @@ export async function dispatchRoyalMailAction(_state: AdminActionState, formData
     const order = await adminRepository.getOrder(parsed.data);
     if (!order) return { success: false, message: "Order not found." };
     await dispatchRoyalMailShipment(order, { userId: admin.userId, displayName: admin.displayName });
+    scheduleEmailOutboxProcessing();
     refreshOrder(order.reference);
     return { success: true, message: "Order marked as handed to Royal Mail." };
   } catch (error) {

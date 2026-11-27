@@ -1,4 +1,5 @@
 import { sendError, sendSuccess } from "@/lib/apiResponse";
+import { scheduleEmailOutboxProcessing } from "@/lib/emailScheduling";
 import { getStripeWebhookEnv, ServerConfigurationError } from "@/lib/env";
 import { getStripeClient } from "@/lib/stripeClient";
 import { applyStripeCheckoutEvent } from "@/services/order.service";
@@ -13,6 +14,10 @@ export async function POST(request: Request) {
     const body = await request.text();
     const event = getStripeClient().webhooks.constructEvent(body, signature, getStripeWebhookEnv().stripeWebhookSecret);
     const result = await applyStripeCheckoutEvent(event);
+    const session = event.data.object as { payment_status?: string };
+    if (result.processed && (event.type === "checkout.session.async_payment_succeeded" || session.payment_status === "paid")) {
+      scheduleEmailOutboxProcessing();
+    }
     return sendSuccess(result, result.ignored ? "Event ignored." : "Event received.");
   } catch (error) {
     if (error instanceof ServerConfigurationError) return sendError("Stripe webhook handling is not configured.", 503);

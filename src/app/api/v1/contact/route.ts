@@ -1,6 +1,7 @@
 import type { NextRequest } from "next/server";
 import { sendCreated, sendError } from "@/lib/apiResponse";
 import { contactSubmissionSchema } from "@/lib/contactSchemas";
+import { scheduleEmailOutboxProcessing } from "@/lib/emailScheduling";
 import { ServerConfigurationError } from "@/lib/env";
 import { checkContactRateLimit } from "@/lib/rateLimit";
 import { getRequestIdentifier } from "@/lib/request";
@@ -26,6 +27,7 @@ export async function POST(request: NextRequest) {
       message: parsed.data.message,
     });
     if (error) throw error;
+    scheduleEmailOutboxProcessing();
     return sendCreated({ received: true }, "Thanks — your message has been received.");
   } catch (error) {
     if (error instanceof ServerConfigurationError) return sendError("The contact form is not configured yet. Please use email or WhatsApp.", 503);
