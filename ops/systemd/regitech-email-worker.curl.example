@@ -1,0 +1,13 @@
+url = "http://127.0.0.1:3000/api/v1/internal/email-outbox"
+request = "POST"
+header = "Authorization: Bearer REPLACE_WITH_A_RANDOM_32_BYTE_OR_LONGER_SECRET"
+silent
+show-error
+fail
+connect-timeout = 5
+max-time = 30
+retry = 2
+retry-delay = 2
+retry-connrefused
+output = "/dev/null"
+
